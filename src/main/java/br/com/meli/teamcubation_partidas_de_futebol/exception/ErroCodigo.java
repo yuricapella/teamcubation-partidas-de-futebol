@@ -2,5 +2,6 @@ package br.com.meli.teamcubation_partidas_de_futebol.exception;
 
 public enum ErroCodigo {
     CAMPO_INVALIDO,
-    REQUISICAO_INVALIDA
+    REQUISICAO_INVALIDA,
+    ESTADO_INEXISTENTE,
 }

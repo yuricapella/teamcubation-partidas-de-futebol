@@ -7,7 +7,7 @@ public class CriarClubeRequestMapper {
     public static Clube toEntity(CriarClubeRequestDTO criarClubeRequestDTO) {
         Clube clube = new Clube();
         clube.setNome(criarClubeRequestDTO.getNome());
-        clube.setSiglaEstado(criarClubeRequestDTO.getSiglaEstado());
+        clube.setSiglaEstado(criarClubeRequestDTO.getSiglaEstado().toUpperCase());
         clube.setDataCriacao(criarClubeRequestDTO.getDataCriacao());
         clube.setAtivo(true);
         return clube;
