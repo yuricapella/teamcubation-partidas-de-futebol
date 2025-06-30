@@ -24,4 +24,16 @@ public class ClubeApiExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(erroPadrao);
     }
+
+    @ExceptionHandler({ClubeComNomeJaCadastradoNoEstadoException.class})
+    public ResponseEntity<ErroPadrao> handlerClubeComNomeJaCadastradoNoEstadoException(ClubeComNomeJaCadastradoNoEstadoException ex) {
+        ErroPadrao erroPadrao = new ErroPadrao();
+        erroPadrao.setCodigoErro(ErroCodigo.CLUBE_DUPLICADO.name());
+        erroPadrao.setDataHora(LocalDateTime.now());
+        erroPadrao.setMensagem(ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(erroPadrao);
+    }
 }

@@ -4,4 +4,6 @@ public enum ErroCodigo {
     CAMPO_INVALIDO,
     REQUISICAO_INVALIDA,
     ESTADO_INEXISTENTE,
+    CLUBE_DUPLICADO,
+
 }
