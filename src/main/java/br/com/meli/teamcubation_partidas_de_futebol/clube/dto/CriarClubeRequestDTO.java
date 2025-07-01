@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class CriarClubeRequestDTO {
     @NotBlank(message = "O nome não pode estar vazio.")
-    @Size(min = 2, message = "O nome tem que ter mais que duas letras;")
+    @Size(min = 2, message = "O nome tem que ter no minimo duas letras;")
     @Pattern(regexp = "^[A-Za-zÀ-ÿ ]+$", message = "O nome deve conter apenas letras e espaços")
     private String nome;
     @NotBlank(message = "A sigla do estado não pode estar vazia.")
