@@ -16,7 +16,7 @@ public class CriarClubeService {
     }
 
     public Clube criarClube(Clube clube) {
-        clubeValidator.validarClube(clube);
+        clubeValidator.validarClubeNaCriacao(clube);
         return clubeRepository.save(clube);
     }
 }

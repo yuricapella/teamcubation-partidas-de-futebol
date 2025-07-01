@@ -14,9 +14,14 @@ public class ClubeValidator {
         this.repository = repository;
     }
 
-    public void validarClube(Clube clube) {
+    public void validarClubeNaCriacao(Clube clube) {
         validarEstado(clube);
-        validarNome(clube);
+        validarNomeAoCriar(clube);
+    }
+
+    public void validarClubeNaAtualizacao(Clube clube) {
+        validarEstado(clube);
+        validarNomeAoAtualizar(clube);
     }
 
     public void validarEstado(Clube clube) {
@@ -25,9 +30,14 @@ public class ClubeValidator {
         }
     }
 
-    public void validarNome(Clube clube) {
-        if(repository.existsByNomeAndSiglaEstado
-                (clube.getNome(), clube.getSiglaEstado())){
+    private void validarNomeAoCriar(Clube clube) {
+        if (repository.existsByNomeAndSiglaEstado(clube.getNome(), clube.getSiglaEstado())) {
+            throw new ClubeComNomeJaCadastradoNoEstadoException();
+        }
+    }
+
+    private void validarNomeAoAtualizar(Clube clube) {
+        if (repository.existsByNomeAndSiglaEstadoAndIdNot(clube.getNome(), clube.getSiglaEstado(), clube.getId())) {
             throw new ClubeComNomeJaCadastradoNoEstadoException();
         }
     }

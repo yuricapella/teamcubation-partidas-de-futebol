@@ -23,7 +23,7 @@ public class AtualizarClubeService {
     public Clube atualizar(AtualizarClubeRequestDTO clubeAtualizado, Long id){
         Clube clubeJaCadastrado = buscarClubeService.buscarClubePorId(id);
         AtualizarClubeRequestMapper.updateEntity(clubeAtualizado, clubeJaCadastrado);
-        clubeValidator.validarClube(clubeJaCadastrado);
+        clubeValidator.validarClubeNaAtualizacao(clubeJaCadastrado);
         return clubeRepository.save(clubeJaCadastrado);
     }
 }
