@@ -36,4 +36,16 @@ public class ClubeApiExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(erroPadrao);
     }
+
+    @ExceptionHandler({ClubeNaoEncontradoException.class})
+    public ResponseEntity<ErroPadrao> handlerClubeNaoEncontradoException(ClubeNaoEncontradoException ex) {
+        ErroPadrao erroPadrao = new ErroPadrao();
+        erroPadrao.setCodigoErro(ErroCodigo.CLUBE_NAO_ENCONTRADO.name());
+        erroPadrao.setDataHora(LocalDateTime.now());
+        erroPadrao.setMensagem(ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(erroPadrao);
+    }
 }

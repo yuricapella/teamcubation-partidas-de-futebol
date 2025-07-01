@@ -5,22 +5,29 @@ import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.CriarClubeRequestD
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.mapper.ClubeResponseMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.mapper.CriarClubeRequestMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
+import br.com.meli.teamcubation_partidas_de_futebol.clube.service.BuscarClubeService;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.service.CriarClubeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/clube")
 public class ClubeApiController {
     private final CriarClubeService criarClubeService;
+    private final BuscarClubeService buscarClubeService;
 
-    public ClubeApiController(CriarClubeService criarClubeService) {
+    public ClubeApiController(CriarClubeService criarClubeService, BuscarClubeService buscarClubeService) {
         this.criarClubeService = criarClubeService;
+        this.buscarClubeService = buscarClubeService;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ClubeResponseDTO> buscarClubePorId(@PathVariable Long id) {
+        Clube clubeRetornado = buscarClubeService.buscarClubePorId(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ClubeResponseMapper.toClubeResponseDTO(clubeRetornado));
     }
 
     @PostMapping
