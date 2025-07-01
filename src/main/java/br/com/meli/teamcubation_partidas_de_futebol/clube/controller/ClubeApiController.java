@@ -11,6 +11,8 @@ import br.com.meli.teamcubation_partidas_de_futebol.clube.service.BuscarClubeSer
 import br.com.meli.teamcubation_partidas_de_futebol.clube.service.CriarClubeService;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.service.InativarClubeService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,16 @@ public class ClubeApiController {
         this.atualizarClubeService = atualizarClubeService;
         this.inativarClubeService = inativarClubeService;
     }
+
+    @GetMapping
+    public Page<ClubeResponseDTO> listarClubes
+            (@RequestParam(required = false) String nome,
+             @RequestParam(required = false) String estado,
+             @RequestParam(required = false) Boolean ativo,
+             Pageable pageable){
+        return buscarClubeService.listarClubesFiltrados(nome,estado,ativo,pageable);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ClubeResponseDTO> buscarPorId(@PathVariable Long id) {
