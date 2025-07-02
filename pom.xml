@@ -56,13 +56,12 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- MYSQL
+        <!-- MYSQL -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
-        -->
 
         <!-- H2 DATABASE -->
         <dependency>
