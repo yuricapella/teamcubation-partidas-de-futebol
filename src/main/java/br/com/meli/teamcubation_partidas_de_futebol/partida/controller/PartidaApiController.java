@@ -6,6 +6,7 @@ import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.mapper.PartidaRe
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.service.BuscarPartidaService;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.service.CriarPartidaService;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.service.DeletarPartidaService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.*;
 public class PartidaApiController {
     private final CriarPartidaService criarPartidaService;
     private final BuscarPartidaService buscarPartidaService;
+    private final DeletarPartidaService deletarPartidaService;
 
-    public PartidaApiController(CriarPartidaService criarPartidaService, BuscarPartidaService buscarPartidaService) {
+    public PartidaApiController(CriarPartidaService criarPartidaService, BuscarPartidaService buscarPartidaService, DeletarPartidaService deletarPartidaService) {
         this.criarPartidaService = criarPartidaService;
         this.buscarPartidaService = buscarPartidaService;
+        this.deletarPartidaService = deletarPartidaService;
     }
 
     @PostMapping
@@ -36,5 +39,13 @@ public class PartidaApiController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(PartidaResponseMapper.toPartidaResponseDTO(partidaRetornada));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPartidaPorId(@PathVariable Long id) {
+        deletarPartidaService.deletarPartidaPorId(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }
