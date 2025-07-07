@@ -61,4 +61,16 @@ public class PartidaApiExceptionHandler {
                 .body(erroPadrao);
     }
 
+    @ExceptionHandler({EstadioJaPossuiPartidaNoMesmoDiaException.class})
+    public ResponseEntity<ErroPadrao> handlerEstadioJaPossuiPartidaNoMesmoDiaException(EstadioJaPossuiPartidaNoMesmoDiaException ex) {
+        ErroPadrao erroPadrao = new ErroPadrao();
+        erroPadrao.setCodigoErro(ErroCodigo.ESTADIO_JA_POSSUI_PARTIDA_MARCADA_NO_MESMO_DIA.name());
+        erroPadrao.setDataHora(LocalDateTime.now());
+        erroPadrao.setMensagem(ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(erroPadrao);
+    }
+
 }

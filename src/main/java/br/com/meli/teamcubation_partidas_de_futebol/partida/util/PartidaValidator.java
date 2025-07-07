@@ -3,10 +3,7 @@ package br.com.meli.teamcubation_partidas_de_futebol.partida.util;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.CriarPartidaRequestDTO;
-import br.com.meli.teamcubation_partidas_de_futebol.partida.exception.ClubeInativoException;
-import br.com.meli.teamcubation_partidas_de_futebol.partida.exception.ClubesComPartidasEmHorarioMenorQue48HorasException;
-import br.com.meli.teamcubation_partidas_de_futebol.partida.exception.ClubesIguaisException;
-import br.com.meli.teamcubation_partidas_de_futebol.partida.exception.DataPartidaAnteriorACriacaoDoClubeException;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.exception.*;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.repository.PartidaRepository;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +23,7 @@ public class PartidaValidator {
         validarDataPartidaAnteriorACriacaoClube(partidaACriar,clubeMandante,clubeVisitante);
         validarClubeInativo(clubeMandante,clubeVisitante);
         validarPartidasDosClubesComHorariosProximos(clubeMandante.getId(),clubeVisitante.getId(),partidaACriar.getDataHora());
+        validarEstadioJaPossuiPartidasNoMesmoDia(partidaACriar);
     }
 
     public void validarClubesIguais(Clube clubeMandante, Clube clubeVisitante) {
@@ -50,6 +48,13 @@ public class PartidaValidator {
     public void validarPartidasDosClubesComHorariosProximos(Long clubeMandanteId, Long clubeVisitanteId, LocalDateTime dataNovaPartida) {
         if(partidaRepository.existeConflitoDeHorario(clubeMandanteId,clubeVisitanteId, dataNovaPartida) > 0){
             throw new ClubesComPartidasEmHorarioMenorQue48HorasException();
+        }
+    }
+
+    public void validarEstadioJaPossuiPartidasNoMesmoDia(CriarPartidaRequestDTO partidaACriar) {
+        LocalDate dataPartida = partidaACriar.getDataHora().toLocalDate();
+        if(partidaRepository.existePartidaNoEstadioNoMesmoDia(partidaACriar.getEstadioId(),dataPartida) > 0){
+            throw new EstadioJaPossuiPartidaNoMesmoDiaException();
         }
     }
 
