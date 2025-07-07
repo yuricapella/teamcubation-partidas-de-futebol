@@ -122,15 +122,62 @@ Pesquisando boas praticas, coloquei o tratamento de exceção 404 not found como
 - [x] Clube envolvido não pode estar inativo
 - [x] Clube não pode ter outra partida marcada com diferença menor que 48 horas
 (adicionado metodo em PartidaRepository com a query para verificação no banco de dados,
-como o banco de dados só retorna 1 ou 0, coloquei o retorno como Long, se retornar 1, 
-há datas dentro de 48 horas e entao lançar exceção)
+como o banco de dados só retorna 1 ou 0 e nao boolean(true or false), coloquei o retorno como Long, se retornar 1, 
+quer dizer que tem datas dentro de 48 horas e entao lança a exceção em PartidaValidator)
 
-- [ ] Estádio não pode ter outra partida cadastrada para o mesmo dia
-  (verificar se faço relações no banco de dados, lista dentro de estadio de partidas, etc)
+- [x] Estádio não pode ter outra partida cadastrada para o mesmo dia
+(adiciona metodo em PartidaRepository que conta quantas partidas existem puxando pelo estadio_id e a data informada, 
+se for maior que 0, a exceção é lançada em PartidaValidator)
 ---
-A estrutura do projeto acabou ficando no modelo chamado Domain Package Structure (DPS), mas só descobri esse termo agora ao verificar boas praticas. Antes, eu organizava meus projetos dessa forma simplesmente porque achava mais prático e organizado para visualizar tudo de cada domínio em um só lugar do que colocar pastas com os nomes do dominio em cada package, service(clube,partida), repository(clube,partida) que seria o modelo DDD(Domain-driven Design).
+## 7. Editar uma partida (PUT, AtualizarPartidaRequestDTO)
+- [] adicionar service para atualizar
+- [] adicionar dto e mapper
 
+### Bean Validation a implementar (automático):
+- [] @NotNull para id da partida, clubes e estádio
+- [] @PositiveOrZero para golsMandante e golsVisitante
+- [] @NotNull e @PastOrPresent para dataHora
+
+### Regras a validar manualmente (service/validator):
+- [x] Clubes iguais (ClubesIguaisException)
+- [x] Clubes e estádio devem existir (404, usar BuscarXService)
+- [x] Data de criação do clube não pode ser posterior à data da partida (DataPartidaAnteriorACriacaoDoClubeException, 409)
+- [x] Clube inativo (ClubeInativoException, 409)
+- [x] Horários próximos entre partidas dos clubes (ClubesComPartidasEmHorarioMenorQue48HorasException, 409)
+- [x] Estádio já possui partida no mesmo dia (EstadioJaPossuiPartidaNoMesmoDiaException, 409)
+- [x] Partida não existe (PartidaNaoEncontradaException, 404)
+
+---
+
+## 8. Remover uma partida (DELETE)
+- [] adicionar service para deletar
+
+### Bean Validation a implementar (automático):
+- [] Id da partida obrigatório (PathVariable na controller)
+
+### Regras a validar manualmente (service/validator):
+- [x] Partida não existe (PartidaNaoEncontradaException, 404 NOT FOUND)
+
+---
+
+## 9. Buscar uma partida (GET)
+- [x] adicionar service para buscar
+
+### Bean Validation a implementar (automático):
+- [x] Id da partida obrigatório (PathVariable na controller)
+
+### Regras a validar manualmente (service/validator):
+- [x] Partida não existe (PartidaNaoEncontradaException, 404 NOT FOUND)
+
+---
 
 ## Melhorias futuras:
 Ao retornar a exceção ClubesComPartidasEmHorarioMenorQue48HorasException, 
 listar as datas conflituosas dos clubes e calcular qual o tempo correto para mostrar ao usuario e facilitar o cadastro.
+
+## Estrutura
+A estrutura do projeto acabou ficando no modelo chamado Domain Package Structure (DPS), 
+mas só descobri esse termo ao verificar boas praticas. 
+Antes, eu organizava meus projetos dessa forma simplesmente porque achava mais prático e organizado 
+para visualizar tudo de cada domínio em um só lugar do que colocar pastas com os nomes do dominio em cada package, 
+service(clube,partida), repository(clube,partida) que seria o modelo DDD(Domain-driven Design).

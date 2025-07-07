@@ -2,6 +2,7 @@ package br.com.meli.teamcubation_partidas_de_futebol.global_exception;
 
 import br.com.meli.teamcubation_partidas_de_futebol.clube.exception.ClubeNaoEncontradoException;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.exception.EstadioNaoEncontradoException;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.exception.PartidaNaoEncontradaException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -66,6 +67,18 @@ public class GlobalApiExceptionHandler {
     public ResponseEntity<ErroPadrao> handlerEstadioNaoEncontradoException(EstadioNaoEncontradoException ex) {
         ErroPadrao erroPadrao = new ErroPadrao();
         erroPadrao.setCodigoErro(ErroCodigo.ESTADIO_NAO_ENCONTRADO.name());
+        erroPadrao.setDataHora(LocalDateTime.now());
+        erroPadrao.setMensagem(ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(erroPadrao);
+    }
+
+    @ExceptionHandler({PartidaNaoEncontradaException.class})
+    public ResponseEntity<ErroPadrao> handlerPartidaNaoEncontradaException(PartidaNaoEncontradaException ex) {
+        ErroPadrao erroPadrao = new ErroPadrao();
+        erroPadrao.setCodigoErro(ErroCodigo.PARTIDA_NAO_ENCONTRADA.name());
         erroPadrao.setDataHora(LocalDateTime.now());
         erroPadrao.setMensagem(ex.getMessage());
 

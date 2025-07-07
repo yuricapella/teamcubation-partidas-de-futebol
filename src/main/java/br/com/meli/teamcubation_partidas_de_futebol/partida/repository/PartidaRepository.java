@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public interface PartidaRepository extends JpaRepository<Partida, Integer> {
+public interface PartidaRepository extends JpaRepository<Partida, Long> {
     @Query(value = """
     SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
     FROM partida
