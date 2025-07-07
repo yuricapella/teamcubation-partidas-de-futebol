@@ -1,4 +1,4 @@
-package br.com.meli.teamcubation_partidas_de_futebol.exception;
+package br.com.meli.teamcubation_partidas_de_futebol.global_exception;
 
 public enum ErroCodigo {
     CAMPO_INVALIDO,

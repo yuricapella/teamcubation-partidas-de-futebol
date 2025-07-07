@@ -1,4 +1,4 @@
-package br.com.meli.teamcubation_partidas_de_futebol.exception;
+package br.com.meli.teamcubation_partidas_de_futebol.global_exception;
 
 import br.com.meli.teamcubation_partidas_de_futebol.util.FormatadorDeData;
 import com.fasterxml.jackson.annotation.JsonFormat;

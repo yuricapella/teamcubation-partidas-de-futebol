@@ -112,8 +112,12 @@ Metodo POST, criar partida request dto
 ## Regras a validar manualmente (service/validator):
 
 - [x] Mandante e visitante não podem ser o mesmo clube
-- [ ] Clube mandante e visitante devem existir
-- [ ] Estádio deve existir
+- [x] Clube mandante e visitante devem existir
+(Em buscar clube, pede para retornar 404 Not Found e para cadastrar partida pede 400 Bad request se nao houver clubes
+Pesquisando boas praticas, coloquei o tratamento de exceção 404 not found como global e retornará isso mesmo ao invés de 400.)
+
+- [x] Estádio deve existir
+  (Mesmo caso do clube, retornará 404 not found)
 - [x] Não permitir dataHora anterior à data de criação de qualquer clube envolvido
 - [x] Clube envolvido não pode estar inativo
 - [ ] Clube não pode ter outra partida marcada com diferença menor que 48 horas 

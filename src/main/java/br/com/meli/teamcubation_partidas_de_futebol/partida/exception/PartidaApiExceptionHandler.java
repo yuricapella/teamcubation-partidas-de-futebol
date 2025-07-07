@@ -1,16 +1,16 @@
 package br.com.meli.teamcubation_partidas_de_futebol.partida.exception;
 
-import br.com.meli.teamcubation_partidas_de_futebol.exception.ErroCodigo;
-import br.com.meli.teamcubation_partidas_de_futebol.exception.ErroPadrao;
+import br.com.meli.teamcubation_partidas_de_futebol.global_exception.ErroCodigo;
+import br.com.meli.teamcubation_partidas_de_futebol.global_exception.ErroPadrao;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.controller.PartidaApiController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-@ControllerAdvice(assignableTypes = PartidaApiController.class)
+@RestControllerAdvice(assignableTypes = PartidaApiController.class)
 public class PartidaApiExceptionHandler {
 
     @ExceptionHandler({ClubesIguaisException.class})
