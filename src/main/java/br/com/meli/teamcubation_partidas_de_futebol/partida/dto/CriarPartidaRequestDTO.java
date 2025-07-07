@@ -1,13 +1,29 @@
 package br.com.meli.teamcubation_partidas_de_futebol.partida.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.time.LocalDateTime;
 
 public class CriarPartidaRequestDTO {
-    Long clubeMandanteId;
-    Long clubeVisitanteId;
-    Long estadioId;
-    int golsMandante;
-    int golsVisitante;
+    @NotNull(message = "O clube mandante é obrigatório")
+    private Long clubeMandanteId;
+
+    @NotNull(message = "O clube visitante é obrigatório")
+    private Long clubeVisitanteId;
+
+    @NotNull(message = "O estádio é obrigatório")
+    private Long estadioId;
+
+    @PositiveOrZero(message = "O número de gols do mandante não pode ser negativo")
+    private int golsMandante;
+
+    @PositiveOrZero(message = "O número de gols do visitante não pode ser negativo")
+    private int golsVisitante;
+
+    @NotNull(message = "A data e hora da partida são obrigatórias")
+    @PastOrPresent(message = "A data da partida não pode ser futura")
     LocalDateTime dataHora;
 
     public CriarPartidaRequestDTO(Long clubeMandanteId, Long clubeVisitanteId, Long estadioId, int golsMandante, int golsVisitante, LocalDateTime dataHora) {

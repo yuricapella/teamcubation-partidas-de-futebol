@@ -111,12 +111,15 @@ Metodo POST, criar partida request dto
 
 ## Regras a validar manualmente (service/validator):
 
-- [ ] Mandante e visitante não podem ser o mesmo clube
+- [x] Mandante e visitante não podem ser o mesmo clube
 - [ ] Clube mandante e visitante devem existir
 - [ ] Estádio deve existir
-- [ ] Não permitir dataHora anterior à data de criação de qualquer clube envolvido
-- [ ] Clube envolvido não pode estar inativo
-- [ ] Clube não pode ter outra partida marcada com diferença menor que 48 horas
+- [x] Não permitir dataHora anterior à data de criação de qualquer clube envolvido
+- [x] Clube envolvido não pode estar inativo
+- [ ] Clube não pode ter outra partida marcada com diferença menor que 48 horas 
+(verificar se tem como usar um boolean retornado do repository ou verificações manuais no validator)
+
 - [ ] Estádio não pode ter outra partida cadastrada para o mesmo dia
+  (verificar se faço relações no banco de dados, lista dentro de estadio de partidas, etc)
 ---
 A estrutura do projeto acabou ficando no modelo chamado Domain Package Structure (DPS), mas só descobri esse termo agora ao verificar boas praticas. Antes, eu organizava meus projetos dessa forma simplesmente porque achava mais prático e organizado para visualizar tudo de cada domínio em um só lugar do que colocar pastas com os nomes do dominio em cada package, service(clube,partida), repository(clube,partida) que seria o modelo DDD(Domain-driven Design).

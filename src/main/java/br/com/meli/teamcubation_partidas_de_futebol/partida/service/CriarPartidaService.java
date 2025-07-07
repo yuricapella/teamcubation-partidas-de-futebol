@@ -10,11 +10,13 @@ import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.repository.PartidaRepository;
 import org.springframework.stereotype.Service;
 
+import static br.com.meli.teamcubation_partidas_de_futebol.partida.util.PartidaValidator.validarCriacaoDePartidas;
+
 @Service
 public class CriarPartidaService {
-    PartidaRepository partidaRepository;
-    BuscarClubeService buscarClubeService;
-    BuscarEstadioService buscarEstadioService;
+    private final PartidaRepository partidaRepository;
+    private final BuscarClubeService buscarClubeService;
+    private final BuscarEstadioService buscarEstadioService;
 
     public CriarPartidaService(PartidaRepository partidaRepository, BuscarEstadioService buscarEstadioService, BuscarClubeService buscarClubeService) {
         this.partidaRepository = partidaRepository;
@@ -27,6 +29,7 @@ public class CriarPartidaService {
         Clube clubeMandante = buscarClubeService.buscarClubePorId(partidaACriar.getClubeMandanteId());
         Clube clubeVisitante = buscarClubeService.buscarClubePorId(partidaACriar.getClubeVisitanteId());
         Estadio estadio = buscarEstadioService.buscarEstadioPorId(partidaACriar.getEstadioId());
+        validarCriacaoDePartidas(clubeMandante,clubeVisitante,estadio,partidaACriar);
         Partida partidaCriada = CriarPartidaRequestMapper.toEntity(partidaACriar, clubeMandante, clubeVisitante, estadio);
         return partidaRepository.save(partidaCriada);
     }
