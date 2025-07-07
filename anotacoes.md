@@ -120,10 +120,17 @@ Pesquisando boas praticas, coloquei o tratamento de exceção 404 not found como
   (Mesmo caso do clube, retornará 404 not found)
 - [x] Não permitir dataHora anterior à data de criação de qualquer clube envolvido
 - [x] Clube envolvido não pode estar inativo
-- [ ] Clube não pode ter outra partida marcada com diferença menor que 48 horas 
-(verificar se tem como usar um boolean retornado do repository ou verificações manuais no validator)
+- [x] Clube não pode ter outra partida marcada com diferença menor que 48 horas
+(adicionado metodo em PartidaRepository com a query para verificação no banco de dados,
+como o banco de dados só retorna 1 ou 0, coloquei o retorno como Long, se retornar 1, 
+há datas dentro de 48 horas e entao lançar exceção)
 
 - [ ] Estádio não pode ter outra partida cadastrada para o mesmo dia
   (verificar se faço relações no banco de dados, lista dentro de estadio de partidas, etc)
 ---
 A estrutura do projeto acabou ficando no modelo chamado Domain Package Structure (DPS), mas só descobri esse termo agora ao verificar boas praticas. Antes, eu organizava meus projetos dessa forma simplesmente porque achava mais prático e organizado para visualizar tudo de cada domínio em um só lugar do que colocar pastas com os nomes do dominio em cada package, service(clube,partida), repository(clube,partida) que seria o modelo DDD(Domain-driven Design).
+
+
+## Melhorias futuras:
+Ao retornar a exceção ClubesComPartidasEmHorarioMenorQue48HorasException, 
+listar as datas conflituosas dos clubes e calcular qual o tempo correto para mostrar ao usuario e facilitar o cadastro.

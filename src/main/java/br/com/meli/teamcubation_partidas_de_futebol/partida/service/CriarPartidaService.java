@@ -8,28 +8,31 @@ import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.CriarPartidaRequ
 import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.mapper.CriarPartidaRequestMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.repository.PartidaRepository;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.util.PartidaValidator;
 import org.springframework.stereotype.Service;
-
-import static br.com.meli.teamcubation_partidas_de_futebol.partida.util.PartidaValidator.validarCriacaoDePartidas;
 
 @Service
 public class CriarPartidaService {
     private final PartidaRepository partidaRepository;
     private final BuscarClubeService buscarClubeService;
     private final BuscarEstadioService buscarEstadioService;
+    private final PartidaValidator partidaValidator;
 
-    public CriarPartidaService(PartidaRepository partidaRepository, BuscarEstadioService buscarEstadioService, BuscarClubeService buscarClubeService) {
+    public CriarPartidaService(
+            PartidaRepository partidaRepository, BuscarEstadioService buscarEstadioService,
+            BuscarClubeService buscarClubeService, PartidaValidator partidaValidator)
+    {
         this.partidaRepository = partidaRepository;
         this.buscarClubeService = buscarClubeService;
         this.buscarEstadioService = buscarEstadioService;
-
+        this.partidaValidator = partidaValidator;
     }
 
     public Partida criarPartida(CriarPartidaRequestDTO partidaACriar) {
         Clube clubeMandante = buscarClubeService.buscarClubePorId(partidaACriar.getClubeMandanteId());
         Clube clubeVisitante = buscarClubeService.buscarClubePorId(partidaACriar.getClubeVisitanteId());
         Estadio estadio = buscarEstadioService.buscarEstadioPorId(partidaACriar.getEstadioId());
-        validarCriacaoDePartidas(clubeMandante,clubeVisitante,estadio,partidaACriar);
+        partidaValidator.validarCriacaoDePartidas(clubeMandante,clubeVisitante,estadio,partidaACriar);
         Partida partidaCriada = CriarPartidaRequestMapper.toEntity(partidaACriar, clubeMandante, clubeVisitante, estadio);
         return partidaRepository.save(partidaCriada);
     }

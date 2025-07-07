@@ -49,4 +49,16 @@ public class PartidaApiExceptionHandler {
                 .body(erroPadrao);
     }
 
+    @ExceptionHandler({ClubesComPartidasEmHorarioMenorQue48HorasException.class})
+    public ResponseEntity<ErroPadrao> handlerClubesComPartidasEmHorarioMenorQue48HorasException(ClubesComPartidasEmHorarioMenorQue48HorasException ex) {
+        ErroPadrao erroPadrao = new ErroPadrao();
+        erroPadrao.setCodigoErro(ErroCodigo.CLUBE_TEM_PARTIDAS_COM_DATA_MENOR_QUE_48_HORAS_DA_NOVA_PARTIDA.name());
+        erroPadrao.setDataHora(LocalDateTime.now());
+        erroPadrao.setMensagem(ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(erroPadrao);
+    }
+
 }
