@@ -12,13 +12,23 @@ public class EstadioValidator {
         this.estadioRepository = estadioRepository;
     }
 
-    public void validarDadosDoEstadio(String nomeACadastrar) {
+    public void validarDadosDoEstadioAoCriar(String nomeACadastrar) {
         validarEstadioJaExistePeloNome(nomeACadastrar);
+    }
+
+    public void validarDadosDoEstadioAoAtualizar(String nomeACadastrar, String nomeAntigo) {
+        validarEstadioJaExistePeloNome(nomeACadastrar, nomeAntigo);
     }
 
     public void validarEstadioJaExistePeloNome(String nomeACadastrar){
         if(estadioRepository.existsByNomeIgnoreCase(nomeACadastrar)){
            throw new EstadioJaExisteException();
+        }
+    }
+
+    public void validarEstadioJaExistePeloNome(String nomeACadastrar, String nomeAntigo){
+        if(!nomeACadastrar.equals(nomeAntigo)){
+            validarEstadioJaExistePeloNome(nomeACadastrar);
         }
     }
 }

@@ -1,9 +1,11 @@
 package br.com.meli.teamcubation_partidas_de_futebol.estadio.controller;
 
+import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.AtualizarEstadioRequestDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.CriarEstadioRequestDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.mapper.EstadioResponseMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;
+import br.com.meli.teamcubation_partidas_de_futebol.estadio.service.AtualizarEstadioService;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.service.BuscarEstadioService;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.service.CriarEstadioService;
 import jakarta.validation.Valid;
@@ -14,12 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/estadio")
 public class EstadioApiController {
-    CriarEstadioService criarEstadioService;
-    BuscarEstadioService buscarEstadioService;
+    private final CriarEstadioService criarEstadioService;
+    private final BuscarEstadioService buscarEstadioService;
+    private final AtualizarEstadioService atualizarEstadioService;
 
-    public EstadioApiController(CriarEstadioService criarEstadioService, BuscarEstadioService buscarEstadioService) {
+    public EstadioApiController(CriarEstadioService criarEstadioService, BuscarEstadioService buscarEstadioService, AtualizarEstadioService atualizarEstadioService) {
         this.criarEstadioService = criarEstadioService;
         this.buscarEstadioService = buscarEstadioService;
+        this.atualizarEstadioService = atualizarEstadioService;
     }
 
     @PostMapping
@@ -36,5 +40,14 @@ public class EstadioApiController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(EstadioResponseMapper.toEstadioResponseDTO(estadioBuscado));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EstadioResponseDTO> atualizar
+            (@RequestBody AtualizarEstadioRequestDTO atualizarEstadioRequestDTO, @PathVariable Long id) {
+        Estadio estadioAtualizado = atualizarEstadioService.AtualizarEstadio(atualizarEstadioRequestDTO, id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(EstadioResponseMapper.toEstadioResponseDTO(estadioAtualizado));
     }
 }

@@ -193,12 +193,12 @@ verificação de dados que não foram atualizados e lançar exceção desnecess�
 
 ## 12. Editar um estádio (PUT)
 
-- [ ] Adicionar service para atualização de estádio
-- [ ] Adicionar DTO e mapper para atualização
-- [ ] Adicionar método PUT na controller para editar estádio
-- [ ] Validar nome mínimo de 3 letras (400 BAD REQUEST)
-- [ ] Validar nome único (409 CONFLICT)
-- [ ] Validar se estádio existe (404 NOT FOUND)
+- [x] Adicionar service para atualização de estádio
+- [x] Adicionar DTO e mapper para atualização
+- [x] Adicionar método PUT na controller para editar estádio
+- [x] Validar nome mínimo de 3 letras (400 BAD REQUEST)
+- [x] Validar nome único (409 CONFLICT)
+- [x] Validar se estádio existe (404 NOT FOUND)
 
 ---
 
@@ -220,8 +220,10 @@ verificação de dados que não foram atualizados e lançar exceção desnecess�
 
 
 ## Melhorias futuras:
-Ao retornar a exceção ClubesComPartidasEmHorarioMenorQue48HorasException, 
+- [] Ao retornar a exceção ClubesComPartidasEmHorarioMenorQue48HorasException, 
 listar as datas conflituosas dos clubes e calcular qual o tempo correto para mostrar ao usuario e facilitar o cadastro.
+
+- [] Tentar usar polimorfismo com interface nos dtos de clube e partida para deixar os metodos dos Validators mais genéricos
 
 ## Estrutura
 A estrutura do projeto acabou ficando no modelo chamado Domain Package Structure (DPS), 

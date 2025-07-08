@@ -19,7 +19,7 @@ public class CriarEstadioService {
 
     public Estadio criarEstadio(CriarEstadioRequestDTO estadioACriar) {
         Estadio estadioCriado = CriarEstadioRequestMapper.toEntity(estadioACriar);
-        estadioValidator.validarDadosDoEstadio(estadioCriado.getNome());
+        estadioValidator.validarDadosDoEstadioAoCriar(estadioCriado.getNome());
         return estadioRepository.save(estadioCriado);
     }
 }
