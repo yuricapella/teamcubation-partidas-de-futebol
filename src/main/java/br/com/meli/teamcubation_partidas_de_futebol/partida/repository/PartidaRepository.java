@@ -1,6 +1,8 @@
 package br.com.meli.teamcubation_partidas_de_futebol.partida.repository;
 
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,4 +30,19 @@ public interface PartidaRepository extends JpaRepository<Partida, Long> {
     AND DATE(data_hora) = :data
     """, nativeQuery = true)
     Long existePartidaNoEstadioNoMesmoDia(Long estadioId, LocalDate data);
+
+
+    @Query("""
+    SELECT partida FROM Partida partida
+    WHERE
+      (
+        (:clubeId IS NULL OR partida.clubeMandante.id = :clubeId OR partida.clubeVisitante.id = :clubeId)
+      )
+      AND (:estadioId IS NULL OR partida.estadio.id = :estadioId)
+    """)
+    Page<Partida> findByFiltros(
+            @Param("clubeId") Long clubeId,
+            @Param("estadioId") Long estadioId,
+            Pageable pageable
+    );
 }

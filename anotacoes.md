@@ -154,8 +154,6 @@ verificação de dados que não foram atualizados e lançar exceção desnecess�
 
 ## 8. Remover uma partida (DELETE)
 - [x] adicionar service para deletar
-
-### Bean Validation a implementar (automático):
 - [x] Id da partida obrigatório (PathVariable na controller)
 
 ### Regras a validar manualmente (service/validator):
@@ -165,14 +163,25 @@ verificação de dados que não foram atualizados e lançar exceção desnecess�
 
 ## 9. Buscar uma partida (GET)
 - [x] adicionar service para buscar
-
-### Bean Validation a implementar (automático):
 - [x] Id da partida obrigatório (PathVariable na controller)
 
 ### Regras a validar manualmente (service/validator):
 - [x] Partida não existe (PartidaNaoEncontradaException, 404 NOT FOUND)
 
 ---
+
+## 10. Listar partidas (GET)
+
+- [x] Adicionar service para listar partidas 
+- [x] adicionar metodo para listar partidas com filtros e paginação
+- [x] Adicionar método GET na controller para listar partidas
+- [x] Permitir filtrar por clube e estádio via parâmetros opcionais
+- [x] Parâmetros de paginação/ordenação (`page`, `size`, `sort`) tratados automaticamente pelo Spring Data
+- [x] Sem resultado: deve retornar lista vazia com status 200 OK (não é exceção, padrão de API REST)
+
+---
+
+
 
 ## Melhorias futuras:
 Ao retornar a exceção ClubesComPartidasEmHorarioMenorQue48HorasException, 

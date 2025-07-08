@@ -3,6 +3,8 @@ package br.com.meli.teamcubation_partidas_de_futebol.partida.service;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.exception.PartidaNaoEncontradaException;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.repository.PartidaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,5 +20,9 @@ public class BuscarPartidaService {
     public Partida buscarPartidaPorId(Long id) {
         Optional<Partida> partidaOptional = partidaRepository.findById(id);
         return partidaOptional.orElseThrow(() -> new PartidaNaoEncontradaException(id));
+    }
+
+    public Page<Partida> listarPartidasFiltradas(Long clubeId, Long estadioId, Pageable pageable) {
+        return partidaRepository.findByFiltros(clubeId,estadioId,pageable);
     }
 }

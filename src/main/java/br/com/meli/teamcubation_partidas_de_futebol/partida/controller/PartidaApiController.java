@@ -10,6 +10,8 @@ import br.com.meli.teamcubation_partidas_de_futebol.partida.service.BuscarPartid
 import br.com.meli.teamcubation_partidas_de_futebol.partida.service.CriarPartidaService;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.service.DeletarPartidaService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,5 +61,15 @@ public class PartidaApiController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(PartidaResponseMapper.toPartidaResponseDTO(partidaAtualizada));
+    }
+
+    @GetMapping
+    public Page<PartidaResponseDTO> listarPartidas(
+            @RequestParam(required = false) Long clubeId,
+            @RequestParam(required = false) Long estadioId,
+            Pageable pageable
+    ) {
+        return buscarPartidaService.listarPartidasFiltradas(clubeId, estadioId, pageable)
+                .map(PartidaResponseMapper::toPartidaResponseDTO);
     }
 }
