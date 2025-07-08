@@ -130,8 +130,11 @@ quer dizer que tem datas dentro de 48 horas e entao lança a exceção em Partid
 se for maior que 0, a exceção é lançada em PartidaValidator)
 ---
 ## 7. Editar uma partida (PUT, AtualizarPartidaRequestDTO)
-- [] adicionar service para atualizar
-- [] adicionar dto e mapper
+- [x] adicionar service para atualizar
+- [x] adicionar dto e mapper
+- [x] Em PartidaValidator no metodo validarAtualizacaoDePartidas adiciona if para impedir 
+verificação de dados que não foram atualizados e lançar exceção desnecessária.
+
 
 ### Bean Validation a implementar (automático):
 - [x] @NotNull clubes e estádio

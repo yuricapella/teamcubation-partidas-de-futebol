@@ -35,8 +35,9 @@ public class AtualizarPartidaService {
         Clube clubeMandante = buscarClubeService.buscarClubePorId(dadosParaAtualizar.getClubeMandanteId());
         Clube clubeVisitante = buscarClubeService.buscarClubePorId(dadosParaAtualizar.getClubeVisitanteId());
         Estadio estadio = buscarEstadioService.buscarEstadioPorId(dadosParaAtualizar.getEstadioId());
-        partidaValidator.validarAtualizacaoDePartidas(clubeMandante,clubeVisitante,estadio,dadosParaAtualizar);
-        Partida partidaAtualizada = AtualizarPartidaRequestMapper.updateEntity(dadosParaAtualizar, partidaComDadosAntigos, clubeMandante, clubeVisitante, estadio);
+        partidaValidator.validarAtualizacaoDePartidas(partidaComDadosAntigos,dadosParaAtualizar,clubeMandante,clubeVisitante,estadio);
+        Partida partidaAtualizada = AtualizarPartidaRequestMapper.updateEntity
+                (dadosParaAtualizar, partidaComDadosAntigos, clubeMandante, clubeVisitante, estadio);
         return partidaRepository.save(partidaAtualizada);
     }
 }

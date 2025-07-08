@@ -5,6 +5,7 @@ import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.AtualizarPartidaRequestDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.CriarPartidaRequestDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.exception.*;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.repository.PartidaRepository;
 import org.springframework.stereotype.Component;
 
@@ -60,12 +61,14 @@ public class PartidaValidator {
     }
 
     // --- ATUALIZAÇÃO ---
-    public void validarAtualizacaoDePartidas(Clube clubeMandante, Clube clubeVisitante, Estadio estadio, AtualizarPartidaRequestDTO dadosParaAtualizar) {
+    public void validarAtualizacaoDePartidas(Partida partidaComDadosAntigos, AtualizarPartidaRequestDTO dadosParaAtualizar, Clube clubeMandante, Clube clubeVisitante, Estadio estadio) {
         validarClubesIguais(clubeMandante, clubeVisitante);
-        validarDataPartidaAnteriorACriacaoClubeAtualizacao(dadosParaAtualizar, clubeMandante, clubeVisitante);
         validarClubeInativo(clubeMandante, clubeVisitante);
-        validarPartidasDosClubesComHorariosProximos(clubeMandante.getId(), clubeVisitante.getId(), dadosParaAtualizar.getDataHora());
-        validarEstadioJaPossuiPartidasNoMesmoDiaAtualizacao(dadosParaAtualizar);
+        if(!dadosParaAtualizar.getDataHora().equals(partidaComDadosAntigos.getDataHora())){
+            validarDataPartidaAnteriorACriacaoClubeAtualizacao(dadosParaAtualizar, clubeMandante, clubeVisitante);
+            validarPartidasDosClubesComHorariosProximos(clubeMandante.getId(), clubeVisitante.getId(), dadosParaAtualizar.getDataHora());
+            validarEstadioJaPossuiPartidasNoMesmoDiaAtualizacao(dadosParaAtualizar);
+        }
     }
     public void validarDataPartidaAnteriorACriacaoClubeAtualizacao(AtualizarPartidaRequestDTO dadosParaAtualizar, Clube clubeMandante, Clube clubeVisitante) {
         LocalDate dataPartida = dadosParaAtualizar.getDataHora().toLocalDate();
