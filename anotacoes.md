@@ -134,9 +134,9 @@ se for maior que 0, a exceção é lançada em PartidaValidator)
 - [] adicionar dto e mapper
 
 ### Bean Validation a implementar (automático):
-- [] @NotNull para id da partida, clubes e estádio
-- [] @PositiveOrZero para golsMandante e golsVisitante
-- [] @NotNull e @PastOrPresent para dataHora
+- [x] @NotNull clubes e estádio
+- [x] @PositiveOrZero para golsMandante e golsVisitante
+- [x] @NotNull e @PastOrPresent para dataHora
 
 ### Regras a validar manualmente (service/validator):
 - [x] Clubes iguais (ClubesIguaisException)
@@ -150,10 +150,10 @@ se for maior que 0, a exceção é lançada em PartidaValidator)
 ---
 
 ## 8. Remover uma partida (DELETE)
-- [] adicionar service para deletar
+- [x] adicionar service para deletar
 
 ### Bean Validation a implementar (automático):
-- [] Id da partida obrigatório (PathVariable na controller)
+- [x] Id da partida obrigatório (PathVariable na controller)
 
 ### Regras a validar manualmente (service/validator):
 - [x] Partida não existe (PartidaNaoEncontradaException, 404 NOT FOUND)
