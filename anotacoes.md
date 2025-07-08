@@ -181,6 +181,42 @@ verificação de dados que não foram atualizados e lançar exceção desnecess�
 
 ---
 
+## 11. Cadastrar um estádio (POST)
+
+- [x] Adicionar service para cadastro de estádio
+- [x] Adicionar DTO e mapper para cadastro
+- [x] Adicionar método POST na controller para criar estádio
+- [x] Validar nome obrigatório e mínimo de 3 letras (400 BAD REQUEST)
+- [] Validar nome único (409 CONFLICT)
+
+---
+
+## 12. Editar um estádio (PUT)
+
+- [ ] Adicionar service para atualização de estádio
+- [ ] Adicionar DTO e mapper para atualização
+- [ ] Adicionar método PUT na controller para editar estádio
+- [ ] Validar nome mínimo de 3 letras (400 BAD REQUEST)
+- [ ] Validar nome único (409 CONFLICT)
+- [ ] Validar se estádio existe (404 NOT FOUND)
+
+---
+
+## 13. Buscar um estádio (GET)
+
+- [x] Adicionar service para busca de estádio por id
+- [x] Adicionar método GET na controller para buscar estádio por id
+- [x] Validar se estádio existe (404 NOT FOUND)
+
+---
+
+## 14. Listar estádios (GET)
+
+- [ ] Adicionar service para listagem de estádios com paginação
+- [ ] Adicionar método GET na controller para listar estádios
+- [ ] Permitir paginação e ordenação por nome
+- [ ] Sem resultado: retornar lista vazia com status 200 OK
+
 
 
 ## Melhorias futuras:

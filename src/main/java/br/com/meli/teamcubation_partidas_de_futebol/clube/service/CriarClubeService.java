@@ -1,5 +1,7 @@
 package br.com.meli.teamcubation_partidas_de_futebol.clube.service;
 
+import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.CriarClubeRequestDTO;
+import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.mapper.CriarClubeRequestMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.repository.ClubeRepository;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.util.ClubeValidator;
@@ -15,8 +17,9 @@ public class CriarClubeService {
         this.clubeValidator = clubeValidator;
     }
 
-    public Clube criarClube(Clube clube) {
-        clubeValidator.validarClubeNaCriacao(clube);
-        return clubeRepository.save(clube);
+    public Clube criarClube(CriarClubeRequestDTO clubeACriar) {
+        Clube clubeCriado = CriarClubeRequestMapper.toEntity(clubeACriar);
+        clubeValidator.validarClubeNaCriacao(clubeCriado);
+        return clubeRepository.save(clubeCriado);
     }
 }

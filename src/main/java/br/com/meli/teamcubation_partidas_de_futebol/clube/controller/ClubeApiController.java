@@ -4,7 +4,6 @@ import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.AtualizarClubeRequ
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.ClubeResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.CriarClubeRequestDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.mapper.ClubeResponseMapper;
-import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.mapper.CriarClubeRequestMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.service.AtualizarClubeService;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.service.BuscarClubeService;
@@ -51,7 +50,7 @@ public class ClubeApiController {
 
     @PostMapping
     public ResponseEntity<ClubeResponseDTO> criar(@RequestBody @Valid CriarClubeRequestDTO clubeDTO) {
-        Clube clubeCriado = criarClubeService.criarClube(CriarClubeRequestMapper.toEntity(clubeDTO));
+        Clube clubeCriado = criarClubeService.criarClube(clubeDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ClubeResponseMapper.toClubeResponseDTO(clubeCriado));
     }
