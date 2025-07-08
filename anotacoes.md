@@ -187,7 +187,7 @@ verificação de dados que não foram atualizados e lançar exceção desnecess�
 - [x] Adicionar DTO e mapper para cadastro
 - [x] Adicionar método POST na controller para criar estádio
 - [x] Validar nome obrigatório e mínimo de 3 letras (400 BAD REQUEST)
-- [] Validar nome único (409 CONFLICT)
+- [x] Validar nome único (409 CONFLICT)
 
 ---
 

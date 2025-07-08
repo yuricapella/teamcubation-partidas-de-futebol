@@ -2,7 +2,6 @@ package br.com.meli.teamcubation_partidas_de_futebol.estadio.controller;
 
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.CriarEstadioRequestDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioResponseDTO;
-import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.mapper.CriarEstadioRequestMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.mapper.EstadioResponseMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.service.BuscarEstadioService;
@@ -25,7 +24,7 @@ public class EstadioApiController {
 
     @PostMapping
     public ResponseEntity<EstadioResponseDTO> criar(@RequestBody @Valid CriarEstadioRequestDTO criarEstadioRequestDTO) {
-        Estadio estadioCriado = criarEstadioService.criarEstadio(CriarEstadioRequestMapper.toEntity(criarEstadioRequestDTO));
+        Estadio estadioCriado = criarEstadioService.criarEstadio(criarEstadioRequestDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(EstadioResponseMapper.toEstadioResponseDTO(estadioCriado));

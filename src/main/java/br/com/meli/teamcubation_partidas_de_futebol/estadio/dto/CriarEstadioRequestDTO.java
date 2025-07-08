@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 public class CriarEstadioRequestDTO {
     @NotBlank(message = "O nome não pode estar vazio.")
     @Size(min = 3, message = "O nome tem que ter no minimo três letras;")
-    @Pattern(regexp = "^[A-Za-zÀ-ÿ ]+$", message = "O nome deve conter apenas letras e espaços")
+    @Pattern(regexp = "^[A-Za-z ]+$", message = "O nome deve conter apenas letras sem acento e espaços")
     private String nome;
 
     public CriarEstadioRequestDTO() {
