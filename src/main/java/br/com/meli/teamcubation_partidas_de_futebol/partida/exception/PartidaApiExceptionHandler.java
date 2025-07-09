@@ -2,7 +2,10 @@ package br.com.meli.teamcubation_partidas_de_futebol.partida.exception;
 
 import br.com.meli.teamcubation_partidas_de_futebol.global_exception.ErroCodigo;
 import br.com.meli.teamcubation_partidas_de_futebol.global_exception.ErroPadrao;
-import br.com.meli.teamcubation_partidas_de_futebol.partida.controller.PartidaApiController;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.controller.AtualizarPartidaApiController;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.controller.BuscarPartidaApiController;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.controller.CriarPartidaApiController;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.controller.DeletarPartidaApiController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,7 +13,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-@RestControllerAdvice(assignableTypes = PartidaApiController.class)
+@RestControllerAdvice(assignableTypes =
+        {BuscarPartidaApiController.class, CriarPartidaApiController.class,
+        AtualizarPartidaApiController.class, DeletarPartidaApiController.class})
+
 public class PartidaApiExceptionHandler {
 
     @ExceptionHandler({ClubesIguaisException.class})
