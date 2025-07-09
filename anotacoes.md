@@ -212,11 +212,10 @@ verificação de dados que não foram atualizados e lançar exceção desnecess�
 
 ## 14. Listar estádios (GET)
 
-- [ ] Adicionar service para listagem de estádios com paginação
-- [ ] Adicionar método GET na controller para listar estádios
-- [ ] Permitir paginação e ordenação por nome
-- [ ] Sem resultado: retornar lista vazia com status 200 OK
-
+- [x] Adicionar service para listagem de estádios com paginação
+- [x] Adicionar método GET na controller para listar estádios
+- [x] Permitir paginação e ordenação por nome
+- [x] Sem resultado: retornar lista vazia com status 200 OK
 
 
 ## Melhorias futuras:

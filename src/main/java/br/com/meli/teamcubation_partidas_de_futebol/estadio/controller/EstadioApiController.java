@@ -9,6 +9,8 @@ import br.com.meli.teamcubation_partidas_de_futebol.estadio.service.AtualizarEst
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.service.BuscarEstadioService;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.service.CriarEstadioService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,5 +51,11 @@ public class EstadioApiController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(EstadioResponseMapper.toEstadioResponseDTO(estadioAtualizado));
+    }
+
+    @GetMapping
+    public Page<EstadioResponseDTO> buscarTodosEstadiosFiltrados(
+            @RequestParam(required = false) String nome, Pageable pageable) {
+        return buscarEstadioService.listarEstadiosFiltrados(nome,pageable);
     }
 }
