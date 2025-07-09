@@ -48,14 +48,14 @@ public class PartidaValidator {
     }
 
     public void validarPartidasDosClubesComHorariosProximos(Long clubeMandanteId, Long clubeVisitanteId, LocalDateTime dataNovaPartida) {
-        if(partidaRepository.existeConflitoDeHorario(clubeMandanteId,clubeVisitanteId, dataNovaPartida) > 0){
+        if(partidaRepository.countConflitosDeHorarioNosClubes(clubeMandanteId,clubeVisitanteId, dataNovaPartida) > 0){
             throw new ClubesComPartidasEmHorarioMenorQue48HorasException();
         }
     }
 
     public void validarEstadioJaPossuiPartidasNoMesmoDiaCriacao(CriarPartidaRequestDTO partidaACriar) {
         LocalDate dataPartida = partidaACriar.getDataHora().toLocalDate();
-        if(partidaRepository.existePartidaNoEstadioNoMesmoDia(partidaACriar.getEstadioId(),dataPartida) > 0){
+        if(partidaRepository.countPartidasNoEstadioNoDia(partidaACriar.getEstadioId(),dataPartida) > 0){
             throw new EstadioJaPossuiPartidaNoMesmoDiaException();
         }
     }
@@ -78,7 +78,7 @@ public class PartidaValidator {
     }
     public void validarEstadioJaPossuiPartidasNoMesmoDiaAtualizacao(AtualizarPartidaRequestDTO dadosParaAtualizar) {
         LocalDate dataPartida = dadosParaAtualizar.getDataHora().toLocalDate();
-        if (partidaRepository.existePartidaNoEstadioNoMesmoDia(dadosParaAtualizar.getEstadioId(), dataPartida) > 0) {
+        if (partidaRepository.countPartidasNoEstadioNoDia(dadosParaAtualizar.getEstadioId(), dataPartida) > 0) {
             throw new EstadioJaPossuiPartidaNoMesmoDiaException();
         }
     }

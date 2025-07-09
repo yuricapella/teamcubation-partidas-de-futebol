@@ -19,7 +19,7 @@ public class AtualizarEstadioService {
         this.buscarEstadioService = buscarEstadioService;
     }
 
-    public Estadio AtualizarEstadio(AtualizarEstadioRequestDTO dadosParaAtualizar, Long id) {
+    public Estadio atualizarEstadio(AtualizarEstadioRequestDTO dadosParaAtualizar, Long id) {
         Estadio dadosAntigos = buscarEstadioService.buscarEstadioPorId(id);
         estadioValidator.validarDadosDoEstadioAoAtualizar(dadosParaAtualizar.getNome(), dadosAntigos.getNome());
         Estadio estadioAtualizado = AtualizarEstadioRequestMapper.updateEntity(dadosParaAtualizar, dadosAntigos);

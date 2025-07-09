@@ -56,7 +56,7 @@ public class PartidaApiController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PartidaResponseDTO> atualizarPartidaPorId(@RequestBody AtualizarPartidaRequestDTO atualizarPartidaRequestDTO, @PathVariable Long id) {
+    public ResponseEntity<PartidaResponseDTO> atualizarPartidaPorId(@RequestBody @Valid AtualizarPartidaRequestDTO atualizarPartidaRequestDTO, @PathVariable Long id) {
         Partida partidaAtualizada = atualizarPartidaService.atualizarPartida(atualizarPartidaRequestDTO, id);
         return ResponseEntity
                 .status(HttpStatus.OK)

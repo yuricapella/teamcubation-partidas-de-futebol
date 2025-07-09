@@ -46,8 +46,8 @@ public class EstadioApiController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EstadioResponseDTO> atualizar
-            (@RequestBody AtualizarEstadioRequestDTO atualizarEstadioRequestDTO, @PathVariable Long id) {
-        Estadio estadioAtualizado = atualizarEstadioService.AtualizarEstadio(atualizarEstadioRequestDTO, id);
+            (@RequestBody @Valid AtualizarEstadioRequestDTO atualizarEstadioRequestDTO, @PathVariable Long id) {
+        Estadio estadioAtualizado = atualizarEstadioService.atualizarEstadio(atualizarEstadioRequestDTO, id);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(EstadioResponseMapper.toEstadioResponseDTO(estadioAtualizado));

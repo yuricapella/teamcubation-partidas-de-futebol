@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class BuscarClubeService {
-    ClubeRepository clubeRepository;
+    private final ClubeRepository clubeRepository;
 
     public BuscarClubeService(ClubeRepository clubeRepository) {
         this.clubeRepository = clubeRepository;

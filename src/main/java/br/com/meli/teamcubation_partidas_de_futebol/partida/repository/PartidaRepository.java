@@ -18,7 +18,7 @@ public interface PartidaRepository extends JpaRepository<Partida, Long> {
            OR clube_visitante_id IN (:clubeMandanteId, :clubeVisitanteId))
       AND ABS(TIMESTAMPDIFF(hour, data_hora, :dataNovaPartida)) < 48
     """, nativeQuery = true)
-    Long existeConflitoDeHorario(
+    int countConflitosDeHorarioNosClubes(
             @Param("clubeMandanteId") Long clubeMandanteId,
             @Param("clubeVisitanteId") Long clubeVisitanteId,
             @Param("dataNovaPartida") LocalDateTime dataNovaPartida);
@@ -29,7 +29,7 @@ public interface PartidaRepository extends JpaRepository<Partida, Long> {
     WHERE estadio_id = :estadioId 
     AND DATE(data_hora) = :data
     """, nativeQuery = true)
-    Long existePartidaNoEstadioNoMesmoDia(Long estadioId, LocalDate data);
+    int countPartidasNoEstadioNoDia(Long estadioId, LocalDate data);
 
 
     @Query("""
