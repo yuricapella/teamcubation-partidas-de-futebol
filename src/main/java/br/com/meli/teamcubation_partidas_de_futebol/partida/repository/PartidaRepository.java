@@ -1,5 +1,6 @@
 package br.com.meli.teamcubation_partidas_de_futebol.partida.repository;
 
+import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface PartidaRepository extends JpaRepository<Partida, Long> {
     @Query(value = """
@@ -45,4 +47,6 @@ public interface PartidaRepository extends JpaRepository<Partida, Long> {
             @Param("estadioId") Long estadioId,
             Pageable pageable
     );
+
+    List<Partida> findByClubeMandanteIdOrClubeVisitanteId(Long clubeIdMandante, Long clubeIdVisitante);
 }
