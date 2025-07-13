@@ -217,6 +217,53 @@ verificação de dados que não foram atualizados e lançar exceção desnecess�
 - [x] Permitir paginação e ordenação por nome
 - [x] Sem resultado: retornar lista vazia com status 200 OK
 
+---
+
+## Busca Avançada 1: Retrospecto Geral de um Clube (GET)
+
+### **Descrição técnica**
+Implementado endpoint para retornar o retrospecto geral de um clube, somando **todas as partidas** 
+que o clube participou (seja como mandante, seja como visitante).  
+A resposta apresenta:
+- Dados resumidos do clube
+- Total de vitórias
+- Empates
+- Derrotas
+- Gols feitos
+- Gols sofridos
+
+### **Funcionalidade/Endpoint**
+- **Método:** GET
+- **Path:** `/api/clube/{id}/retrospecto`
+- **Exemplo de resposta:**
+  ```json
+  {
+    "clube": {
+      "nome": "clube de time atualizado",
+      "siglaEstado": "AM",
+      "dataCriacao": "2025-05-13"
+    },
+    "vitorias": 2,
+    "derrotas": 1,
+    "empates": 1,
+    "golsFeitos": 7,
+    "golsSofridos": 5
+  }
+  ```
+
+### **Cenários tratados**
+- Se o clube não existe, retorna 404 NOT FOUND.
+- Se o clube existe mas não possui partidas, retorna todos os valores zerados e status 200 OK.
+
+### **Checklist de Implementação**
+- [x] Busca por ID do clube com validação de existência e erro 404
+- [x] Recuperação de todas as partidas do clube (como mandante ou visitante)
+- [x] Cálculo de vitórias, empates, derrotas, gols feitos e sofridos, considerando o papel do clube em cada partida
+- [x] Uso de DTO (ClubeResponseDTO) para expor somente dados necessários do clube
+- [x] Resposta única (não lista), com todos os campos zerados caso o clube não tenha partidas
+- [x] Chamada da service pelo controller com endpoint RESTful, padrão status code e resposta JSON
+
+---
 
 ## Busca Avançada 2: Retrospecto contra adversários (GET)
 
