@@ -218,6 +218,62 @@ verificação de dados que não foram atualizados e lançar exceção desnecess�
 - [x] Sem resultado: retornar lista vazia com status 200 OK
 
 
+## Busca Avançada 2: Retrospecto contra adversários (GET)
+
+### **Descrição técnica**
+Implementado endpoint para retornar o retrospecto de um clube contra **cada um** de seus adversários já enfrentados.  
+Para cada adversário, são calculados:
+- Nome do adversário
+- Estado do adversário
+- Total de partidas (jogos)
+- Vitórias
+- Derrotas
+- Empates
+- Gols feitos
+- Gols sofridos
+
+O resultado entregue é um objeto JSON com o nome do clube central, o estado e uma **lista** de retrospectos, cada um apontando para um adversário diferente.
+
+### **Funcionalidade/Endpoint**
+- **Endpoint:**  
+  `GET /api/clube/{id}/retrospectos-adversarios`
+- **Response:**
+  ```json
+  {
+    "nomeClube": "clube de time atualizado",
+    "estadoClube": "SP",
+    "retrospectoContraAdversarios": [
+      {
+        "nomeAdversario": "clube de time",
+        "estadoAdversario": "SP",
+        "jogos": 2,
+        "vitorias": 1,
+        "derrotas": 0,
+        "empates": 1,
+        "golsFeitos": 5,
+        "golsSofridos": 4
+      },
+      ...
+    ]
+  }
+  ```
+
+### **Cenários tratados**
+- Se o clube não existir, retorna 404 NOT FOUND.
+- Se o clube existir mas não tiver partidas, a lista `"retrospectoContraAdversarios"` é **vazia**, com status 200 OK.
+
+### **Checklist do que foi implementado:**
+
+- [x] Busca por ID do clube, validando existência antes de processar.
+- [x] Recuperação de todas as partidas em que o clube foi mandante ou visitante.
+- [x] Agrupamento automático por adversário utilizando Streams/Map.
+- [x] Para cada adversário, cálculo do retrospecto (jogos, estatísticas e agora também o estado(pois tem nomes repetidos de clubes)).
+- [x] Construção do DTO de resposta: nome do clube, estado do clube, lista de retrospectos com nome e estado do adversário.
+- [x] Retorno de lista vazia e status 200 OK se não houver jogos; 404 se clube não existe.
+
+---
+
+
 ## Melhorias futuras:
 - [] Ao retornar a exceção ClubesComPartidasEmHorarioMenorQue48HorasException, 
 listar as datas conflituosas dos clubes e calcular qual o tempo correto para mostrar ao usuario e facilitar o cadastro.

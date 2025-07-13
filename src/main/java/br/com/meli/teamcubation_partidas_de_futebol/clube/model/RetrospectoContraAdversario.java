@@ -1,21 +1,23 @@
 package br.com.meli.teamcubation_partidas_de_futebol.clube.model;
 
-import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.ClubeResponseDTO;
-import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.mapper.ClubeResponseMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 
 import java.util.List;
 
-public class RetrospectoClube {
-    private final ClubeResponseDTO clubeDTO;
+public class RetrospectoContraAdversario {
+    private final String nomeAdversario;
+    private final String estadoAdversario;
+    private final int jogos;
     private final int vitorias;
     private final int derrotas;
     private final int empates;
     private final int golsFeitos;
     private final int golsSofridos;
 
-    public RetrospectoClube(Clube clube, List<Partida> partidas) {
-        this.clubeDTO = ClubeResponseMapper.toClubeResponseDTO(clube);
+    public RetrospectoContraAdversario(Long idClube, Clube clubeAdversario, List<Partida> partidas) {
+        this.nomeAdversario = clubeAdversario.getNome();
+        this.estadoAdversario = clubeAdversario.getSiglaEstado();
+        this.jogos = partidas.size();
         int vitorias = 0;
         int derrotas = 0;
         int empates = 0;
@@ -23,7 +25,7 @@ public class RetrospectoClube {
         int golsSofridos = 0;
 
         for (Partida partida : partidas) {
-            if (partida.getClubeMandante().getId().equals(clube.getId())) {
+            if (partida.getClubeMandante().getId().equals(idClube)) {
                 golsFeitos += partida.getGolsMandante();
                 golsSofridos += partida.getGolsVisitante();
                 switch (partida.getResultado()) {
@@ -31,7 +33,7 @@ public class RetrospectoClube {
                     case VITORIA_VISITANTE -> derrotas++;
                     case EMPATE -> empates++;
                 }
-            } else if (partida.getClubeVisitante().getId().equals(clube.getId())) {
+            } else if (partida.getClubeVisitante().getId().equals(idClube)) {
                 golsFeitos += partida.getGolsVisitante();
                 golsSofridos += partida.getGolsMandante();
                 switch (partida.getResultado()) {
@@ -49,11 +51,35 @@ public class RetrospectoClube {
         this.golsSofridos = golsSofridos;
     }
 
-    public ClubeResponseDTO getClube() { return clubeDTO; }
-    public int getVitorias() { return vitorias; }
-    public int getDerrotas() { return derrotas; }
-    public int getEmpates() { return empates; }
-    public int getGolsFeitos() { return golsFeitos; }
-    public int getGolsSofridos() { return golsSofridos; }
+    public String getNomeAdversario() {
+        return nomeAdversario;
+    }
 
+    public String getEstadoAdversario() {
+        return estadoAdversario;
+    }
+
+    public int getJogos() {
+        return jogos;
+    }
+
+    public int getVitorias() {
+        return vitorias;
+    }
+
+    public int getDerrotas() {
+        return derrotas;
+    }
+
+    public int getEmpates() {
+        return empates;
+    }
+
+    public int getGolsFeitos() {
+        return golsFeitos;
+    }
+
+    public int getGolsSofridos() {
+        return golsSofridos;
+    }
 }
