@@ -501,6 +501,65 @@ O ranking mostra:
 
 ---
 
+## Busca Avançada 4: Ranking - Total de Gols (GET)
+
+### **Descrição técnica**
+Implementado endpoint para retornar o **ranking dos clubes** com base no **total de gols marcados**.
+
+- O ranking exibe nome e estado do clube e o total de gols feitos.
+- Clubes com zero gols não aparecem na lista.
+- A lista é ordenada do maior para o menor número de gols.
+
+### **Como chamar**
+- **Endpoint:** `GET /api/clube/ranking?tipoRanking=TOTAL_GOLS`
+
+### **Checklist de implementação**
+
+- [x] Implementada classe filha `RankingGols` com lógica de cálculo no atributo total (baseada em gols marcados)
+- [x] Implementada `RankingGolsStrategy` para cálculo e ordenação do tipo TOTAL_GOLS
+- [x] Endpoint e resposta seguem padrão já estabelecido nos rankings anteriores
+
+---
+
+## Busca Avançada 4: Ranking - Total de Vitórias (GET)
+
+### **Descrição técnica**
+Implementado endpoint para retornar o **ranking dos clubes** baseado no **total de vitórias**.
+
+- O ranking mostra nome e estado do clube, e o total de vitórias.
+- Clubes sem vitórias são excluídos da lista.
+- Ordenação do maior para o menor total de vitórias.
+
+### **Como chamar**
+- **Endpoint:** `GET /api/clube/ranking?tipoRanking=TOTAL_VITORIAS`
+
+### **Checklist de implementação**
+- [x] Inclusão da classe filha `RankingVitorias` para calcular o total de vitórias do clube
+- [x] Inclusão da strategy `RankingVitoriasStrategy` para esse tipo de ranking
+- [x] Endpoint e resposta seguem padrão já estabelecido nos rankings anteriores
+
+---
+
+## Busca Avançada 4: Ranking - Total de Jogos (GET)
+
+### **Descrição técnica**
+Implementado endpoint para retornar o **ranking dos clubes** por **total de jogos disputados**.
+
+- O ranking mostra nome e estado do clube, e o total de jogos.
+- Clubes que não jogaram são excluídos da lista.
+- Ordenação do maior para o menor número de jogos disputados.
+
+### **Como chamar**
+- **Endpoint:** `GET /api/clube/ranking?tipoRanking=TOTAL_JOGOS`
+
+### **Checklist de implementação**
+- [x] Inclusão da classe filha `RankingJogos` para calcular o total de jogos do clube
+- [x] Inclusão da strategy `RankingJogosStrategy` para esse tipo de ranking
+- [x] Endpoint e resposta seguem padrão já estabelecido nos rankings anteriores
+
+---
+
+
 ## Melhorias futuras:
 - [] Ao retornar a exceção ClubesComPartidasEmHorarioMenorQue48HorasException, 
 listar as datas conflituosas dos clubes e calcular qual o tempo correto para mostrar ao usuario e facilitar o cadastro.
