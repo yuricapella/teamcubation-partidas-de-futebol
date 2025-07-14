@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -35,6 +36,18 @@ public class GlobalApiExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(erroPadrao);
+    }
+
+    @ExceptionHandler({ResponseStatusException.class})
+    public ResponseEntity<ErroPadrao> handleResponseStatusException(ResponseStatusException ex) {
+        ErroPadrao erroPadrao = new ErroPadrao();
+        erroPadrao.setCodigoErro(ex.getStatusCode().toString());
+        erroPadrao.setDataHora(LocalDateTime.now());
+        erroPadrao.setMensagem(ex.getReason());
+
+        return ResponseEntity
+                .status(ex.getStatusCode())
                 .body(erroPadrao);
     }
 

@@ -1,6 +1,6 @@
 package br.com.meli.teamcubation_partidas_de_futebol.retrospecto.service;
 
-import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.mapper.RetrospectosAdversariosMapper;
+import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.mapper.RetrospectosAdversariosMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.service.BuscarClubeService;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.PartidaResponseDTO;

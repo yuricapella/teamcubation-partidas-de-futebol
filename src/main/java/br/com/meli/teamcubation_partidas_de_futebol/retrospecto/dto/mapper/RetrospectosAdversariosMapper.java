@@ -1,4 +1,4 @@
-package br.com.meli.teamcubation_partidas_de_futebol.clube.dto.mapper;
+package br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.mapper;
 
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.RetrospectoAdversariosResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.RetrospectoAdversario;

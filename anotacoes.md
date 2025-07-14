@@ -411,6 +411,95 @@ O resultado entregue é um objeto JSON contendo uma lista de retrospectos (um pa
 
 ---
 
+### Commit melhorado (legibilidade e clareza):
+
+```
+feat(ranking): implementação da busca avançada 4 - ranking de clubes por pontos
+
+- Adiciona anotações técnicas e de arquitetura
+- Implementa tratamento de exceção com ResponseStatusException para tipos de ranking inválidos
+- Cria CalculadoraRankingStrategy para aplicar polimorfismo na lógica de cálculo dos rankings
+- Cria classe abstrata Ranking para centralizar atributos/métodos comuns e evitar repetição nas subclasses
+- Adiciona controller com rota /ranking usando RequestParam para selecionar o tipo do ranking GET
+- Implementa classe filha RankingPontos com o cálculo específico desse tipo de ranking
+- Implementa RankingPontosStrategy que usa a strategy para calcular e ordenar os pontos sem código duplicado/paradigma de extensão
+- Adiciona RankingService com método genérico, usando o padrão strategy, que permite fácil inclusão de novos rankings (princípio aberto-fechado)
+- Define enum TipoRanking para padronizar os valores aceitos pelo endpoint GET e garantir segurança de dados
+```
+
+---
+
+## Busca Avançada 4: Ranking - Total de Pontos (GET)
+
+### **Descrição técnica**
+Implementado endpoint para retornar o **ranking dos clubes** com base no total de pontos (vitória = 3, empate = 1).  
+Utiliza enum `TipoRanking` para selecionar o critério. A abordagem segue o padrão Strategy, facilitando evolução para novos tipos de ranking.
+
+O ranking mostra:
+- Nome e estado do clube
+- Total de pontos (calculado: vitórias × 3 + empates)
+- Lista é ordenada do maior para o menor número de pontos
+- Clubes com zero pontos são excluídos do resultado final
+
+### **Funcionalidade/Endpoint**
+- **Método:** GET
+- **Path:** `/api/clube/ranking?tipoRanking=TOTAL_PONTOS`
+- **Request:**  
+  Exemplo de chamada:
+  ```
+  GET http://localhost:8080/api/clube/ranking?tipoRanking=TOTAL_PONTOS
+  ```
+- **Exemplo de resposta:**
+  ```json
+  [
+    {
+      "nomeClube": "clube de time atualizado",
+      "estadoClube": "AM",
+      "total": 4
+    },
+    {
+      "nomeClube": "aclube de time",
+      "estadoClube": "AP",
+      "total": 3
+    },
+    {
+      "nomeClube": "clube de time criado",
+      "estadoClube": "SC",
+      "total": 3
+    },
+    {
+      "nomeClube": "clube de time criado",
+      "estadoClube": "SP",
+      "total": 3
+    },
+    {
+      "nomeClube": "clube de time oito",
+      "estadoClube": "SP",
+      "total": 3
+    },
+    {
+      "nomeClube": "clube de time",
+      "estadoClube": "AP",
+      "total": 1
+    }
+  ]
+  ```
+
+### **Cenários tratados**
+- Endpoint retorna 400 BAD_REQUEST se tipo de ranking informado não existir no enum
+- Se não houver clubes com pontos, retorna lista vazia e status 200 OK
+- Retorna lista ordenada por total de pontos, excluindo clubes zerados
+
+### **Checklist do que foi implementado**
+- [x] Criação do enum `TipoRanking` para limitar e padronizar opções de ranking recebidas pela API
+- [x] Implementação do padrão Strategy para cálculo de rankings, facilitando extensão para outros tipos no futuro
+- [x] Classe abstrata genérica para rankings, evitando repetição de atributos e métodos
+- [x] Classe filha para ranking de pontos com o cálculo apropriado e herança da estrutura base
+- [x] Service central polimórfico, que orquestra escolha dinâmica da strategy conforme o tipo solicitado
+- [x] Controller GET usando `@RequestParam` para receber o tipo de ranking, em conformidade com o padrão REST
+- [x] Tratamento de exceção para tipos de ranking inválidos, seguindo padronização de respostas HTTP
+
+---
 
 ## Melhorias futuras:
 - [] Ao retornar a exceção ClubesComPartidasEmHorarioMenorQue48HorasException, 
@@ -418,9 +507,22 @@ listar as datas conflituosas dos clubes e calcular qual o tempo correto para mos
 
 - [] Tentar usar polimorfismo com interface nos dtos de clube e partida para deixar os metodos dos Validators mais genéricos
 
+- [] alterar o get confronto de retrospecto para usar requestparam e nao request body, pois foge do padrao rest
+
 ## Estrutura
 A estrutura do projeto acabou ficando no modelo chamado Domain Package Structure (DPS), 
 mas só descobri esse termo ao verificar boas praticas. 
 Antes, eu organizava meus projetos dessa forma simplesmente porque achava mais prático e organizado 
 para visualizar tudo de cada domínio em um só lugar do que colocar pastas com os nomes do dominio em cada package, 
 service(clube,partida), repository(clube,partida) que seria o modelo DDD(Domain-driven Design).
+
+## Comentarios:
+### Busca avançada 4 rankings
+Minha ideia inicial era fazer um método genérico que recebesse uma String "tipo" e usasse um switch para cada tipo chamar o método privado correspondente.
+Optei por evoluir para o padrão Strategy: cada novo ranking cria uma nova strategy e implementa a lógica, sem mexer no código legado.
+O fluxo ficou:
+Classe Ranking é pai com informações genéricas e cálculo abstrato;
+Cada filha (RankingPontos, etc) implementa a lógica de cálculo de total;
+Cada strategy (RankingPontosStrategy, etc) usa polimorfismo para calcular o ranking;
+Service central orquestra tudo, mantendo código limpo e extensível.
+Essa abordagem torna o código mais complexo inicialmente, porém altamente extensível e de fácil manutenção a longo prazo.
