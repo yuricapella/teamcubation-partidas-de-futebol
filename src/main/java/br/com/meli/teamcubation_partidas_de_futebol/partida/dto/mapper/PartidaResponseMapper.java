@@ -5,6 +5,9 @@ import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.mapper.EstadioRe
 import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.PartidaResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class PartidaResponseMapper {
     public static PartidaResponseDTO toPartidaResponseDTO(Partida partida) {
         PartidaResponseDTO partidaDTO = new PartidaResponseDTO();
@@ -16,5 +19,11 @@ public class PartidaResponseMapper {
         partidaDTO.setDataHora(partida.getDataHora());
         partidaDTO.setResultado(partida.getResultado());
         return partidaDTO;
+    }
+
+    public static List<PartidaResponseDTO> toPartidaResponseDTO(List<Partida> partidas) {
+        return partidas.stream()
+                .map(PartidaResponseMapper::toPartidaResponseDTO)
+                .collect(Collectors.toList());
     }
 }

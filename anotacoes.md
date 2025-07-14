@@ -320,6 +320,97 @@ O resultado entregue é um objeto JSON com o nome do clube central, o estado e u
 
 ---
 
+## Busca Avançada 3: Confrontos Diretos (GET)
+
+### **Descrição técnica**
+Implementado endpoint para retornar todas as partidas entre dois clubes específicos (confronto direto).  
+Além da lista de partidas, são retornados os retrospectos de cada time no confronto, incluindo:
+- Nome e dados resumidos do clube
+- Número total de jogos entre os dois clubes
+- Vitórias, empates e derrotas de cada clube neste confronto
+- Gols feitos e gols sofridos por cada clube neste confronto
+
+O resultado entregue é um objeto JSON contendo uma lista de retrospectos (um para cada clube) e uma lista de partidas correspondentes ao confronto.
+
+### **Funcionalidade/Endpoint**
+- **Método:** GET
+- **Path:** `/api/clube/confronto`
+- **Request:**  
+  Recebe via corpo JSON:
+  ```json
+  {
+    "clubeId": 1,
+    "adversarioId": 2
+  }
+  ```
+- **Exemplo de resposta:**
+  ```json
+  {
+    "retrospectos": [
+      {
+        "clube": {
+          "nome": "clube de time atualizado",
+          "siglaEstado": "AM",
+          "dataCriacao": "2025-05-13"
+        },
+        "jogos": 2,
+        "vitorias": 1,
+        "derrotas": 0,
+        "empates": 1,
+        "golsFeitos": 5,
+        "golsSofridos": 4
+      },
+      {
+        "clube": {
+          "nome": "clube de time",
+          "siglaEstado": "AP",
+          "dataCriacao": "2025-05-13"
+        },
+        "jogos": 2,
+        "vitorias": 0,
+        "derrotas": 1,
+        "empates": 1,
+        "golsFeitos": 4,
+        "golsSofridos": 5
+      }
+    ],
+    "partidas": [
+      {
+        "clubeMandante": { ... },
+        "clubeVisitante": { ... },
+        "estadio": { ... },
+        "golsMandante": 2,
+        "golsVisitante": 2,
+        "dataHora": "10/06/2025 21:00:00",
+        "resultado": "EMPATE"
+      },
+      {
+        "clubeMandante": { ... },
+        "clubeVisitante": { ... },
+        "estadio": { ... },
+        "golsMandante": 3,
+        "golsVisitante": 2,
+        "dataHora": "05/06/2025 21:00:00",
+        "resultado": "VITORIA_MANDANTE"
+      }
+    ]
+  }
+  ```
+
+### **Cenários tratados**
+- Se algum dos clubes não existir, retorna 404 NOT FOUND.
+- Se não houver confrontos entre os clubes, retorna lista de partidas vazia e retrospectos zerados para ambos, status 200 OK.
+
+### **Checklist do que foi implementado:**
+- [x] Recebe os IDs de ambos os clubes de forma robusta (via corpo JSON no RequestDTO)
+- [x] Valida existência dos clubes, gerando 404 se necessário
+- [x] Consulta todas as partidas entre os dois clubes, independentemente de quem foi mandante ou visitante
+- [x] Calcula, para cada clube, o retrospecto no confronto — incluindo vitórias, empates, derrotas, gols feitos e sofridos
+- [x] Exibe ambos retrospectos junto à lista de partidas na resposta
+- [x] Retorna corretamente lista de partidas vazia e retrospectos zerados se não houver confrontos
+
+---
+
 
 ## Melhorias futuras:
 - [] Ao retornar a exceção ClubesComPartidasEmHorarioMenorQue48HorasException, 

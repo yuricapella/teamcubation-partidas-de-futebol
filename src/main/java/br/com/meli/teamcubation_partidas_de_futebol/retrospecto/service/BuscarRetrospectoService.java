@@ -1,12 +1,17 @@
-package br.com.meli.teamcubation_partidas_de_futebol.clube.service;
+package br.com.meli.teamcubation_partidas_de_futebol.retrospecto.service;
 
-import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.RetrospectoAdversariosResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.mapper.RetrospectosAdversariosMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
-import br.com.meli.teamcubation_partidas_de_futebol.clube.model.RetrospectoContraAdversario;
-import br.com.meli.teamcubation_partidas_de_futebol.clube.model.RetrospectoTotalClube;
+import br.com.meli.teamcubation_partidas_de_futebol.clube.service.BuscarClubeService;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.PartidaResponseDTO;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.mapper.PartidaResponseMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.repository.PartidaRepository;
+import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.RetrospectoAdversariosResponseDTO;
+import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.RetrospectoConfrontoRequestDTO;
+import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.Retrospecto;
+import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.RetrospectoAdversario;
+import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.RetrospectoConfronto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,10 +28,10 @@ public class BuscarRetrospectoService {
         this.partidaRepository = partidaRepository;
     }
 
-    public RetrospectoTotalClube buscarRetrospectoClube(Long id) {
+    public Retrospecto buscarRetrospectoClube(Long id) {
         Clube clubeRetornado = buscarClubeService.buscarClubePorId(id);
         List<Partida> partidas = partidaRepository.findByClubeMandanteIdOrClubeVisitanteId(id,id);
-        RetrospectoTotalClube retrospecto = new RetrospectoTotalClube(clubeRetornado, partidas);
+        Retrospecto retrospecto = new Retrospecto(clubeRetornado, partidas);
         return retrospecto;
     }
 
@@ -41,8 +46,8 @@ public class BuscarRetrospectoService {
                                 : partida.getClubeMandante()
                 ));
 
-        List<RetrospectoContraAdversario> retrospectos = partidasPorAdversario.entrySet().stream()
-                .map(entry -> new RetrospectoContraAdversario(
+        List<RetrospectoAdversario> retrospectos = partidasPorAdversario.entrySet().stream()
+                .map(entry -> new RetrospectoAdversario(
                         id,
                         entry.getKey(),
                         entry.getValue()))
@@ -51,13 +56,19 @@ public class BuscarRetrospectoService {
         return RetrospectosAdversariosMapper.toDTO(clube.getNome(), clube.getSiglaEstado(), retrospectos);
     }
 
-//    public RetrospectoTotalClube buscarRetrospectoClubeContraAdversarios(RetrospectoContraAdversarioRequestDTO dadosDoClubeEAdversario) {
-//        Long idClube = dadosDoClubeEAdversario.getClubeId();
-//        Long idAdversario = dadosDoClubeEAdversario.getAdversarioId();
-//        Clube clubeRetornado = buscarClubeService.buscarClubePorId(idClube);
-//        Clube adversarioRetornado = buscarClubeService.buscarClubePorId(idAdversario);
-//        List<Partida> partidas = partidaRepository.findPartidasDoClubeContraAdversario(idClube, idAdversario);
-//        RetrospectoTotalClube retrospectoContraAdversario =  new RetrospectoTotalClube(clubeRetornado, partidas);
-//        return retrospectoContraAdversario;
-//    }
+    public RetrospectoConfronto buscarRetrospectoConfronto(RetrospectoConfrontoRequestDTO dto) {
+        Long idClube = dto.getClubeId();
+        Long idAdversario = dto.getAdversarioId();
+
+        Clube clube = buscarClubeService.buscarClubePorId(idClube);
+        Clube clubeAdversario = buscarClubeService.buscarClubePorId(idAdversario);
+
+        List<Partida> partidas = partidaRepository.findPartidasDoClubeContraAdversario(idClube, idAdversario);
+        List<PartidaResponseDTO> partidasDTO = PartidaResponseMapper.toPartidaResponseDTO(partidas);
+
+        Retrospecto retrospectoClube = new Retrospecto(clube, partidas);
+        Retrospecto retrospectoAdversario = new Retrospecto(clubeAdversario, partidas);
+
+        return new RetrospectoConfronto(List.of(retrospectoClube, retrospectoAdversario), partidasDTO);
+    }
 }

@@ -1,10 +1,11 @@
-package br.com.meli.teamcubation_partidas_de_futebol.clube.model;
+package br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model;
 
+import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 
 import java.util.List;
 
-public class RetrospectoContraAdversario {
+public class RetrospectoAdversario {
     private final String nomeAdversario;
     private final String estadoAdversario;
     private final int jogos;
@@ -14,7 +15,7 @@ public class RetrospectoContraAdversario {
     private final int golsFeitos;
     private final int golsSofridos;
 
-    public RetrospectoContraAdversario(Long idClube, Clube clubeAdversario, List<Partida> partidas) {
+    public RetrospectoAdversario(Long idClube, Clube clubeAdversario, List<Partida> partidas) {
         this.nomeAdversario = clubeAdversario.getNome();
         this.estadoAdversario = clubeAdversario.getSiglaEstado();
         this.jogos = partidas.size();
