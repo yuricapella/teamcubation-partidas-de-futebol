@@ -559,6 +559,53 @@ Implementado endpoint para retornar o **ranking dos clubes** por **total de jogo
 
 ---
 
+## Filtro Avançado (extra): Goleadas (GET)
+
+### **Descrição técnica**
+Implementado filtro opcional para goleadas nos endpoints de listagem de partidas.  
+Quando o parâmetro `goleada` é especificado na requisição, a API retorna apenas partidas em que a diferença de gols entre os clubes é igual ou superior a 3, conforme a definição do requisito.
+
+### **Como chamar**
+- **Endpoint:** `GET /api/partida?goleada=true`
+- Também pode ser combinado com outros filtros, como clube e estádio:
+  - `GET /api/partida?clubeId=1&goleada=true`
+  - `GET /api/partida?estadioId=5&goleada=true`
+
+### **Exemplo de resposta**
+```json
+{
+  "content": [
+    {
+      "clubeMandante": { "nome": "...", ... },
+      "clubeVisitante": { "nome": "...", ... },
+      "estadio": { "nome": "..." },
+      "golsMandante": 1,
+      "golsVisitante": 4,
+      "dataHora": "15/06/2025 21:00:00",
+      "resultado": "VITORIA_VISITANTE"
+    },
+    ...
+  ],
+  "totalElements": 3,
+  "totalPages": 1,
+  // ... demais campos de paginação
+}
+```
+
+### **Cenários tratados**
+- Quando `goleada=true`, retorna apenas partidas onde a diferença de gols é >= 3
+- Requisições sem o filtro retornam todas as partidas normalmente (com ou sem goleada)
+- Pode ser combinado com outros filtros já existentes do endpoint
+- Em caso de nenhuma partida encontrada, retorna lista vazia e status 200 OK
+
+### **Checklist de implementação**
+- [x] Adicionado parâmetro booleano `goleada` no endpoint de listagem de partidas
+- [x] Implementado método/calculo para identificar partidas com diferença de gols >= 3
+- [x] Aplicado filtro na service após busca das partidas
+- [x] Mantido padrão de resposta paginada do projeto
+
+---
+
 
 ## Melhorias futuras:
 - [] Ao retornar a exceção ClubesComPartidasEmHorarioMenorQue48HorasException, 

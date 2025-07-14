@@ -101,4 +101,8 @@ public class Partida {
     public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
         this.dataAtualizacao = dataAtualizacao;
     }
+
+    public boolean isGoleada() {
+        return Math.abs(this.golsMandante - this.golsVisitante) >= 3;
+    }
 }
