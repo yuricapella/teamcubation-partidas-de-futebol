@@ -28,18 +28,21 @@ public class BuscarRetrospectoService {
         this.partidaRepository = partidaRepository;
     }
 
-    public Retrospecto buscarRetrospectoClube(Long id) {
+    public Retrospecto buscarRetrospectoClube(Long id, Boolean mandante, Boolean visitante) {
         Clube clubeRetornado = buscarClubeService.buscarClubePorId(id);
         List<Partida> partidas = partidaRepository.findByClubeMandanteIdOrClubeVisitanteId(id,id);
-        Retrospecto retrospecto = new Retrospecto(clubeRetornado, partidas);
-        return retrospecto;
+        List<Partida> partidasFiltradas = filtrarPartidasPorMandanteVisitante(partidas,id, mandante, visitante);
+        return new Retrospecto(clubeRetornado, partidasFiltradas);
     }
 
-    public RetrospectoAdversariosResponseDTO buscarRetrospectoClubeContraAdversarios(Long id) {
+    public RetrospectoAdversariosResponseDTO buscarRetrospectoClubeContraAdversarios
+            (Long id, Boolean mandante, Boolean visitante) {
+
         Clube clube = buscarClubeService.buscarClubePorId(id);
         List<Partida> partidas = partidaRepository.findByClubeMandanteIdOrClubeVisitanteId(id,id);
+        List<Partida> partidasFiltradas = filtrarPartidasPorMandanteVisitante(partidas,id, mandante, visitante);
 
-        Map<Clube, List<Partida>> partidasPorAdversario = partidas.stream()
+        Map<Clube, List<Partida>> partidasPorAdversario = partidasFiltradas.stream()
                 .collect(Collectors.groupingBy(
                         partida -> partida.getClubeMandante().getId().equals(clube.getId())
                                 ? partida.getClubeVisitante()
@@ -68,7 +71,13 @@ public class BuscarRetrospectoService {
 
         Retrospecto retrospectoClube = new Retrospecto(clube, partidas);
         Retrospecto retrospectoAdversario = new Retrospecto(clubeAdversario, partidas);
-
         return new RetrospectoConfronto(List.of(retrospectoClube, retrospectoAdversario), partidasDTO);
+    }
+
+    private List<Partida> filtrarPartidasPorMandanteVisitante(List<Partida> partidas, Long id, Boolean mandante, Boolean visitante) {
+        return partidas.stream()
+                .filter(partida -> mandante == null || (partida.getClubeMandante().getId().equals(id) == mandante))
+                .filter(partida -> visitante == null || (partida.getClubeVisitante().getId().equals(id) == visitante))
+                .collect(Collectors.toList());
     }
 }

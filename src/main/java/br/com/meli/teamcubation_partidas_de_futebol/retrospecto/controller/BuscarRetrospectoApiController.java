@@ -20,16 +20,25 @@ public class BuscarRetrospectoApiController {
     }
 
     @GetMapping("/{id}/retrospecto")
-    public ResponseEntity<Retrospecto> buscar(@PathVariable Long id){
-        Retrospecto retrospecto = buscarRetrospectoService.buscarRetrospectoClube(id);
+    public ResponseEntity<Retrospecto> buscar
+            (@PathVariable Long id,
+             @RequestParam(required = false) Boolean mandante,
+             @RequestParam(required = false) Boolean visitante){
+        Retrospecto retrospecto = buscarRetrospectoService.buscarRetrospectoClube(id, mandante, visitante);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(retrospecto);
     }
 
     @GetMapping("/{id}/retrospectos-adversarios")
-    public ResponseEntity<RetrospectoAdversariosResponseDTO> buscarContraAdversarios(@PathVariable Long id){
-        RetrospectoAdversariosResponseDTO retrospectosDTO = buscarRetrospectoService.buscarRetrospectoClubeContraAdversarios(id);
+    public ResponseEntity<RetrospectoAdversariosResponseDTO> buscarContraAdversarios
+            (@PathVariable Long id,
+             @RequestParam(required = false) Boolean mandante,
+             @RequestParam(required = false) Boolean visitante)
+    {
+        RetrospectoAdversariosResponseDTO retrospectosDTO =
+                buscarRetrospectoService.buscarRetrospectoClubeContraAdversarios(id, mandante, visitante);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(retrospectosDTO);

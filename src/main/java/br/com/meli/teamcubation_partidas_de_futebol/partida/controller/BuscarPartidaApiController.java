@@ -32,9 +32,11 @@ public class BuscarPartidaApiController {
             @RequestParam(required = false) Long clubeId,
             @RequestParam(required = false) Long estadioId,
             @RequestParam(required = false) Boolean goleada,
+            @RequestParam(required = false) Boolean mandante,
+            @RequestParam(required = false) Boolean visitante,
             Pageable pageable
     ) {
-        return buscarPartidaService.listarPartidasFiltradas(clubeId, estadioId, goleada, pageable)
+        return buscarPartidaService.listarPartidasFiltradas(clubeId, estadioId, goleada, mandante, visitante, pageable)
                 .map(PartidaResponseMapper::toPartidaResponseDTO);
     }
 }

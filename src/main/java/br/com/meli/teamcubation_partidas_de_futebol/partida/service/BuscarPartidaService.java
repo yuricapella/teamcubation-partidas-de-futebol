@@ -25,17 +25,24 @@ public class BuscarPartidaService {
         return partidaOptional.orElseThrow(() -> new PartidaNaoEncontradaException(id));
     }
 
-    public Page<Partida> listarPartidasFiltradas(Long clubeId, Long estadioId, Boolean goleada, Pageable pageable) {
+    public Page<Partida> listarPartidasFiltradas
+            (Long clubeId, Long estadioId, Boolean goleada, Boolean mandante, Boolean visitante, Pageable pageable) {
+
         Page<Partida> partidas = partidaRepository.findByFiltros(clubeId,estadioId,pageable);
-
-        if (goleada == null) {
-            return partidas;
-        }
-
         List<Partida> partidasFiltradas = partidas.stream()
-                .filter(partida -> partida.isGoleada() == goleada)
+                .filter(partida -> (goleada == null || partida.isGoleada() == goleada))
+                .filter(partida -> (mandante == null || (partida.getClubeMandante().getId().equals(clubeId) == mandante)))
+                .filter(partida -> (visitante == null || (partida.getClubeVisitante().getId().equals(clubeId) == visitante)))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(partidasFiltradas, pageable, partidasFiltradas.size());
     }
+
+//    private Page<Partida> retornaListaDePartidasComGoleadas(Page<Partida> partidas, Boolean goleada, Pageable pageable) {
+//        List<Partida> partidasFiltradas = partidas.stream()
+//                .filter(partida -> partida.isGoleada() == goleada)
+//                .collect(Collectors.toList());
+//
+//        return new PageImpl<>(partidasFiltradas, pageable, partidasFiltradas.size());
+//    }
 }
