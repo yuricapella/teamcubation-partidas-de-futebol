@@ -2,7 +2,6 @@ package br.com.meli.teamcubation_partidas_de_futebol.ranking.controller;
 
 import br.com.meli.teamcubation_partidas_de_futebol.ranking.model.Ranking;
 import br.com.meli.teamcubation_partidas_de_futebol.ranking.service.RankingService;
-import br.com.meli.teamcubation_partidas_de_futebol.ranking.util.TipoRanking;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +22,8 @@ public class RankingApiController {
 
     @GetMapping
     public ResponseEntity<List<? extends Ranking>> calcularRanking
-            (@RequestParam("tipoRanking") TipoRanking tipo) {
-        List<? extends Ranking> ranking = rankingService.calcularRanking(tipo);
+            (@RequestParam("tipoRanking") String tipoRankingString) {
+        List<? extends Ranking> ranking = rankingService.calcularRanking(tipoRankingString);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ranking);

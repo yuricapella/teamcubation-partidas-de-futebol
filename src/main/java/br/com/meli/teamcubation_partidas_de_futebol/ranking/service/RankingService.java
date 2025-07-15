@@ -4,8 +4,8 @@ import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.repository.ClubeRepository;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.repository.PartidaRepository;
-import br.com.meli.teamcubation_partidas_de_futebol.ranking.strategy.CalculadoraRankingStrategy;
 import br.com.meli.teamcubation_partidas_de_futebol.ranking.model.Ranking;
+import br.com.meli.teamcubation_partidas_de_futebol.ranking.strategy.CalculadoraRankingStrategy;
 import br.com.meli.teamcubation_partidas_de_futebol.ranking.util.TipoRanking;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.Retrospecto;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,8 @@ public class RankingService {
         this.clubeRepository = clubeRepository;
     }
 
-    public List<? extends Ranking> calcularRanking(TipoRanking tipo) {
+    public List<? extends Ranking> calcularRanking(String tipoRankingString) {
+        TipoRanking tipo = TipoRanking.fromString(tipoRankingString);
         List<Clube> clubes = clubeRepository.findAll();
         Map<Long, Retrospecto> retrospectosPorClube = clubes.stream()
                 .collect(Collectors.toMap(
