@@ -606,6 +606,30 @@ Quando o parâmetro `goleada` é especificado na requisição, a API retorna ape
 
 ---
 
+## Filtro Avançado 2: Mandantes e Visitantes (GET)
+
+### **Descrição técnica**
+Implementado filtro opcional para partidas em que o clube jogou como mandante ou visitante nos endpoints que retornam listas de partidas ou retrospectos. O usuário pode aplicar o filtro adicionando os parâmetros `mandante` e/ou `visitante` à requisição.
+
+### **Como chamar**
+- **Endpoint exemplos:**
+  - `/api/partida/buscar?clubeId=3&mandante=true`
+  - `/api/clube/{id}/retrospecto?mandante=true`
+  - `/api/clube/{id}/retrospectos-adversarios?visitante=true`
+
+### **Cenários tratados**
+- Filtra resultados para retornar apenas partidas em que o clube foi mandante ou visitante, conforme o parâmetro informado.
+- Parâmetros `mandante` e `visitante` são opcionais; se não informados, retorna todas as partidas/retrospectos normalmente.
+- Parâmetros podem ser combinados com os demais filtros já existentes.
+
+### **Checklist de implementação**
+- [x] Adicionados parâmetros opcionais `mandante` e `visitante` como Boolean nos endpoints de listagem/retrospectos
+- [x] Lógica de filtragem aplicada na service para considerar apenas partidas conforme o filtro selecionado
+- [x] Criação de método utilitário para evitar duplicação de lógica de filtragem
+- [x] Padronização das respostas e manutenção da compatibilidade com os outros filtros e paginação
+
+---
+
 
 ## Melhorias futuras:
 - [] Ao retornar a exceção ClubesComPartidasEmHorarioMenorQue48HorasException, 
