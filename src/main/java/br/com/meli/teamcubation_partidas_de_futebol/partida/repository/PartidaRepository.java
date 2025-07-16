@@ -56,4 +56,15 @@ public interface PartidaRepository extends JpaRepository<Partida, Long> {
        OR (p.clubeMandante.id = :idAdversario AND p.clubeVisitante.id = :idClube)
 """)
     List<Partida> findPartidasDoClubeContraAdversario(@Param("idClube") Long idClube, @Param("idAdversario") Long idAdversario);
+
+    @Query(value = """
+    SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+    FROM partida
+    WHERE (clube_mandante_id = :clubeId OR clube_visitante_id = :clubeId)
+      AND data_hora < :novaDataCriacao
+    """, nativeQuery = true)
+    int countPartidasAntesDaNovaDataDeCriacao(
+            @Param("clubeId") Long clubeId,
+            @Param("novaDataCriacao") LocalDate novaDataCriacao
+    );
 }

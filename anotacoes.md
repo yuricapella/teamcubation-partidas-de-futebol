@@ -58,7 +58,7 @@
   _Método: atualizar; Arquivo: AtualizarClubeService, ClubeValidator_
 - [x] Estado válido (`EstadoInexistenteException`)  
   _Método: atualizar; Arquivo: AtualizarClubeService, ClubeValidator_
-- [ ] Data inválida: data criação não pode ser posterior a alguma partida já registrada (`DataCriacaoInvalidaException` ou `ConflitoDataClubeException`)  
+- [x] Data inválida: data criação não pode ser posterior a alguma partida já registrada (`DataCriacaoPosteriorDataPartidaException`)  
   _Método: atualizar; Arquivo: AtualizarClubeService, ClubeValidator_
 - [x] Clube não existe: _já tratado por buscarClubeService, retorna 404_
 - [x] Dados mínimos: Bean Validation cobre

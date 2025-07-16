@@ -42,4 +42,16 @@ public class ClubeApiExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(erroPadrao);
     }
+
+    @ExceptionHandler({DataCriacaoPosteriorDataPartidaException.class})
+    public ResponseEntity<ErroPadrao> handlerDataCriacaoPosteriorDataPartidaException(DataCriacaoPosteriorDataPartidaException ex) {
+        ErroPadrao erroPadrao = new ErroPadrao();
+        erroPadrao.setCodigoErro(ErroCodigo.DATA_CRIACAO_POSTERIOR_A_DATA_PARTIDA.name());
+        erroPadrao.setDataHora(LocalDateTime.now());
+        erroPadrao.setMensagem(ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(erroPadrao);
+    }
 }
