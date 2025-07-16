@@ -51,3 +51,100 @@ A classe `BuscarClubeApiControllerTest` cobre os cenários principais de busca p
 - [x] Impressão do início de cada teste via `PrintUtil`.
 
 ---
+
+## 2. Inativar clube controller (DELETE - sucesso e exceção)
+
+#### **Descrição técnica**
+Foram implementados testes unitários para o controller responsável por inativar (desativar) um clube de futebol.  
+A classe `InativarClubeApiControllerTest` cobre o cenário de sucesso e o cenário de exceção (clube inexistente), garantindo que a camada controller responde corretamente de acordo com o contrato HTTP especificado.
+
+#### **Métodos de teste**
+- `deveInativarClubePorIdComSucessoERetornarNoContent()`
+  - Testa o endpoint de inativação (`/api/clube/inativar/{id}`) com um id válido.
+  - Mocka o service para realizar a operação sem erro (`doNothing()`).
+  - Verifica que o status retornado é 204 (NO_CONTENT) e que o método do service foi chamado.
+
+- `deveRetornarNotFoundAoInativarClubeInexistente()`
+  - Testa o cenário onde se tenta inativar um clube com id inexistente.
+  - Mocka o service para lançar a exceção `ClubeNaoEncontradoException`.
+  - Espera o status HTTP 404 (NOT_FOUND) e verifica a chamada correta do método do service.
+
+#### **Principais argumentos e dependências**
+- **Controller/Endpoint testado:**
+  - `/api/clube/inativar/{id}` [DELETE]
+- **Mocks do service:** Uso de `doNothing().when(...)` para simular sucesso e `doThrow(...).when(...)` para simular exceção.
+- **ControllerAdvice** incluído no MockMvc para tratamento global e específico das exceções.
+- **Verificação do status HTTP**: 204 para sucesso, 404 para caso de clube inexistente.
+- **Mockito.verify** para confirmar a chamada ao método do service com o id correto.
+- **Impressão do início de cada teste** via `PrintUtil` para facilitar rastreabilidade.
+
+#### **Checklist de implementação**
+- [x] Teste para DELETE de sucesso com status 204 NO_CONTENT.
+- [x] Teste para exceção de clube não encontrado retornando status 404 NOT_FOUND.
+- [x] Controle preciso de mocks para todos os retornos (sucesso e exceção).
+- [x] Setup do MockMvc inclui ControllerAdvices para tratamento correto das respostas de erro.
+- [x] Verificação se o método do service responsável foi chamado exatamente uma vez.
+- [x] Impressão informativa do início de cada teste com `PrintUtil`.
+
+
+---
+
+## 3. Atualizar clube controller (PUT - sucesso, validação, erros de negócio)
+
+#### **Descrição técnica**
+Foram implementados testes unitários para o controller responsável pela atualização dos dados do clube de futebol.  
+A classe `AtualizarClubeApiControllerTest` cobre os principais cenários de atualização: fluxo feliz, erros de validação de DTO, exceção de não encontrado e exceções de regras de negócio customizadas do domínio.
+
+#### **Métodos de teste**
+- `deveAtualizarClubePorIdComSucesso()`
+  - Testa o endpoint de atualização (`/api/clube/atualizar/{id}`) com dados válidos.
+  - Simula fluxo normal, mockando o service para retornar o clube atualizado.
+  - Verifica status 200 OK e garante via `Mockito.verify` que service foi chamado com os dados corretos.
+
+- `deveRetornarNotFoundQuandoAtualizarClubeComIdInexistente()`
+  - Testa o cenário em que o id do clube não existe.
+  - Mocka o service para lançar `ClubeNaoEncontradoException`.
+  - Verifica status 404 e conteúdo do JSON de erro (`codigoErro`, `mensagem`).
+
+- `deveRetornarBadRequestQuandoAtualizarClubeComDtoInvalido(String nome, String siglaEstado, String dataCriacaoStr, String campoErro, String mensagemEsperada)`
+  - Teste parametrizado via `@CsvSource` cobrindo todos os casos relevantes de violação de validação do DTO.
+  - Envia dados inválidos nos campos (`nome`, `siglaEstado`, `dataCriacao`), incluindo nulos, tamanhos e formatos errados.
+  - Valida retorno 400 e a mensagem de erro específica esperada no campo correto do JSON (`errors.<campo>` e `codigoErro` igual a `CAMPO_INVALIDO`).
+
+- `deveRetornarConflictQuandoNomeJaCadastradoNoEstado()`
+  - Testa cenário de negócio onde já existe clube com mesmo nome no estado.
+  - Mocka o service para lançar `ClubeComNomeJaCadastradoNoEstadoException`.
+  - Espera status 409 e conteúdo do erro padronizado (`codigoErro`, `mensagem`).
+
+- `deveRetornarConflictQuandoDataCriacaoPosteriorAPartida()`
+  - Testa cenário de negócio onde a data de criação do clube conflita com partidas já cadastradas.
+  - Mocka o service para lançar `DataCriacaoPosteriorDataPartidaException`.
+  - Espera status 409 e JSON de erro (`codigoErro`, `mensagem`).
+
+- `deveRetornarBadRequestQuandoEstadoInexistente()`
+  - Testa cenário de negócio onde o estado informado não existe.
+  - Mocka o service para lançar `EstadoInexistenteException`.
+  - Espera status 400 (`BAD_REQUEST`) e JSON de erro padronizado (`codigoErro`, `mensagem`).
+
+#### **Principais argumentos e dependências**
+- **Controller/Endpoint testado:**
+  - `/api/clube/atualizar/{id}` [PUT]
+- **DTO de request:** `AtualizarClubeRequestDTO` (validações: tamanho, formato, data)
+- **Campos testados:** `nome`, `siglaEstado`, `dataCriacao`
+- **Mocks do service:** `Mockito.when(...).thenReturn(...)` e `thenThrow(...)` para simulação de cenários diversos
+- **Uso de `Mockito.verify(... argThat(...))`** para garantir os valores passados ao service
+- **Validações automáticas propagam `MethodArgumentNotValidException`**, capturada por `ControllerAdvice` e customizada no retorno JSON
+- **ControllerAdvice** incluído no setup do MockMvc para tratamento global e específico das exceções
+
+#### **Checklist de implementação**
+- [x] Teste para PUT de sucesso validando chamada exata ao service.
+- [x] Teste de exceção para id não encontrado (404).
+- [x] Teste parametrizado cobrindo todas as validações do DTO, campo a campo (400).
+- [x] Teste para exceção de negócio de nome duplicado (409).
+- [x] Teste para exceção de negócio de data inválida com partidas (409).
+- [x] Teste para exceção de estado inexistente (400).
+- [x] Conferência dos campos e mensagens nas respostas de erro.
+- [x] Setup do MockMvc inclui dois ControllerAdvices.
+- [x] Impressão do início de cada teste via `PrintUtil`.
+
+---
