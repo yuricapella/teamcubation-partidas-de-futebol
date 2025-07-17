@@ -309,3 +309,57 @@ A classe `AtualizarEstadioApiControllerTest` valida, de forma isolada, os princi
 - [x] Configuração dos handlers de exceção específicos e globais na MockMvc
 - [x] Uso de mocks para isolar camada de controller dos serviços reais
 - [x] Cobertura para mensagens, códigos de erro e estrutura da resposta JSON
+
+---
+
+## Partida
+
+## 1. Criação de partida (controller - fluxos de sucesso, validações e exceções específicas)
+
+#### **Descrição técnica**
+A classe `CriarPartidaApiControllerTest` testa os principais fluxos do endpoint de criação de partidas na API. 
+Valida tanto o caminho de sucesso (resposta 201) quanto diferentes cenários de erro, 
+incluindo validação do DTO e exceções de negócio, simulando responses padronizadas para cada caso. 
+Utiliza MockMvc com Mockito para orquestração dos mocks e autenticação do fluxo HTTP, 
+além de handlers globais e específicos para mapeamento consistente das exceções.
+
+#### **Métodos/Funções principais**
+- **deveCriarPartidaComSucessoERetornar201Created:**  
+  Testa o fluxo padrão de criação de partida, garantindo status 201 e chamada correta ao CriarPartidaService.
+
+- **deveRetornarBadRequestParaCamposInvalidos:**  
+  Teste parametrizado cobrindo campos obrigatórios nulos, valores negativos e data futura, validando erro 400 e mensagens do DTO.
+
+- **deveRetornarBadRequestQuandoClubesSaoIguais:**  
+  Simula lançamento da ClubesIguaisException, garante status 400 e response com código/mensagem apropriados.
+
+- **deveRetornarConflictQuandoDataPartidaAnteriorACriacaoDoClube:**  
+  Testa exceção de tentativa de criar partida para data anterior à criação dos clubes, retornando 409 e conteúdo de erro.
+
+- **deveRetornarConflictQuandoClubeInativo:**  
+  Valida comportamento quando um clube do DTO está inativo, gerando 409 e response com detalhes do erro.
+
+- **deveRetornarConflictQuandoEstadioJaPossuiJogoNoDia:**  
+  Simula conflito de múltiplas partidas no mesmo estádio e dia, garantindo exceção e resposta de conflito 409.
+
+- **deveRetornarConflictQuandoClubeJaTiverPartidasDentroDe48HorasDaNovaPartida:**  
+  Cobre situação de conflito de horários por partidas anteriores dos clubes em intervalo inferior a 48h, validando o JSON de erro.
+
+#### **Principais argumentos, entradas e dependências**
+- **Endpoint testado:** `POST /api/partida/criar`
+- **DTO:** `CriarPartidaRequestDTO` — recebe clubeMandanteId, clubeVisitanteId, estadioId, golsMandante, golsVisitante, dataHora
+- **Dependências mockadas:**
+  - `CriarPartidaService`
+  - Exceções específicas de partida: ClubesIguaisException, DataPartidaAnteriorACriacaoDoClubeException, ClubeInativoException, EstadioJaPossuiPartidaNoMesmoDiaException, ClubesComPartidasEmHorarioMenorQue48HorasException
+- **Response esperado:**
+  - Status HTTP 201, 400 ou 409, dependendo do cenário
+  - Corpo JSON validando códigos de erro e mensagens de exceção via `jsonPath`
+  - Consistência garantida por uso de PartidaApiExceptionHandler e GlobalApiExceptionHandler
+
+#### **Checklist de implementação**
+- [x] Fluxo principal de criação de partida com retorno 201 Created
+- [x] Validação de campos obrigatórios, tipos e regras do DTO via testes parametrizados
+- [x] Tratamento e teste das principais exceções de negócio relacionadas ao domínio de partida
+- [x] Verificação dos status HTTP, códigos de erro e mensagens nas respostas das exceções
+- [x] Integração nos testes dos handlers de exceção globais e locais
+- [x] Cobertura de casos de conflito de agendamento, clubes inativos e clubes iguais
