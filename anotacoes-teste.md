@@ -148,3 +148,51 @@ A classe `AtualizarClubeApiControllerTest` cobre os principais cenários de atua
 - [x] Impressão do início de cada teste via `PrintUtil`.
 
 ---
+
+## 4. Criar clube controller (POST - sucesso, validação, erros de negócio)
+
+#### **Descrição técnica**
+Foram implementados testes unitários para o controller responsável pelo cadastro de clubes de futebol.  
+A classe `CriarClubeApiControllerTest` cobre os principais cenários de criação: fluxo feliz de cadastro, erros de validação do DTO, e exceções de regras de negócio customizadas do domínio.
+
+#### **Métodos de teste**
+- `deveCriarClubeComSucessoERetornar201Created()`
+  - Testa o endpoint de criação (`/api/clube/criar`) com dados válidos.
+  - Mocka o service para retornar o clube criado.
+  - Verifica status 201 (Created) e garante via Mockito.verify que o service foi chamado com os dados corretos.
+
+- `deveRetornarBadRequestQuandoCriarClubeComDtoInvalido(String nome, String siglaEstado, String dataCriacaoStr, String campoErro, String mensagemEsperada)`
+  - Teste parametrizado via @CsvSource, cobrindo todos os cenários relevantes de violação de validação do DTO.
+  - Envia dados inválidos nos campos (`nome`, `siglaEstado`, `dataCriacao`), incluindo nulos, tamanhos e formatos errados.
+  - Valida retorno 400 (Bad Request) e a mensagem de erro específica esperada no campo correto do JSON (`errors.<campo>`) e código de erro `CAMPO_INVALIDO`.
+
+- `deveRetornarBadRequestQuandoEstadoInexistente()`
+  - Testa cenário de negócio onde o estado informado não existe.
+  - Mocka o service para lançar a exceção `EstadoInexistenteException`.
+  - Espera status 400 e JSON de erro padronizado com código `ESTADO_INEXISTENTE` e mensagem específica.
+
+- `deveRetornarConflictQuandoNomeJaCadastradoNoEstado()`
+  - Testa cenário de negócio onde já existe clube com mesmo nome no estado.
+  - Mocka o service para lançar `ClubeComNomeJaCadastradoNoEstadoException`.
+  - Espera status 409 (Conflict) e JSON de erro padronizado com código `CLUBE_DUPLICADO` e mensagem específica.
+
+#### **Principais argumentos e dependências**
+- **Controller/Endpoint testado:**
+  - `/api/clube/criar` [POST]
+- **DTO de request:** `CriarClubeRequestDTO` (validações: tamanho, formato, data)
+- **Campos testados:** `nome`, `siglaEstado`, `dataCriacao`
+- **Mocks do service:** Uso de `when(...).thenReturn(...)` e `thenThrow(...)` para simulação de cenários de sucesso e exceção
+- **Utilização de Mockito.verify e argThat** para garantir os valores corretos enviados ao service
+- **Validações automáticas disparam `MethodArgumentNotValidException`**, tratada por `ControllerAdvice` com retorno JSON padronizado
+- **ControllerAdvice** incluído no setup do MockMvc para tratamento global e customizado das exceções de negócio
+- **Impressão do início de cada teste** via PrintUtil para rastreabilidade
+
+#### **Checklist de implementação**
+- [x] Teste para POST de sucesso validando a chamada ao service e status 201.
+- [x] Teste parametrizado cobrindo todas as validações do DTO, campo a campo (400).
+- [x] Teste para exceção de negócio de nome duplicado (409).
+- [x] Teste para exceção de estado inexistente (400).
+- [x] Verificação dos campos e mensagens nas respostas de erro.
+- [x] Setup do MockMvc inclui ControllerAdvices para tratamento de erros.
+- [x] Verificação rigorosa com Mockito.verify dos argumentos.
+- [x] Impressão do início dos testes com PrintUtil.
