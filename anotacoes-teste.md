@@ -234,3 +234,39 @@ A classe `BuscarEstadioApiControllerTest` cobre cenários principais de busca pa
 - [x] Uso do PrintUtil para logar início dos testes.
 
 ---
+
+## 2. Criar estádio controller (POST - sucesso, validação, conflito de nome)
+
+#### **Descrição técnica**
+Foram implementados testes unitários para o controller responsável pelo cadastro de estádios de futebol.
+A classe `CriarEstadioApiControllerTest` cobre os principais cenários de criação, incluindo fluxo de cadastro bem-sucedido, erros de validação do DTO e conflito de nome já existente.
+
+#### **Métodos de teste**
+- `deveCriarEstadioComSucessoERetornar201Created()`
+  - Testa o endpoint de criação (`/api/estadio/criar`) com dados válidos.
+  - Mocka o service para retornar o estádio criado.
+  - Verifica status 201 (Created) e garante via Mockito.verify que o service foi chamado com o nome correto.
+- `deveRetornarBadRequestQuandoCriarEstadioComDtoInvalido(String nome, String campoErro, String mensagemEsperada)`
+  - Teste parametrizado via @CsvSource para cenários de erro do DTO (`@Size`, `@Pattern`), validando status 400, campo de erro e mensagem específica.
+- `deveRetornarConflictQuandoNomeJaCadastrado()`
+  - Testa o cenário de nome duplicado, simulando EstadioJaExisteException.
+  - Verifica status 409, código e mensagem customizada no JSON de erro.
+
+#### **Principais argumentos e dependências**
+- **Controller/Endpoint testado:**
+  - `/api/estadio/criar` [POST]
+- **DTO de request:** `CriarEstadioRequestDTO` (validações de tamanho e formato no campo `nome`)
+- **Mocks do service:** Uso de Mockito para simular retorno do estádio criado e lançamento de exceção de nome duplicado
+- **Configuração do MockMvc:** Inclui ControllerAdvices para tratamento global e de exceção de estádio
+- **Verificação dos argumentos com Mockito.verify** e validadores específicos no DTO
+- **Impressão do início dos testes** via PrintUtil
+
+#### **Checklist de implementação**
+- [x] Teste para POST de sucesso com status 201 Created.
+- [x] Teste parametrizado cobrindo validação de campo do DTO e retorno 400.
+- [x] Teste para exceção de nome de estádio duplicado com retorno 409 Conflict.
+- [x] Setup do MockMvc com ControllerAdvices.
+- [x] Verificação rigorosa da chamada ao service e mensagens de erro em JSON.
+- [x] Utilização de PrintUtil para rastreabilidade nos testes.
+
+---
