@@ -363,3 +363,50 @@ além de handlers globais e específicos para mapeamento consistente das exceç�
 - [x] Verificação dos status HTTP, códigos de erro e mensagens nas respostas das exceções
 - [x] Integração nos testes dos handlers de exceção globais e locais
 - [x] Cobertura de casos de conflito de agendamento, clubes inativos e clubes iguais
+
+---
+
+## 2. Atualização de partida (controller - cenários de sucesso, validação e exceções)
+
+#### **Descrição técnica**
+A classe `AtualizarPartidaApiControllerTest` cobre, de maneira isolada, todos os principais fluxos do endpoint de atualização de partidas pela AtualizarPartidaApiController. Os testes abrangem desde o fluxo de sucesso até todas as validações de entrada, regras de negócio e exceções previstas no domínio. Utiliza MockMvc para simular requisições HTTP e Mockito para orquestrar retornos e lançamentos de exceções do serviço mockado, além de aplicar handlers globais e do domínio de partida.
+
+#### **Métodos/Funções principais**
+- **deveAtualizarPartidaComSucessoERetornar200OK**  
+  Valida atualização bem-sucedida da partida, verificando resposta 200 e parâmetros corretos ao serviço.
+- **deveRetornarBadRequestParaCamposInvalidos**  
+  Parametriza casos de erro por obrigatoriedade de campo, valor negativo e data futura, validando a estrutura da resposta de erro.
+- **deveRetornarBadRequestQuandoClubesSaoIguais**  
+  Simula exceção de clubes iguais, verifica retorno 400 e mensagem.
+- **deveRetornarConflictQuandoDataPartidaAnteriorAAtualizacaoDoClube**  
+  Testa exceção para data anterior à criação do clube, conferindo status 409.
+- **deveRetornarConflictQuandoClubeInativo**  
+  Cobre atualização envolvendo clube inativo, garantindo returno e mensagem certas.
+- **deveRetornarConflictQuandoEstadioJaPossuiJogoNoDia**  
+  Garante cobertura para caso de estádio ocupado na mesma data.
+- **deveRetornarConflictQuandoClubeJaTiverPartidasDentroDe48HorasDaNovaPartida**  
+  Valida cenário de conflito de horários para clubes com partidas em menos de 48h.
+- **deveRetornarNotFoundQuandoPartidaNaoExistir**  
+  Testa situação de atualização de partida inexistente, retornando 404 e mensagem específica.
+
+#### **Principais argumentos, entradas e dependências**
+- **Endpoint testado:** `PUT /api/partida/atualizar/{id}`
+- **DTO:** `AtualizarPartidaRequestDTO`
+- **Dependências mockadas:**
+  - `AtualizarPartidaService`
+  - Exceções customizadas para regras de negócio: ClubesIguaisException, DataPartidaAnteriorACriacaoDoClubeException, ClubeInativoException, EstadioJaPossuiPartidaNoMesmoDiaException, ClubesComPartidasEmHorarioMenorQue48HorasException, PartidaNaoEncontradaException
+- **Response esperado:**
+  - Status HTTP 200, 400, 409 ou 404, conforme o cenário
+  - Corpo JSON validando código de erro e mensagem da exception, quando aplicável
+- **Handlers utilizados:** GlobalApiExceptionHandler e PartidaApiExceptionHandler
+
+#### **Checklist de implementação**
+- [x] Cobertura total do fluxo de sucesso (200 OK)
+- [x] Teste para validação de entrada (obrigatórios, negativo, data futura)
+- [x] Clubes iguais (400 Bad Request)
+- [x] Data anterior à criação do clube (409 Conflict)
+- [x] Clube inativo (409 Conflict)
+- [x] Estádio já ocupado no mesmo dia (409 Conflict)
+- [x] Partidas em menos de 48 horas (409 Conflict)
+- [x] Partida não encontrada (404 Not Found)
+- [x] Handlers globais e de domínio configurados no MockMvc
