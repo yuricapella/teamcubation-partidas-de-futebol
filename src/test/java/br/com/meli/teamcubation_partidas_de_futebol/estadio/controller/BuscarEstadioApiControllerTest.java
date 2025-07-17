@@ -1,6 +1,5 @@
-package br.com.meli.teamcubation_partidas_de_futebol.estadio;
+package br.com.meli.teamcubation_partidas_de_futebol.estadio.controller;
 
-import br.com.meli.teamcubation_partidas_de_futebol.estadio.controller.BuscarEstadioApiController;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.mapper.EstadioResponseMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.exception.EstadioApiExceptionHandler;
