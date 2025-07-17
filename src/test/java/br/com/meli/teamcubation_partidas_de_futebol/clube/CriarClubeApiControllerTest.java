@@ -66,7 +66,7 @@ public class CriarClubeApiControllerTest {
         Mockito.when(criarClubeService.criarClube(Mockito.any(CriarClubeRequestDTO.class)))
                 .thenReturn(clubeCriado);
 
-        mockMvc.perform(post(PATH, id)
+        mockMvc.perform(post(PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.asJsonString(criarDTO)))
                 .andExpect(status().isCreated())
