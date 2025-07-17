@@ -410,3 +410,30 @@ A classe `AtualizarPartidaApiControllerTest` cobre, de maneira isolada, todos os
 - [x] Partidas em menos de 48 horas (409 Conflict)
 - [x] Partida não encontrada (404 Not Found)
 - [x] Handlers globais e de domínio configurados no MockMvc
+
+---
+
+## 3. Deletar partida (controller - deleção e tratamento de exceção de não encontrada)
+
+#### **Descrição técnica**
+Testa o endpoint de deleção de partidas implementado pela DeletarPartidaApiController. Garante a correta resposta do controller tanto para operações de deleção bem-sucedidas quanto para o cenário de exceção quando a partida solicitada não existe. Utiliza MockMvc para orquestração dos fluxos HTTP e Mockito para simulação dos cenários de negócio e lançamento de exceções específicas, integrando handlers globais e de domínio de partida para padronizar o tratamento de erro da API.
+
+#### **Métodos/Funções principais**
+- `deveDeletarPartidaPorIdComSucessoERetornarNoContent`
+  - Testa remoção de partida existente por id, confere status 204 No Content e chamada ao service mockado
+- `deveRetornarNotFoundAoDeletarPartidaInexistente`
+  - Simula solicitação de deleção para id inválido, força lançamento de PartidaNaoEncontradaException, valida resposta 404 Not Found
+
+#### **Principais argumentos, entradas e dependências**
+- Endpoint: `DELETE /api/partida/deletar/{id}`
+- Service mockado: `DeletarPartidaService`
+- Exceção customizada: `PartidaNaoEncontradaException`
+- Utilização de MockMvc para asserções de status HTTP, e de handlers GlobalApiExceptionHandler e PartidaApiExceptionHandler para tratamento e mapeamento dos erros
+
+#### **Checklist de implementação**
+- [x] Fluxo principal de deleção de partida com retorno 204 No Content
+- [x] Tratamento de tentativa de deleção de partida inexistente com retorno 404 Not Found
+- [x] Integração dos exception handlers globais e específicos de partida
+- [x] Verificação de chamada única ao service para ambos cenários
+
+---
