@@ -196,3 +196,41 @@ A classe `CriarClubeApiControllerTest` cobre os principais cenários de criaçã
 - [x] Setup do MockMvc inclui ControllerAdvices para tratamento de erros.
 - [x] Verificação rigorosa com Mockito.verify dos argumentos.
 - [x] Impressão do início dos testes com PrintUtil.
+
+## Estadio
+
+## 1. Buscar estádio controller (GET - paginado, por id, exceção)
+
+#### **Descrição técnica**
+Foram implementados testes unitários para o controller responsável pela busca de estádios de futebol.  
+A classe `BuscarEstadioApiControllerTest` cobre cenários principais de busca paginada (com e sem filtro de nome), busca por id e cenário de exceção quando o estádio não é encontrado.
+
+#### **Métodos de teste**
+- `deveBuscarTodosEstadiosComSucesso(String nome)`
+  - Teste parametrizado via @CsvSource, cobrindo busca sem filtro (retorna todos) e com filtro de nome.
+  - Simula página de resultados com dois estádios distintos e valida JSON de resposta.
+  - Verifica se o service foi chamado com os parâmetros apropriados.
+- `deveBuscarEstadioPorIdComSucesso()`
+  - Testa busca por id e valida retorno dos campos do EstadioResponseDTO.
+  - Garante chamada ao método buscarEstadioPorId no service.
+- `deveRetornarNotFoundQuandoEstadioNaoExistir()`
+  - Simula exceção de EstadioNaoEncontradoException ao buscar id inexistente.
+  - Espera status 404 e verifica a chamada ao service.
+
+#### **Principais argumentos e dependências**
+- **Controllers/Endpoints testados:**
+  - `/api/estadio/buscar [GET]` (paginado, opcionalmente filtrado por `nome`)
+  - `/api/estadio/buscar/{id} [GET]`
+- **Mocks do service:** Uso de Mockito para simular page de DTOs e lançamentos de exceção
+- **ArgumentResolver** para Pageable na configuração do MockMvc
+- **ControllerAdvices** para tratamento de exceções
+- **Impressão do início dos testes** via PrintUtil para rastreabilidade
+
+#### **Checklist de implementação**
+- [x] Teste parametrizado de busca paginada com variações de filtro de nome.
+- [x] Teste para busca por id com validação detalhada do JSON.
+- [x] Teste de exceção para id inexistente retornando 404.
+- [x] Setup completo do MockMvc com ControllerAdvices e ArgumentResolver.
+- [x] Uso do PrintUtil para logar início dos testes.
+
+---
