@@ -507,6 +507,38 @@ Abrange o fluxo completo de atualização de estádios na camada de serviço (`A
 - [x] Logs de rastreabilidade para erros e início dos testes
 ---
 
+## 3. Buscar Estadio Service (busca filtrada, busca por ID e exceção)
+
+#### **Descrição técnica**
+Implementa testes unitários para o serviço de busca de estádios, validando:
+- Busca paginada filtrada por nome com diferentes cenários de filtro (nome preenchido ou nulo)
+- Conversão correta de entidade Estadio para DTO na resposta paginada
+- Busca de estádio por id, validando integridade dos campos principais
+- Lançamento e mensagem correta de EstadioNaoEncontradoException quando id não for encontrado
+
+#### **Métodos/Funções principais**
+- **deveListarEstadiosFiltradosComSucesso**
+  - Cobre busca paginada usando filtro nome, mockando resposta do repository e conferindo correspondência entre entidade e DTO
+- **deveBuscarEstadioPorIdComSucesso**
+  - Valida recuperação de estádio por id, checando igualdade de todos os atributos importantes
+- **deveLancarEstadioNaoEncontradoException_quandoEstadioNaoExistir**
+  - Garante cenário de exceção ao não encontrar estádio, verifica mensagem e ausência de atributos retornados
+
+#### **Principais argumentos, entradas e dependências**
+- Service: BuscarEstadioService
+- Parâmetros: nome (String), id (Long), pageable (PageRequest)
+- Mocks: EstadioRepository, utilitário EstadioUtil para geração de entidades e listas fake
+- Principais asserts: equivalência entre entidade e DTO, mensagens de exceção, verificação de chamadas mockadas
+
+#### **Checklist de implementação**
+- [x] Busca paginada filtrada por nome no service
+- [x] Busca por id com validação de todos atributos principais
+- [x] Tratamento e mensagem de exceção para não encontrado
+- [x] Mapeamento correto entre entidade e DTO
+- [x] Verificação de chamadas ao repository
+- [x] Logs com PrintUtil
+---
+
 ## Partida
 
 ## 1. Criação de partida (controller - fluxos de sucesso, validações e exceções específicas)
