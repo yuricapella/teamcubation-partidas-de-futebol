@@ -309,7 +309,39 @@ Garante os principais fluxos da camada de serviço responsável por inativar clu
 - [x] Cobertura de logs utilitários para rastreabilidade
 ---
 
+## 4. Atualizar Clube Service (atualização, ordem de dependências e exceções)
 
+#### **Descrição técnica**
+Implementa cobertura completa para a lógica de atualização de clubes na camada serviço, abrangendo:
+- Cenário de sucesso com atualização dos campos, persistência e sequenciamento correto das dependências
+- Todas as principais exceções de negócio previstas: clube não encontrado, estado inexistente, nome duplicado e data de criação inválida relacionada a partidas
+- Utilização de mocks para BuscarClubeService, ClubeRepository e ClubeValidator, com controle preciso de fluxo e validação de ordem
+
+#### **Métodos/Funções principais**
+- **deveAtualizarUmClubePorIdComSucesso**
+  - Simula fluxo normal de atualização de clube existente
+  - Verifica persistência, modificação correta dos atributos e sequência dos métodos dependentes
+- **deveLancarClubeNaoEncontradoException_quandoClubeNaoExistir**
+  - Garante tratamento de ausência do clube na busca prévia e bloqueio de validação/persistência
+- **deveLancarEstadoInexistenteException_quandoEstadoNaoExistir**
+  - Testa regra de validação de estado inválido impedindo continuidade da operação
+- **deveLancarClubeComNomeJaCadastradoNoEstadoException_quandoNomeDoClubeJaExisteNoMesmoEstado**
+  - Cobre bloqueio de atualização quando há clube duplicado no mesmo estado
+- **deveLancarDataCriacaoPosteriorDataPartidaException_quandoAlterarDataCriacaoPosteriorADataPartida**
+  - Assegura validação de integridade da data de criação frente a partidas cadastradas
+
+#### **Principais argumentos, entradas e dependências**
+- Service: AtualizarClubeService
+- Parâmetros: AtualizarClubeRequestDTO, id (Long)
+- Mocks: BuscarClubeService, ClubeRepository, ClubeValidator, ClubeUtil para instância de domínio
+- Validações: correlaciona mensagens e tipos de exceção previstos
+
+#### **Checklist de implementação**
+- [x] Atualização de clube para fluxo nominal com todos os atributos essenciais
+- [x] Cobertura dos cenários previstos de erro de domínio/regra de negócio
+- [x] Testes garantem fluxo correto entre busca, validação e persistência via InOrder
+- [x] Logs principais para rastreabilidade de exceções
+---
 
 
 ## Estadio
