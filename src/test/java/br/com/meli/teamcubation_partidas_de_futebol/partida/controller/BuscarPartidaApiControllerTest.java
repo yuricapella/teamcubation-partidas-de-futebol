@@ -7,7 +7,7 @@ import br.com.meli.teamcubation_partidas_de_futebol.partida.exception.PartidaApi
 import br.com.meli.teamcubation_partidas_de_futebol.partida.exception.PartidaNaoEncontradaException;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.service.BuscarPartidaService;
-import br.com.meli.teamcubation_partidas_de_futebol.util.PartidaUtil;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.util.PartidaUtil;
 import br.com.meli.teamcubation_partidas_de_futebol.util.PrintUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

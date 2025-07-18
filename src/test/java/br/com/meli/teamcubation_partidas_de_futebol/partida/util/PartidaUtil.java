@@ -1,4 +1,4 @@
-package br.com.meli.teamcubation_partidas_de_futebol.util;
+package br.com.meli.teamcubation_partidas_de_futebol.partida.util;
 
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;

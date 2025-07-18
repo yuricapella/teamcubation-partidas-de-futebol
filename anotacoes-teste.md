@@ -197,6 +197,50 @@ A classe `CriarClubeApiControllerTest` cobre os principais cenários de criaçã
 - [x] Verificação rigorosa com Mockito.verify dos argumentos.
 - [x] Impressão do início dos testes com PrintUtil.
 
+---
+
+## 1. Testes unitários de criação de clube (service - cenários de sucesso e exceção)
+
+#### **Descrição técnica**
+Implementa todos os testes unitários necessários para a camada de serviço de criação de clube (`CriarClubeService`), abrangendo:
+- Operação de sucesso, atribuição de atributos obrigatórios (`nome`, `siglaEstado`, `dataCriacao`, `ativo`, `id`)
+- Fluxo de exceção para estados inexistentes e nomes já cadastrados no mesmo estado, propagando as exceções corretas e prevenindo persistência em caso de erro
+- Validação da ordem correta: validação ocorre antes do acesso ao repositório
+
+#### **Métodos/Funções principais**
+- **deveCriarUmClubeComSucesso**
+  - Testa a criação plena de um clube, incluindo mapeamento do DTO, atribuição correta de campos, ativação automática e ausência de data de atualização
+  - Garante execução de `clubeValidator.validarClubeNaCriacao` antes de `clubeRepository.save`
+- **deveLancarEstadoInexistenteException_quandoEstadoNaoExistir**
+  - Simula o lançamento de `EstadoInexistenteException` pelo validator para estados inválidos
+  - Garante que o save não é invocado e mensagem da exceção está correta
+- **deveLancarClubeComNomeJaCadastradoNoEstadoException_quandoNomeDoClubeJaExisteNoMesmoEstado**
+  - Simula cenário de nome duplicado para estado, lançando `ClubeComNomeJaCadastradoNoEstadoException`
+  - Valida mensagem e não persiste o registro
+
+#### **Principais argumentos, entradas e dependências**
+- **Entradas:** `CriarClubeRequestDTO` com nome, siglaEstado e dataCriacao
+- **Dependências:**
+  - `ClubeRepository` mockado para persistência
+  - `ClubeValidator` mockado para simular validações de negócio e lançamento de exceções relevantes
+- **Verificações relevantes:**
+  - Atributos essenciais preenchidos conforme esperado
+  - Ordem de chamada das dependências
+  - Exceções propagadas com mensagem correta
+  - Save não executado em caso de erros
+
+#### **Checklist de implementação**
+- [x] Fluxo principal de criação com persistência
+- [x] Validação de atributos obrigatórios e estado inicial (ativo true, dataAtualizacao nula)
+- [x] Ordem dos métodos de validação e persistência
+- [x] Cenários de exceção para estado inválido e nome duplicado
+- [x] Asserts para mensagens das exceções
+- [x] Teste para bloqueio do save quando há erro de validação
+
+---
+
+
+
 ## Estadio
 
 ## 1. Buscar estádio controller (GET - paginado, por id, exceção)
