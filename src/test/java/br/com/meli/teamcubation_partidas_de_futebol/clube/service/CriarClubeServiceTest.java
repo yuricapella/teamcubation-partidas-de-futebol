@@ -71,6 +71,8 @@ public class CriarClubeServiceTest {
 
         Mockito.verify(clubeValidator, Mockito.times(1)).validarClubeNaCriacao(Mockito.any(Clube.class));
         Mockito.verify(clubeRepository, Mockito.never()).save(Mockito.any(Clube.class));
+
+        PrintUtil.printMensagemDeErro(exception.getMessage());
     }
 
     @Test
@@ -91,6 +93,8 @@ public class CriarClubeServiceTest {
 
         Mockito.verify(clubeValidator, Mockito.times(1)).validarClubeNaCriacao(Mockito.any(Clube.class));
         Mockito.verify(clubeRepository, Mockito.never()).save(Mockito.any(Clube.class));
+
+        PrintUtil.printMensagemDeErro(exception.getMessage());
     }
 
 

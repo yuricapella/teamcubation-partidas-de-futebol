@@ -199,7 +199,7 @@ A classe `CriarClubeApiControllerTest` cobre os principais cenários de criaçã
 
 ---
 
-## 1. Testes unitários de criação de clube (service - cenários de sucesso e exceção)
+## 1. Criar Clube Service (criação e cenários de exceção)
 
 #### **Descrição técnica**
 Implementa todos os testes unitários necessários para a camada de serviço de criação de clube (`CriarClubeService`), abrangendo:
@@ -238,6 +238,43 @@ Implementa todos os testes unitários necessários para a camada de serviço de 
 - [x] Teste para bloqueio do save quando há erro de validação
 
 ---
+
+## 2. Buscar Clube Service (busca filtrada, busca por ID e cenário de exceção)
+
+#### **Descrição técnica**
+Implementa a bateria de testes unitários para a camada de serviço de busca de clubes (`BuscarClubeService`), cobrindo:
+- Busca paginada e filtrada utilizando os parâmetros nome, sigla do estado e booleano "ativo" via método listarClubesFiltrados
+- Conversão correta de entidades Clube para DTO de resposta nas respostas da busca filtrada
+- Fluxo de sucesso na busca por ID, garantindo a preservação de todos os atributos relevantes do clube retornado
+- Cenário negativo onde um clube não é encontrado, assegurando o lançamento e mensagem da exception ClubeNaoEncontradoException
+
+#### **Métodos/Funções principais**
+- **deveListarClubesFiltradosComSucesso**
+  - Testa integração dos filtros isoladamente (nome, estado, ativo) usando @ParameterizedTest e verifica a correspondência dos dados no DTO
+  - Garante chamada do método findByFiltros do ClubeRepository com todos os parâmetros e pageable
+- **deveBuscarClubePorIdComSucesso**
+  - Verifica busca correta e completa por id existente
+  - Assegura manutenção de todos os campos do objeto Clube recuperado
+- **deveLancarClubeNaoEncontradoException_quandoClubeNaoExistir**
+  - Simula ausência de resultado para o id buscado e valida o lançamento da exceção customizada, com assert na mensagem
+  - Utiliza utilitário PrintUtil para exibir mensagem de erro nos logs do teste
+
+#### **Principais argumentos, entradas e dependências**
+- Métodos testados: listarClubesFiltrados(nome, estado, ativo, pageable) e buscarClubePorId(id)
+- Parâmetros: `String nome`, `String estado`, `Boolean ativo`, `Long id`, `Pageable pageable`
+- Mocks: `ClubeRepository`, com configuração de resposta mediante argumentos via Mockito
+- Uso de DTO: `ClubeResponseDTO` para conversão e verificação dos dados apresentados ao consumidor
+- Suporte para validação de mensagem de exceção em caso de erro esperado na busca
+
+#### **Checklist de implementação**
+- [x] Fluxo principal de busca paginada e filtrada (cenário feliz)
+- [x] Conversão correta de entidade para DTO em buscas filtradas
+- [x] Busca por id com objeto encontrado e cobertura total de atributos
+- [x] Tratamento de cenário negativo (clube não encontrado), com assert da exception
+- [x] Validação de mocks e verificação das chamadas ao repository em todos os testes
+- [x] Uso de utilitário PrintUtil para marcação dos testes e mensagens de erro
+---
+
 
 
 
