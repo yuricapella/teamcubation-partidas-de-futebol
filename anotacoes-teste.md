@@ -275,6 +275,40 @@ Implementa a bateria de testes unitários para a camada de serviço de busca de 
 - [x] Uso de utilitário PrintUtil para marcação dos testes e mensagens de erro
 ---
 
+## 3. Inativar Clube Service (inativação por id e cenário de exceção)
+
+#### **Descrição técnica**
+Garante os principais fluxos da camada de serviço responsável por inativar clubes, especificamente:
+- Alterar o atributo `ativo` para `false` e definir o `dataAtualizacao` ao inativar um clube pelo identificador
+- Persistir a alteração no repository
+- Lançar exceção customizada caso o clube buscado não exista
+
+#### **Métodos/Funções principais**
+- **deveInativarClubePorIdComSucesso**
+  - Mocka BuscarClubeService para retornar entidade existente
+  - Garante update correto nos campos (`ativo=false`, dataAtualizacao preenchida)
+  - Valida persistência com save no ClubeRepository
+  - Verifica ordem das chamadas no fluxo de service
+- **deveLancarClubeNaoEncontradoException_quandoClubeNaoExistir**
+  - Simula ausência do clube ao buscar por id com throw de ClubeNaoEncontradoException
+  - Valida mensagem da exception e chamada única do método de busca
+  - Utiliza PrintUtil para log do erro no teste
+
+#### **Principais argumentos, entradas e dependências**
+- Service testada: `InativarClubeService`
+- Parâmetros principais: `Long id` do clube
+- Dependências mockadas: `BuscarClubeService`, `ClubeRepository`
+- Integração: verifica chamada a buscarClubeService e persistência no repository
+
+#### **Checklist de implementação**
+- [x] Inativação do clube (ativo=false, dataAtualizacao)
+- [x] Persistência da alteração no banco (save)
+- [x] Verificação de ordem entre busca e persistência
+- [x] Lançamento e validação de exceção de não encontrado
+- [x] Assert no estado final dos campos alterados
+- [x] Cobertura de logs utilitários para rastreabilidade
+---
+
 
 
 
