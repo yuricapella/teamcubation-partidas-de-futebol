@@ -105,4 +105,12 @@ public class Partida {
     public boolean isGoleada() {
         return Math.abs(this.golsMandante - this.golsVisitante) >= 3;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

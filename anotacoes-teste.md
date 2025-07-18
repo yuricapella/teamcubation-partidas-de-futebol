@@ -437,3 +437,37 @@ Testa o endpoint de deleção de partidas implementado pela DeletarPartidaApiCon
 - [x] Verificação de chamada única ao service para ambos cenários
 
 ---
+
+## 4. Buscar partida (controller - busca paginada, filtros e busca por id)
+
+#### **Descrição técnica**
+Foi implementada a bateria de testes para o endpoint de buscar partida na BuscarPartidaApiController. 
+Cobre todos os fluxos relevantes, incluindo buscas paginadas com 
+filtros opcionais (clubeId, estadioId, goleada, mandante, visitante), 
+busca unitária pelo id, e tratamento de exceção quando a partida não existe. 
+A criação e paginação de objetos Partida utiliza PartidaUtil, 
+garantindo consistência nos mocks e validações de retorno.
+
+#### **Métodos/Funções principais**
+- `deveBuscarPartidasComFiltros`
+  - Valida busca paginada com diversos filtros, confere conteúdo do JSON, size da lista e mapeamento dos sub-objetos (clube, estádio, resultado)
+  - Usa Mockito para mockar a busca paginada partindo de Page<Partida> criado pelo utilitário PartidaUtil
+- `deveBuscarPartidaPorIdComSucesso`
+  - Testa busca de partida única por ID, verificando todos os campos relevantes retornados e integração com o mapper de DTOs
+- `deveRetornarNotFoundQuandoClubeNaoExistir`
+  - Simula cenário de partida inexistente via exceção específica, valida status 404 e rastreabilidade do fluxo
+
+#### **Principais argumentos, entradas e dependências**
+- Endpoints:
+  - GET `/api/partida/buscar` com filtros opcionais via query params
+  - GET `/api/partida/buscar/{id}`
+- Argumentos e filtros principais: clubeId, estadioId, goleada, mandante, visitante, pageable
+- Dependências: BuscarPartidaService mockado, PartidaUtil para criação de Partida e Page<Partida>, 
+- PartidaResponseMapper para conversão ao DTO de resposta, handlers globais e do domínio de partida configurados no MockMvc
+
+#### **Checklist de implementação**
+- [x] Busca paginada de partidas com múltiplos filtros opcionais
+- [x] Busca de partida por id retornando DTO completo
+- [x] Cobertura para cenário de partida não encontrada (404 Not Found)
+- [x] Mock de Page e entidades Partida com utilitário dedicado para padronização dos dados de teste
+- [x] Integração e validação dos handlers globais e específicos de partida no controller
