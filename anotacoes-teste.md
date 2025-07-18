@@ -343,7 +343,6 @@ Implementa cobertura completa para a lógica de atualização de clubes na camad
 - [x] Logs principais para rastreabilidade de exceções
 ---
 
-
 ## Estadio
 
 ## 1. Buscar estádio controller (GET - paginado, por id, exceção)
@@ -456,6 +455,37 @@ A classe `AtualizarEstadioApiControllerTest` valida, de forma isolada, os princi
 - [x] Configuração dos handlers de exceção específicos e globais na MockMvc
 - [x] Uso de mocks para isolar camada de controller dos serviços reais
 - [x] Cobertura para mensagens, códigos de erro e estrutura da resposta JSON
+
+---
+
+## 1. Criar Estadio Service (criação e cenários de exceção)
+
+#### **Descrição técnica**
+Implementa testes unitários para o fluxo de criação de estádios na camada de serviço (`CriarEstadioService`), cobrindo tanto o caso de sucesso quanto os principais cenários de erro por nome duplicado. Os testes garantem validação adequada do nome via `EstadioValidator` antes de persistir no `EstadioRepository`, além de confirmar a ordem das operações.
+
+#### **Métodos/Funções principais**
+- **deveCriarUmEstadioComSucesso**
+  - Garante que um novo estádio é criado corretamente e que o save ocorre apenas após a validação bem-sucedida
+  - Valida atributos obrigatórios do estádio e ausência de data de atualização inicial
+  - Usa InOrder para checar ordem entre validação e persistência
+- **deveLancarEstadioJaExisteException_quandoTentarCriarEstadioComMesmoNome**
+  - Simula fluxo de tentativa de criação com nome já existente, forçando EstadioJaExisteException
+  - Assegura que, ao ocorrer a exceção, o método save do repository não é chamado
+  - Valida a mensagem da exception customizada
+
+#### **Principais argumentos, entradas e dependências**
+- Service testada: `CriarEstadioService`
+- DTO: `CriarEstadioRequestDTO` (nome)
+- Dependências mockadas: `EstadioValidator`, `EstadioRepository`
+- Principais asserts: atributos do estádio criado, ordem dos métodos, exceção e mensagem customizada
+
+#### **Checklist de implementação**
+- [x] Criação de estádio com sucesso e atributos essenciais
+- [x] Validação do nome via EstadioValidator
+- [x] Bloqueio com exceção de nome duplicado, sem chamada ao save
+- [x] Conferência da ordem entre validação e persistência
+- [x] Logs utilitários para rastreabilidade
+---
 
 ---
 
