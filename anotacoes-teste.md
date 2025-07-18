@@ -1,7 +1,3 @@
-Com seu exemplo de código e modelo de documentação, aqui está como documentar **de forma sucinta, objetiva e focada só no código, argumentos e lógica** (e não em como rodar/comandos):
-
----
-
 # Anotações
 
 ## Clube
@@ -49,7 +45,6 @@ A classe `BuscarClubeApiControllerTest` cobre os cenários principais de busca p
 - [x] Uso de lista mutável (`new ArrayList<>`) no PageImpl, garantindo serialização correta com Jackson.
 - [x] Setup do MockMvc inclui ControllerAdvices e ArgumentResolver para Pageable.
 - [x] Impressão do início de cada teste via `PrintUtil`.
-
 ---
 
 ## 2. Inativar clube controller (DELETE - sucesso e exceção)
@@ -85,8 +80,6 @@ A classe `InativarClubeApiControllerTest` cobre o cenário de sucesso e o cenár
 - [x] Setup do MockMvc inclui ControllerAdvices para tratamento correto das respostas de erro.
 - [x] Verificação se o método do service responsável foi chamado exatamente uma vez.
 - [x] Impressão informativa do início de cada teste com `PrintUtil`.
-
-
 ---
 
 ## 3. Atualizar clube controller (PUT - sucesso, validação, erros de negócio)
@@ -146,7 +139,6 @@ A classe `AtualizarClubeApiControllerTest` cobre os principais cenários de atua
 - [x] Conferência dos campos e mensagens nas respostas de erro.
 - [x] Setup do MockMvc inclui dois ControllerAdvices.
 - [x] Impressão do início de cada teste via `PrintUtil`.
-
 ---
 
 ## 4. Criar clube controller (POST - sucesso, validação, erros de negócio)
@@ -196,7 +188,6 @@ A classe `CriarClubeApiControllerTest` cobre os principais cenários de criaçã
 - [x] Setup do MockMvc inclui ControllerAdvices para tratamento de erros.
 - [x] Verificação rigorosa com Mockito.verify dos argumentos.
 - [x] Impressão do início dos testes com PrintUtil.
-
 ---
 
 ## 1. Criar Clube Service (criação e cenários de exceção)
@@ -236,7 +227,6 @@ Implementa todos os testes unitários necessários para a camada de serviço de 
 - [x] Cenários de exceção para estado inválido e nome duplicado
 - [x] Asserts para mensagens das exceções
 - [x] Teste para bloqueio do save quando há erro de validação
-
 ---
 
 ## 2. Buscar Clube Service (busca filtrada, busca por ID e cenário de exceção)
@@ -378,7 +368,6 @@ A classe `BuscarEstadioApiControllerTest` cobre cenários principais de busca pa
 - [x] Teste de exceção para id inexistente retornando 404.
 - [x] Setup completo do MockMvc com ControllerAdvices e ArgumentResolver.
 - [x] Uso do PrintUtil para logar início dos testes.
-
 ---
 
 ## 2. Criar estádio controller (POST - sucesso, validação, conflito de nome)
@@ -414,7 +403,6 @@ A classe `CriarEstadioApiControllerTest` cobre os principais cenários de criaç
 - [x] Setup do MockMvc com ControllerAdvices.
 - [x] Verificação rigorosa da chamada ao service e mensagens de erro em JSON.
 - [x] Utilização de PrintUtil para rastreabilidade nos testes.
-
 ---
 
 ## 3. AtualizarEstadioApiControllerTest (testes - atualização, validação, conflitos e inexistência de estádio)
@@ -455,7 +443,6 @@ A classe `AtualizarEstadioApiControllerTest` valida, de forma isolada, os princi
 - [x] Configuração dos handlers de exceção específicos e globais na MockMvc
 - [x] Uso de mocks para isolar camada de controller dos serviços reais
 - [x] Cobertura para mensagens, códigos de erro e estrutura da resposta JSON
-
 ---
 
 ## 1. Criar Estadio Service (criação e cenários de exceção)
@@ -487,6 +474,37 @@ Implementa testes unitários para o fluxo de criação de estádios na camada de
 - [x] Logs utilitários para rastreabilidade
 ---
 
+## 2. Atualizar Estadio Service (atualização, ordem de dependências e exceções)
+
+#### **Descrição técnica**
+Abrange o fluxo completo de atualização de estádios na camada de serviço (`AtualizarEstadioService`), incluindo:
+- Atualização de entidade existente, com propagação correta das alterações e controle da ordem das operações entre busca, validação e persistência
+- Tratamento de exceções de domínio: estádio não encontrado e duplicidade de nome ao atualizar
+- Utilização de mocks para EstadioRepository, EstadioValidator e BuscarEstadioService, garantindo path correto de execução em todos os cenários
+
+#### **Métodos/Funções principais**
+- **deveAtualizarUmEstadioComSucesso**
+  - Simula atualização normal de estádio, garantindo alteração de nome e atualização do campo dataAtualizacao
+  - Garante persistência e sequência exata do fluxo de dependências
+- **deveLancarEstadioNaoEncontradoException_quandoAtualizarEstadioInexistente**
+  - Bloqueia validação/persistência na ausência do estádio, lançando exceção customizada
+  - Valida mensagem de exceção e não execução dos métodos seguintes
+- **deveLancarEstadioJaExisteException_quandoTentarAtualizarEstadioComMesmoNome**
+  - Testa cenário de validação de nome duplicado, garantindo lançamento de exceção e ausência de save
+
+#### **Principais argumentos, entradas e dependências**
+- Service: AtualizarEstadioService
+- DTO: AtualizarEstadioRequestDTO (nome)
+- Dependências mockadas: EstadioRepository, EstadioValidator, BuscarEstadioService
+- Validação via EstadioValidator (validarDadosDoEstadioAoAtualizar)
+- Checagem de ordem entre busca, validação e save com InOrder
+
+#### **Checklist de implementação**
+- [x] Atualização e persistência de estádio com sucesso
+- [x] Tratamento de exceções de domínio (não encontrado e nome duplicado)
+- [x] Garantia de bloqueio em caminhos de exceção
+- [x] Validação da ordem correta das dependências
+- [x] Logs de rastreabilidade para erros e início dos testes
 ---
 
 ## Partida
