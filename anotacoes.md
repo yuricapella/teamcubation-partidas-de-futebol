@@ -638,6 +638,7 @@ listar as datas conflituosas dos clubes e calcular qual o tempo correto para mos
 - [] Tentar usar polimorfismo com interface nos dtos de clube e partida para deixar os metodos dos Validators mais genéricos
 
 - [] alterar o get confronto de retrospecto para usar requestparam e nao request body, pois foge do padrao rest
+- [] colocar um filtro de % % nos repository por nome por exemplo, para poder filtrar todos clubes/estadios com nomes parecidos.
 
 ## Estrutura
 A estrutura do projeto acabou ficando no modelo chamado Domain Package Structure (DPS), 
