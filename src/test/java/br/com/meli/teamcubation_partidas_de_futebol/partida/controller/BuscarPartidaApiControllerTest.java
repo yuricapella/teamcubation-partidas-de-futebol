@@ -68,7 +68,7 @@ public class BuscarPartidaApiControllerTest {
             "1,2,true,true,false,"          // todos combinados
     })
     void deveBuscarPartidasComFiltros(Long clubeId, Long estadioId, Boolean goleada, Boolean mandante, Boolean visitante) throws Exception {
-        Page<Partida> partidasRetornadas = PartidaUtil.getPagePartida();
+        Page<Partida> partidasRetornadas = PartidaUtil.criarPagePartidas(2);
 
         Mockito.when(buscarPartidaService.listarPartidasFiltradas(
                 any(), any(), any(), any(), any(), any(Pageable.class)
@@ -92,9 +92,9 @@ public class BuscarPartidaApiControllerTest {
                 .andExpect(jsonPath("$.content[0].clubeMandante.nome").value("Mandante"))
                 .andExpect(jsonPath("$.content[1].clubeVisitante.siglaEstado").value("RJ"))
                 .andExpect(jsonPath("$.content[0].estadio.nome").value("Estádio Teste"))
-                .andExpect(jsonPath("$.content[0].golsMandante").value(2))
-                .andExpect(jsonPath("$.content[0].golsVisitante").value(1))
-                .andExpect(jsonPath("$.content[1].golsMandante").value(3))
+                .andExpect(jsonPath("$.content[0].golsMandante").value(3))
+                .andExpect(jsonPath("$.content[0].golsVisitante").value(2))
+                .andExpect(jsonPath("$.content[1].golsMandante").value(4))
                 .andExpect(jsonPath("$.content[1].golsVisitante").value(3))
                 .andDo(MockMvcResultHandlers.print());
 
@@ -106,7 +106,7 @@ public class BuscarPartidaApiControllerTest {
     @Test
     void deveBuscarPartidaPorIdComSucesso() throws Exception {
         Long id = 1L;
-        Partida partida = PartidaUtil.getPartida();
+        Partida partida = PartidaUtil.criarPartida();
         partida.setId(id);
         PartidaResponseDTO partidaDTO = PartidaResponseMapper.toPartidaResponseDTO(partida);
 

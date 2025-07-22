@@ -1,6 +1,7 @@
 # Anotações
 
-## Clube
+# Clube
+## Controller
 
 ### 1. **Buscar clube controller (GET - todos com Page, por id, e exceção)**
 
@@ -190,6 +191,7 @@ A classe `CriarClubeApiControllerTest` cobre os principais cenários de criaçã
 - [x] Impressão do início dos testes com PrintUtil.
 ---
 
+## Service
 ## 1. Criar Clube Service (criação e cenários de exceção)
 
 #### **Descrição técnica**
@@ -333,7 +335,9 @@ Implementa cobertura completa para a lógica de atualização de clubes na camad
 - [x] Logs principais para rastreabilidade de exceções
 ---
 
-## Estadio
+# Estadio
+## Controller
+
 
 ## 1. Buscar estádio controller (GET - paginado, por id, exceção)
 
@@ -445,6 +449,7 @@ A classe `AtualizarEstadioApiControllerTest` valida, de forma isolada, os princi
 - [x] Cobertura para mensagens, códigos de erro e estrutura da resposta JSON
 ---
 
+## Service
 ## 1. Criar Estadio Service (criação e cenários de exceção)
 
 #### **Descrição técnica**
@@ -539,7 +544,8 @@ Implementa testes unitários para o serviço de busca de estádios, validando:
 - [x] Logs com PrintUtil
 ---
 
-## Partida
+# Partida
+## Controller
 
 ## 1. Criação de partida (controller - fluxos de sucesso, validações e exceções específicas)
 
@@ -698,3 +704,39 @@ garantindo consistência nos mocks e validações de retorno.
 - [x] Cobertura para cenário de partida não encontrada (404 Not Found)
 - [x] Mock de Page e entidades Partida com utilitário dedicado para padronização dos dados de teste
 - [x] Integração e validação dos handlers globais e específicos de partida no controller
+---
+
+## Service
+### 1. Buscar Partida Service (paginação, filtros avançados, busca por id, vazio, exceção)
+
+#### **Descrição técnica**
+A suite cobre integralmente os fluxos do serviço `BuscarPartidaService`, responsável pela recuperação paginada e filtrada de partidas, além da busca pontual por id. Assegura que:
+- Todos os filtros são aplicados corretamente após o retorno paginado da repository, usando streams para as regras de negócio: `goleada`, `mandante`, `visitante` e combinações com clubId/estadioId, com cobertura pelo parametrizado e validação dinâmica de resultados.
+- O método retorna Page correta tanto para casos de múltiplos resultados quanto para cenário sem correspondências.
+- O método de busca por id confere todos os campos do modelo Partida e lida com ausência lançando exceção customizada com mensagem consistente.
+- Toda integração com PartidaRepository é verificada, usando mocks e asserts de chamadas únicas.
+
+#### **Métodos/Funções principais**
+- **deveListarPartidasFiltradasComSucesso (parametrizado)**
+  - Cobre fluxo paginado com combinações dos cinco filtros, assertiva pelo count pós-filtros, garantindo aderência exata ao comportamento de service.
+- **deveRetornarListaVaziaQuandoNenhumaPartidaAtendeOsFiltros**
+  - Simula cenário de retorno nulo após aplicação dos filtros avançados na service.
+- **deveBuscarPartidaPorIdComSucesso**
+  - Garante recuperação do objeto completo, validando individualmente cada campo importante do domínio Partida.
+- **deveLancarPartidaNaoEncontradaException_quandoPartidaNaoExistir**
+  - Lida com ausência do id na repository, assegurando o lançamento e mensagem da exceção customizada.
+
+#### **Principais argumentos, entradas e dependências**
+- Service central: BuscarPartidaService
+- Entrada: parâmetros Long clubeId, Long estadioId, Boolean goleada, Boolean mandante, Boolean visitante, Pageable pageable
+- Dependências: PartidaRepository (mock), PartidaUtil para geração de massa
+- Validações: aplicação real dos filtros do service, assertividade do Page/objetos retornados, rastreabilidade das chamadas mockadas
+
+#### **Checklist de implementação**
+- [x] Busca paginada com combinações de todos os filtros possíveis
+- [x] Fluxo para resposta vazia por ausência de correspondências
+- [x] Busca por id, com verificação de todos os atributos essenciais de Partida
+- [x] Tratamento e assert de exceção na ausência da partida por id
+- [x] Mock e verificação rigorosa de chamadas aos métodos do repository
+- [x] Ajuste dos testes da controller a partir da refatoração e da nova massa mockada
+---
