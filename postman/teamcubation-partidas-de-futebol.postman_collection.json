@@ -1,0 +1,1787 @@
+{
+	"info": {
+		"_postman_id": "08f6964e-b24d-4820-93d7-9863643427ce",
+		"name": "teamcubation-partidas-de-futebol",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43702238",
+		"_collection_link": "https://yuricapella.postman.co/workspace/Yuri-Capella's-Workspace~eed12cec-649d-4622-8f2c-fee779577473/collection/43702238-08f6964e-b24d-4820-93d7-9863643427ce?action=share&source=collection_link&creator=43702238"
+	},
+	"item": [
+		{
+			"name": "clube",
+			"item": [
+				{
+					"name": "sucesso",
+					"item": [
+						{
+							"name": "Criar clube",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"clube de time quatorze\",\n    \"siglaEstado\":\"SP\",\n    \"dataCriacao\":\"2025-05-13\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar por id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/buscar/14",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"buscar",
+										"14"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "inativar por id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/inativar/14",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"inativar",
+										"14"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "atualizar",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"clube de time quatorze atualizado\",\n    \"siglaEstado\":\"AM\",\n    \"dataCriacao\":\"2025-05-13\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/atualizar/14",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"atualizar",
+										"14"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar todos",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/buscar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"buscar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar todos ascendente e paginação",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/buscar?page=0&size=10&sort=nome,desc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"buscar"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										},
+										{
+											"key": "sort",
+											"value": "nome,desc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "filtro por nome",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/buscar?nome=time teste",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"buscar"
+									],
+									"query": [
+										{
+											"key": "nome",
+											"value": "time teste"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "filtro por estado",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/buscar?estado=am",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"buscar"
+									],
+									"query": [
+										{
+											"key": "estado",
+											"value": "am"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "filtro por ativo",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/buscar?ativo=false",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"buscar"
+									],
+									"query": [
+										{
+											"key": "ativo",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "atualizar com ativo e sem nome duplicado",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"clube de time quatorze atualizado\",\n    \"siglaEstado\":\"SP\",\n    \"dataCriacao\":\"2025-05-13\",\n    \"ativo\": true\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/atualizar/14",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"atualizar",
+										"14"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "falha",
+					"item": [
+						{
+							"name": "todos os campos incorretos",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"a\",\n    \"siglaEstado\":\"M\",\n    \"dataCriacao\":\"2090-12-13\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/atualizar/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"atualizar",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "id nao encontrado",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/buscar/999",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"buscar",
+										"999"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "estado inexistente",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"clube de time trinta\",\n    \"siglaEstado\":\"ax\",\n    \"dataCriacao\":\"2025-05-13\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "nome igual no mesmo estado",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"clube de time\",\n    \"siglaEstado\":\"ap\",\n    \"dataCriacao\":\"2025-05-13\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "atualizar data criação posterior a data de uma partida cadastrada",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"clube de time atualizado\",\n    \"siglaEstado\":\"AM\",\n    \"dataCriacao\":\"2025-06-20\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/atualizar/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"atualizar",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "nao encontrado",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"clube de time atualizado\",\n    \"siglaEstado\":\"AM\",\n    \"dataCriacao\":\"2025-05-13\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/atualizar/999",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"atualizar",
+										"999"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "nao encontrado",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"clube de time\",\n    \"siglaEstado\":\"SP\",\n    \"dataCriacao\":\"2025-02-13\"\n\n}"
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clube/inativar/999",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clube",
+										"inativar",
+										"999"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "estadio",
+			"item": [
+				{
+					"name": "sucesso",
+					"item": [
+						{
+							"name": "criar estadio",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"Estadio de time criado\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/estadio/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"estadio",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "atualizar estadio",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"Estadio de time atualizado\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/estadio/atualizar/6",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"estadio",
+										"atualizar",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar por id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/estadio/buscar/6",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"estadio",
+										"buscar",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar todos estadios por paginação",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/estadio/buscar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"estadio",
+										"buscar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar estadio por nome",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/estadio/buscar?nome=estadio de time um",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"estadio",
+										"buscar"
+									],
+									"query": [
+										{
+											"key": "nome",
+											"value": "estadio de time um"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar estadios com sort",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/estadio/buscar?sort=nome,asc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"estadio",
+										"buscar"
+									],
+									"query": [
+										{
+											"key": "sort",
+											"value": "nome,asc"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "falha",
+					"item": [
+						{
+							"name": "dados inválidos",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"es\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/estadio/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"estadio",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar id nao existente",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/estadio/buscar/999",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"estadio",
+										"buscar",
+										"999"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "criar estadio com mesmo nome",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"Estadio de time um\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/estadio/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"estadio",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "atualizar nao encontrado",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\":\"Estadio de time atualizado\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/estadio/atualizar/999",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"estadio",
+										"atualizar",
+										"999"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "partida",
+			"item": [
+				{
+					"name": "sucesso",
+					"item": [
+						{
+							"name": "criar partida",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"clubeMandanteId\": 1,\n  \"clubeVisitanteId\": 12,\n  \"estadioId\": 1,\n  \"golsMandante\": 1,\n  \"golsVisitante\": 4,\n  \"dataHora\": \"2025-05-19T21:00:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "criar partida para deletar",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"clubeMandanteId\": 1,\n  \"clubeVisitanteId\": 2,\n  \"estadioId\": 1,\n  \"golsMandante\": 3,\n  \"golsVisitante\": 2,\n  \"dataHora\": \"2025-07-03T21:00:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deletar partida 6",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/deletar/12",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"deletar",
+										"12"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar partida por id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/buscar/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"buscar",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar todas partidas",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/buscar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"buscar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "todas partidas que tiveram goleada",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/buscar?goleada=true",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"buscar"
+									],
+									"query": [
+										{
+											"key": "goleada",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "todas partidas em que o clube foi mandante",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/buscar?clubeId=3&mandante=true",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"buscar"
+									],
+									"query": [
+										{
+											"key": "clubeId",
+											"value": "3"
+										},
+										{
+											"key": "mandante",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar com pageable e clube id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/buscar?clubeId=3&page=0&size=10&sort=clubeVisitante,asc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"buscar"
+									],
+									"query": [
+										{
+											"key": "clubeId",
+											"value": "3"
+										},
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										},
+										{
+											"key": "sort",
+											"value": "clubeVisitante,asc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "atualizar partida por id",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"clubeMandanteId\": 1,\n  \"clubeVisitanteId\": 2,\n  \"estadioId\": 1,\n  \"golsMandante\": 2,\n  \"golsVisitante\": 2,\n  \"dataHora\": \"2025-06-10T21:00:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/atualizar/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"atualizar",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "falha",
+					"item": [
+						{
+							"name": "dados inválidos",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"clubeMandanteId\": 1,\n  \"clubeVisitanteId\": 2,\n  \"estadioId\": 1,\n  \"golsMandante\": -1,\n  \"golsVisitante\": -1,\n  \"dataHora\": \"2026-05-19T21:00:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "clubes iguais",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"clubeMandanteId\": 1,\n  \"clubeVisitanteId\": 1,\n  \"estadioId\": 1,\n  \"golsMandante\": 3,\n  \"golsVisitante\": 2,\n  \"dataHora\": \"2024-07-03T21:00:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "data anterior ao do clube",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"clubeMandanteId\": 1,\n  \"clubeVisitanteId\": 2,\n  \"estadioId\": 1,\n  \"golsMandante\": 3,\n  \"golsVisitante\": 2,\n  \"dataHora\": \"2024-04-03T21:00:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "clube inativo",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"clubeMandanteId\": 1,\n  \"clubeVisitanteId\": 4,\n  \"estadioId\": 1,\n  \"golsMandante\": 3,\n  \"golsVisitante\": 2,\n  \"dataHora\": \"2025-06-03T21:00:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "clube inexistente",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"clubeMandanteId\": 999,\n  \"clubeVisitanteId\": 999,\n  \"estadioId\": 1,\n  \"golsMandante\": 3,\n  \"golsVisitante\": 2,\n  \"dataHora\": \"2025-06-03T21:00:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "clubes que tem partidas em menos de 48 horas",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"clubeMandanteId\": 3,\n  \"clubeVisitanteId\": 2,\n  \"estadioId\": 1,\n  \"golsMandante\": 3,\n  \"golsVisitante\": 2,\n  \"dataHora\": \"2025-06-05T21:00:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/partida/criar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"partida",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "estadio ja tendo partidas no mesmo dia",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"clubeMandanteId\": 6,\n  \"clubeVisitanteId\": 7,\n  \"estadioId\": 1,\n  \"golsMandante\": 3,\n  \"golsVisitante\": 2,\n  \"dataHora\": \"2025-06-06T21:00:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/partida/criar",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"partida",
+										"criar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "buscar partida inexistente",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "ß",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/partida/buscar/999",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"partida",
+										"buscar",
+										"999"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "retrospecto",
+			"item": [
+				{
+					"name": "retrospecto total de um clube via id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/clube/1/retrospecto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"clube",
+								"1",
+								"retrospecto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "retrospecto total + filtro visitante",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/clube/3/retrospecto?visitante=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"clube",
+								"3",
+								"retrospecto"
+							],
+							"query": [
+								{
+									"key": "visitante",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "retrospecto contra adversarios via id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/clube/3/retrospectos-adversarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"clube",
+								"3",
+								"retrospectos-adversarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "retrospecto contra adversarios + filtro mandante",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/clube/3/retrospectos-adversarios?mandante=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"clube",
+								"3",
+								"retrospectos-adversarios"
+							],
+							"query": [
+								{
+									"key": "mandante",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "retrospecto confronto entre clubes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"clubeId\":1,\n    \"adversarioId\":2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/clube/confronto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"clube",
+								"confronto"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ranking",
+			"item": [
+				{
+					"name": "busca ranking por total pontos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/clube/ranking?tipoRanking=TOTAL_PONTOS",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"clube",
+								"ranking"
+							],
+							"query": [
+								{
+									"key": "tipoRanking",
+									"value": "TOTAL_PONTOS"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "busca ranking por total vitorias",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/clube/ranking?tipoRanking=TOTAL_VITORIAS",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"clube",
+								"ranking"
+							],
+							"query": [
+								{
+									"key": "tipoRanking",
+									"value": "TOTAL_VITORIAS"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "busca ranking por total gols",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/clube/ranking?tipoRanking=TOTAL_GOLS",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"clube",
+								"ranking"
+							],
+							"query": [
+								{
+									"key": "tipoRanking",
+									"value": "TOTAL_GOLS"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "busca ranking por total jogos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/clube/ranking?tipoRanking=TOTAL_JOGOS",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"clube",
+								"ranking"
+							],
+							"query": [
+								{
+									"key": "tipoRanking",
+									"value": "TOTAL_JOGOS"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:8080",
+			"type": "default"
+		}
+	]
+}
