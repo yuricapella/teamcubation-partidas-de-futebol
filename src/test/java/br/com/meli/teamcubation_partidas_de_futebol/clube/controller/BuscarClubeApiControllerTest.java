@@ -1,6 +1,5 @@
-package br.com.meli.teamcubation_partidas_de_futebol.clube;
+package br.com.meli.teamcubation_partidas_de_futebol.clube.controller;
 
-import br.com.meli.teamcubation_partidas_de_futebol.clube.controller.BuscarClubeApiController;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.ClubeResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.mapper.ClubeResponseMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.exception.ClubeApiExceptionHandler;
