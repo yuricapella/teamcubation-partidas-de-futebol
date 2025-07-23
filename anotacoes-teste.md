@@ -740,3 +740,50 @@ A suite cobre integralmente os fluxos do serviço `BuscarPartidaService`, respon
 - [x] Mock e verificação rigorosa de chamadas aos métodos do repository
 - [x] Ajuste dos testes da controller a partir da refatoração e da nova massa mockada
 ---
+
+## 2. Criar Partida Service (criação com validações de entidade, integridade e conflitos)
+
+#### **Descrição técnica**
+Testa a funcionalidade de criação de partida, abrangendo:
+- Fluxo de sucesso: criação de partida nova, busca de entidades por id, validações e persistência, com asserts completos.
+- Fluxos de erro: cenário de clubes iguais, clubes inexistentes, estádio inexistente, clubes inativos, conflito por partidas próximas (intervalo <48h), data anterior à criação do clube, e estádio ocupado.
+- Utiliza mocks de BuscarClubeService e BuscarEstadioService para simular busca de entidades associadas.
+- Mocka PartidaValidator para simular envio de exceções de negócio, incluindo mensagens customizadas.
+- Controla execução e integrações com PartidaRepository por inOrder confiando na ordem dos métodos.
+- Inclui logs utilitários nos catchs e rastreamento assertivo de mensagens para todos os erros.
+
+#### **Métodos/Funções principais**
+- **deveCriarUmaPartidaComSucesso**
+  - Testa criação integral, verifica persistência, ordem das etapas, asserts de todos os campos do modelo
+- **deveLancarClubeNaoEncontradoException_quandoMandanteNaoExistir**
+  - Simula ausência do mandante, confere exceção e fluxo parcial
+- **deveLancarClubeNaoEncontradoException_quandoVisitanteNaoExistir**
+  - Simula ausência do visitante, confere exceção e fluxo parcial
+- **deveLancarEstadioNaoEncontradoException_quandoEstadioNaoExistir**
+  - Simula estádio inexistente, confere exceção e fluxo parcial
+- **deveLancarClubesIguaisException_quandoMandanteEVisitanteForemOMesmoTime**
+  - Simula clubes iguais, verifica tratamento de erro no início da validação
+- **deveLancarDataPartidaAnteriorACriacaoDoClubeException_quandoCriarPartidaAntesDaCriacaoDeUmClube**
+  - Simula data anterior à criação dos clubes, valida mensagem e travamento do fluxo
+- **deveLancarClubeInativoException_quandoUmClubeEstiverInativo**
+  - Simula fluxo de clube inativo e assegura parada no validator
+- **deveLancarClubesComPartidasEmHorarioMenorQue48HorasException_quandoPartidaForMarcadaComIntervaloMenorQue48Horas**
+  - Garante erro por intervalo inferior a 48h entre partidas dos clubes
+- **deveLancarEstadioJaPossuiPartidaNoMesmoDiaException_quandoEstadioJaEstiverOcupadoNoMesmoDia**
+  - Simula conflito de datas para o mesmo estádio e assert de erro
+
+#### **Principais argumentos, entradas e dependências**
+- Service testada: CriarPartidaService
+- DTO de entrada: CriarPartidaRequestDTO (ids, gols, data/hora)
+- Dependências mockadas: BuscarClubeService, BuscarEstadioService, PartidaValidator, PartidaRepository
+- Exceções simuladas: ClubesIguaisException, ClubeNaoEncontradoException, EstadioNaoEncontradoException, DataPartidaAnteriorACriacaoDoClubeException, ClubeInativoException, ClubesComPartidasEmHorarioMenorQue48HorasException, EstadioJaPossuiPartidaNoMesmoDiaException
+- Conferência de ordem: inOrder entre busca, validação e persistência
+
+#### **Checklist de implementação**
+- [x] Fluxo principal de sucesso com asserts em todos os campos
+- [x] Cobertura para todos os cenários de exceção de negócio configurados para validação na criação de partidas
+- [x] Validação da ordem e quantidade de chamadas entre as dependências pela service
+- [x] Mensagens assertivas e rastreabilidade de erros críticos
+- [x] Cobertura de logs utilitários para falhas/flow
+
+---
