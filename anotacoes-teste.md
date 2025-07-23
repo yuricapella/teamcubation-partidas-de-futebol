@@ -785,5 +785,36 @@ Testa a funcionalidade de criação de partida, abrangendo:
 - [x] Validação da ordem e quantidade de chamadas entre as dependências pela service
 - [x] Mensagens assertivas e rastreabilidade de erros críticos
 - [x] Cobertura de logs utilitários para falhas/flow
+---
 
+## 3. Atualizar Partida Service (atualização, exceções e rastreio dos fluxos)
+
+#### **Descrição técnica**
+Abrange testes unitários da service de atualização de partida, cobrindo diferentes cenários de sucesso e falha.
+Valida correta passagem por buscar e validação das entidades envolvidas, acionamento das validações de negócio e chamadas ao repositório para persistência, lidando com retorno esperado e propagação de erros apropriados.
+
+#### **Métodos/Funções principais**
+- **deveAtualizarUmaPartidaComSucesso**: Atualiza a entidade e verifica campos e sequenciamento das operações dependentes.
+- **deveLancarPartidaNaoEncontradaException_quandoPartidaNaoExistir**: Bloqueia fluxo se partida não está presente, testando ordem e mensagem.
+- **deveLancarClubeNaoEncontradoException_quandoMandanteNaoExistir_aoAtualizarPartida**: Travamento ao buscar mandante inexistente.
+- **deveLancarClubeNaoEncontradoException_quandoVisitanteNaoExistir_aoAtualizarPartida**: Travamento ao buscar visitante inexistente.
+- **deveLancarEstadioNaoEncontradoException_quandoEstadioNaoExistir_aoAtualizarPartida**: Testa fluxo para estádio não encontrado.
+- **deveLancarClubesIguaisException_quandoMandanteEVisitanteForemOMesmoTime_aoAtualizarPartida**: Validação de clubes iguais.
+- **deveLancarDataPartidaAnteriorACriacaoDoClubeException_quandoAtualizarPartidaAntesDaCriacaoDeUmClube**: Validação de data anterior à criação dos clubes envolvidos.
+- **deveLancarClubeInativoException_quandoUmClubeEstiverInativo_aoAtualizarPartida**: Reprova atualização se algum clube está inativo.
+- **deveLancarClubesComPartidasEmHorarioMenorQue48HorasException_quandoPartidaForMarcadaComIntervaloMenorQue48Horas_aoAtualizarPartida**: Bloqueio por conflito de horário entre partidas de clubes.
+- **deveLancarEstadioJaPossuiPartidaNoMesmoDiaException_quandoEstadioJaEstiverOcupadoNoMesmoDia_aoAtualizarPartida**: Consistência para datas já ocupadas no estádio.
+
+#### **Principais argumentos, entradas e dependências**
+- Service: AtualizarPartidaService
+- DTO: AtualizarPartidaRequestDTO
+- Dependências mockadas: BuscarPartidaService, BuscarClubeService, BuscarEstadioService, PartidaValidator, PartidaRepository
+- Exceções cobertas: PartidaNaoEncontradaException, ClubeNaoEncontradoException, EstadioNaoEncontradoException, ClubesIguaisException, DataPartidaAnteriorACriacaoDoClubeException, ClubeInativoException, ClubesComPartidasEmHorarioMenorQue48HorasException, EstadioJaPossuiPartidaNoMesmoDiaException
+
+#### **Checklist de implementação**
+- [x] Atualização de partida com sucesso e campo a campo
+- [x] Ordem correta das dependências e assertividade do fluxo via InOrder
+- [x] Cobertura de exceções por entidade não encontrada e regras de negócio
+- [x] Assert detalhado para mensagens e controle de fluxo em erros
+- [x] Uso de PrintUtil para log e rastreamento dos testes
 ---
