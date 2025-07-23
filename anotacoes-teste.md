@@ -818,3 +818,27 @@ Valida correta passagem por buscar e validação das entidades envolvidas, acion
 - [x] Assert detalhado para mensagens e controle de fluxo em erros
 - [x] Uso de PrintUtil para log e rastreamento dos testes
 ---
+
+## 4. Deletar Partida Service (deleção forte e propagação de exceção)
+
+#### **Descrição técnica**
+Testes cobrem o fluxo de deleção forte (hard delete) de partidas na DeletarPartidaService.
+Verifica remoção da entidade caso encontre o id, assincronismo correto de métodos dependentes e tratamento do erro esperado para id inexistente.
+Fluxos cobertos validam ordem de chamadas, resposta do serviço de busca, propagação e mensagem de exception personalizada.
+
+#### **Métodos/Funções principais**
+- **deveDeletarPartidaPorIdComSucesso**: Realiza deleção direta após busca bem-sucedida e verifica InOrder das dependências.
+- **deveLancarPartidaNaoEncontradaException_quandoPartidaNaoExistir**: Simula fluxo para id inexistente, garante assert da exceção e que apenas o método de busca é chamado.
+
+#### **Principais argumentos, entradas e dependências**
+- Service: DeletarPartidaService
+- Dependências mockadas: BuscarPartidaService, PartidaRepository
+- Exceção coberta: PartidaNaoEncontradaException (mensagem de id conforme o padrão do projeto)
+- Mensagens e logs controlados por PrintUtil
+
+#### **Checklist de implementação**
+- [x] Deleção de partida (busca e exclusão)
+- [x] Ordem correta das dependências e asserts sobre quantidade/argumentos das chamadas
+- [x] Propagação e assert exato da exceção para partida não encontrada
+- [x] Logs de erro e rastreamento
+---
