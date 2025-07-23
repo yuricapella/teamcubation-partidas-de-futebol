@@ -1,11 +1,9 @@
 package br.com.meli.teamcubation_partidas_de_futebol.retrospecto.controller;
 
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.RetrospectoAdversariosResponseDTO;
-import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.RetrospectoConfrontoRequestDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.Retrospecto;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.RetrospectoConfronto;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.service.BuscarRetrospectoService;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,13 +42,13 @@ public class BuscarRetrospectoApiController {
                 .body(retrospectosDTO);
     }
 
-    @GetMapping("/confronto")
-    public ResponseEntity<RetrospectoConfronto> buscarRetrospectoContraAdversario
-            (@RequestBody @Valid RetrospectoConfrontoRequestDTO dto){
+    @GetMapping("/{idClube}/confronto/{idAdversario}")
+    public ResponseEntity<RetrospectoConfronto> buscarRetrospectoContraAdversario(
+            @PathVariable Long idClube,
+            @PathVariable Long idAdversario
+    ) {
         RetrospectoConfronto retrospectoConfronto = buscarRetrospectoService
-                .buscarRetrospectoConfronto(dto);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(retrospectoConfronto);
+                .buscarRetrospectoConfronto(idClube, idAdversario);
+        return ResponseEntity.status(HttpStatus.OK).body(retrospectoConfronto);
     }
 }

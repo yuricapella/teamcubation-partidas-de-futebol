@@ -320,7 +320,7 @@ O resultado entregue é um objeto JSON com o nome do clube central, o estado e u
 
 ---
 
-## Busca Avançada 3: Confrontos Diretos (GET)
+## 3. Busca Avançada 3: Confrontos Diretos (GET)
 
 ### **Descrição técnica**
 Implementado endpoint para retornar todas as partidas entre dois clubes específicos (confronto direto).  
@@ -334,15 +334,9 @@ O resultado entregue é um objeto JSON contendo uma lista de retrospectos (um pa
 
 ### **Funcionalidade/Endpoint**
 - **Método:** GET
-- **Path:** `/api/clube/confronto`
+- **Path:** `/api/clube/{idClube}/confronto/{idAdversario}`
 - **Request:**  
-  Recebe via corpo JSON:
-  ```json
-  {
-    "clubeId": 1,
-    "adversarioId": 2
-  }
-  ```
+  Recebe os IDs de ambos os clubes via path variables na URL.
 - **Exemplo de resposta:**
   ```json
   {
@@ -402,30 +396,12 @@ O resultado entregue é um objeto JSON contendo uma lista de retrospectos (um pa
 - Se não houver confrontos entre os clubes, retorna lista de partidas vazia e retrospectos zerados para ambos, status 200 OK.
 
 ### **Checklist do que foi implementado:**
-- [x] Recebe os IDs de ambos os clubes de forma robusta (via corpo JSON no RequestDTO)
+- [x] Recebe os IDs de ambos os clubes via path variable na URL
 - [x] Valida existência dos clubes, gerando 404 se necessário
 - [x] Consulta todas as partidas entre os dois clubes, independentemente de quem foi mandante ou visitante
 - [x] Calcula, para cada clube, o retrospecto no confronto — incluindo vitórias, empates, derrotas, gols feitos e sofridos
 - [x] Exibe ambos retrospectos junto à lista de partidas na resposta
 - [x] Retorna corretamente lista de partidas vazia e retrospectos zerados se não houver confrontos
-
----
-
-### Commit melhorado (legibilidade e clareza):
-
-```
-feat(ranking): implementação da busca avançada 4 - ranking de clubes por pontos
-
-- Adiciona anotações técnicas e de arquitetura
-- Implementa tratamento de exceção com ResponseStatusException para tipos de ranking inválidos
-- Cria CalculadoraRankingStrategy para aplicar polimorfismo na lógica de cálculo dos rankings
-- Cria classe abstrata Ranking para centralizar atributos/métodos comuns e evitar repetição nas subclasses
-- Adiciona controller com rota /ranking usando RequestParam para selecionar o tipo do ranking GET
-- Implementa classe filha RankingPontos com o cálculo específico desse tipo de ranking
-- Implementa RankingPontosStrategy que usa a strategy para calcular e ordenar os pontos sem código duplicado/paradigma de extensão
-- Adiciona RankingService com método genérico, usando o padrão strategy, que permite fácil inclusão de novos rankings (princípio aberto-fechado)
-- Define enum TipoRanking para padronizar os valores aceitos pelo endpoint GET e garantir segurança de dados
-```
 
 ---
 
@@ -637,7 +613,9 @@ listar as datas conflituosas dos clubes e calcular qual o tempo correto para mos
 
 - [] Tentar usar polimorfismo com interface nos dtos de clube e partida para deixar os metodos dos Validators mais genéricos
 
-- [] alterar o get confronto de retrospecto para usar requestparam e nao request body, pois foge do padrao rest
+- [x] alterar o get confronto de retrospecto para usar requestparam e nao request body, pois foge do padrao rest
+- Agora utiliza     @GetMapping("/{idClube}/confronto/{idAdversario}")
+
 - [] colocar um filtro de % % nos repository por nome por exemplo, para poder filtrar todos clubes/estadios com nomes parecidos.
 
 ## Estrutura

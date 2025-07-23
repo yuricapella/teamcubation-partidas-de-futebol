@@ -1,6 +1,5 @@
 package br.com.meli.teamcubation_partidas_de_futebol.retrospecto.service;
 
-import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.mapper.RetrospectosAdversariosMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.service.BuscarClubeService;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.PartidaResponseDTO;
@@ -8,7 +7,7 @@ import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.mapper.PartidaRe
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.repository.PartidaRepository;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.RetrospectoAdversariosResponseDTO;
-import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.RetrospectoConfrontoRequestDTO;
+import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.mapper.RetrospectosAdversariosMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.Retrospecto;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.RetrospectoAdversario;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.RetrospectoConfronto;
@@ -59,10 +58,7 @@ public class BuscarRetrospectoService {
         return RetrospectosAdversariosMapper.toDTO(clube.getNome(), clube.getSiglaEstado(), retrospectos);
     }
 
-    public RetrospectoConfronto buscarRetrospectoConfronto(RetrospectoConfrontoRequestDTO dto) {
-        Long idClube = dto.getClubeId();
-        Long idAdversario = dto.getAdversarioId();
-
+    public RetrospectoConfronto buscarRetrospectoConfronto(Long idClube, Long idAdversario) {
         Clube clube = buscarClubeService.buscarClubePorId(idClube);
         Clube clubeAdversario = buscarClubeService.buscarClubePorId(idAdversario);
 
