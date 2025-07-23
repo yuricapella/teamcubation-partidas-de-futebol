@@ -1,6 +1,5 @@
 package br.com.meli.teamcubation_partidas_de_futebol.clube.util;
 
-import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.ClubeResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,9 +32,5 @@ public class ClubeUtil {
     public static Page<Clube> criarPageClubes(int quantidade) {
         List<Clube> clubes = criarClubes(quantidade);
         return new PageImpl<>(clubes, PageRequest.of(0, 10), quantidade);
-    }
-
-    public static ClubeResponseDTO criarClubeResponseDTO() {
-        return new ClubeResponseDTO("Clube Exemplo", "AM", LocalDate.of(2025, 11, 3));
     }
 }

@@ -1,6 +1,5 @@
 package br.com.meli.teamcubation_partidas_de_futebol.estadio.util;
 
-import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -32,10 +31,6 @@ public class EstadioUtil {
     public static Page<Estadio> criarPageEstadios(int quantidade) {
         List<Estadio> estadios = criarEstadios(quantidade);
         return new PageImpl<>(estadios, PageRequest.of(0, 10), quantidade);
-    }
-
-    public static EstadioResponseDTO criarEstadioResponseDTO() {
-        return new EstadioResponseDTO("Estadio Exemplo");
     }
 }
 
