@@ -1598,7 +1598,6 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"clubeId\":1,\n    \"adversarioId\":2\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1606,7 +1605,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/clube/confronto",
+							"raw": "http://localhost:8080/api/clube/1/confronto/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1615,7 +1614,9 @@
 							"path": [
 								"api",
 								"clube",
-								"confronto"
+								"1",
+								"confronto",
+								"2"
 							]
 						}
 					},

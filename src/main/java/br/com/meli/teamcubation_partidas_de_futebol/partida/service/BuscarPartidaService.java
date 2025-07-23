@@ -37,12 +37,4 @@ public class BuscarPartidaService {
 
         return new PageImpl<>(partidasFiltradas, pageable, partidasFiltradas.size());
     }
-
-//    private Page<Partida> retornaListaDePartidasComGoleadas(Page<Partida> partidas, Boolean goleada, Pageable pageable) {
-//        List<Partida> partidasFiltradas = partidas.stream()
-//                .filter(partida -> partida.isGoleada() == goleada)
-//                .collect(Collectors.toList());
-//
-//        return new PageImpl<>(partidasFiltradas, pageable, partidasFiltradas.size());
-//    }
 }
