@@ -80,7 +80,7 @@ public class CriarPartidaServiceTest {
         Assertions.assertEquals(partida.getResultado(), partidaCriada.getResultado());
         Assertions.assertEquals(partida.isGoleada(), partidaCriada.isGoleada());
 
-        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarClubeService, buscarEstadioService, partidaValidator, partidaRepository);
+        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarEstadioService, partidaValidator, partidaRepository);
         inOrder.verify(buscarClubeService, Mockito.times(1)).buscarClubePorId(clubeMandanteId);
         inOrder.verify(buscarClubeService, Mockito.times(1)).buscarClubePorId(clubeVisitanteId);
         inOrder.verify(buscarEstadioService, Mockito.times(1)).buscarEstadioPorId(estadioId);
@@ -105,7 +105,7 @@ public class CriarPartidaServiceTest {
 
         Assertions.assertEquals("Clube com id " + clubeMandanteId + " não encontrado.", exception.getMessage());
 
-        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarClubeService, buscarEstadioService, partidaValidator, partidaRepository);
+        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarEstadioService, partidaValidator, partidaRepository);
         inOrder.verify(buscarClubeService, Mockito.times(1)).buscarClubePorId(clubeMandanteId);
         inOrder.verifyNoMoreInteractions();
 
@@ -131,7 +131,7 @@ public class CriarPartidaServiceTest {
 
         Assertions.assertEquals("Clube com id " + clubeVisitanteId + " não encontrado.", exception.getMessage());
 
-        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarClubeService);
+        InOrder inOrder = Mockito.inOrder(buscarClubeService);
         inOrder.verify(buscarClubeService, Mockito.times(1)).buscarClubePorId(clubeMandanteId);
         inOrder.verify(buscarClubeService, Mockito.times(1)).buscarClubePorId(clubeVisitanteId);
         inOrder.verifyNoMoreInteractions();
@@ -160,7 +160,7 @@ public class CriarPartidaServiceTest {
 
         Assertions.assertEquals("Estadio com id " + estadioId + " não encontrado.", exception.getMessage());
 
-        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarClubeService, buscarEstadioService);
+        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarEstadioService);
         inOrder.verify(buscarClubeService, Mockito.times(1)).buscarClubePorId(clubeMandanteId);
         inOrder.verify(buscarClubeService, Mockito.times(1)).buscarClubePorId(clubeVisitanteId);
         inOrder.verify(buscarEstadioService, Mockito.times(1)).buscarEstadioPorId(estadioId);
@@ -193,7 +193,7 @@ public class CriarPartidaServiceTest {
 
         Assertions.assertEquals("Não é possivel criar a partida pois os clubes são iguais.", exception.getMessage());
 
-        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarClubeService, buscarEstadioService, partidaValidator);
+        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarEstadioService, partidaValidator);
         inOrder.verify(buscarClubeService, Mockito.times(2)).buscarClubePorId(clubeMandanteId);
         inOrder.verify(buscarEstadioService, Mockito.times(1)).buscarEstadioPorId(estadioId);
         inOrder.verify(partidaValidator, Mockito.times(1)).validarCriacaoDePartidas(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
@@ -230,7 +230,7 @@ public class CriarPartidaServiceTest {
 
         Assertions.assertEquals("Não pode cadastrar uma partida para uma data anterior à data de criação do clube.", exception.getMessage());
 
-        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarClubeService, buscarEstadioService, partidaValidator);
+        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarEstadioService, partidaValidator);
         inOrder.verify(buscarClubeService, Mockito.times(1)).buscarClubePorId(clubeMandanteId);
         inOrder.verify(buscarClubeService, Mockito.times(1)).buscarClubePorId(clubeVisitanteId);
         inOrder.verify(buscarEstadioService, Mockito.times(1)).buscarEstadioPorId(estadioId);
@@ -267,7 +267,7 @@ public class CriarPartidaServiceTest {
         Assertions.assertFalse(clubeMandante.getAtivo());
         Assertions.assertEquals("Não é possivel criar a partida pois há um clube inativo", exception.getMessage());
 
-        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarClubeService, buscarEstadioService, partidaValidator);
+        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarEstadioService, partidaValidator);
         inOrder.verify(buscarClubeService).buscarClubePorId(clubeMandanteId);
         inOrder.verify(buscarClubeService).buscarClubePorId(clubeVisitanteId);
         inOrder.verify(buscarEstadioService).buscarEstadioPorId(estadioId);
@@ -302,7 +302,7 @@ public class CriarPartidaServiceTest {
 
         Assertions.assertEquals("Não é possível criar a partida pois um dos clubes já possui uma partida cadastrada em menos de 48 horas desta data.", exception.getMessage());
 
-        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarClubeService, buscarEstadioService, partidaValidator);
+        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarEstadioService, partidaValidator);
         inOrder.verify(buscarClubeService).buscarClubePorId(clubeMandanteId);
         inOrder.verify(buscarClubeService).buscarClubePorId(clubeVisitanteId);
         inOrder.verify(buscarEstadioService).buscarEstadioPorId(estadioId);
@@ -337,7 +337,7 @@ public class CriarPartidaServiceTest {
 
         Assertions.assertEquals("Não é possivel criar a partida pois no estádio já tem uma partida marcada para o mesmo dia", exception.getMessage());
 
-        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarClubeService, buscarEstadioService, partidaValidator);
+        InOrder inOrder = Mockito.inOrder(buscarClubeService, buscarEstadioService, partidaValidator);
         inOrder.verify(buscarClubeService).buscarClubePorId(clubeMandanteId);
         inOrder.verify(buscarClubeService).buscarClubePorId(clubeVisitanteId);
         inOrder.verify(buscarEstadioService).buscarEstadioPorId(estadioId);
