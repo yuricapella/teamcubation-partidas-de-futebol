@@ -851,14 +851,14 @@ Fluxos cobertos validam ordem de chamadas, resposta do serviço de busca, propag
 Implementação dos testes automatizados de controller para o endpoint de retrospecto geral de clube. Foram validados todos os fluxos principais: busca de retrospecto com partidas, situação zerada (clube sem jogo) e exceção para clube ausente. O teste cobre diferentes filtros na requisição e garante o contrato do JSON de resposta e o mapeamento de erros conforme o handler.
 
 #### **Métodos/Funções principais**
-- `deveBuscarRetrospectoComSucesso`
+- `deveBuscarRetrospecto_comSucesso`
   - Teste parametrizado cobrindo fluxos de filtro mandante/visitante.
   - Garante status 200 OK, valida os campos principais do retrospecto (jogos, vitórias, empates, derrotas, gols feitos e sofridos) e dados do clube.
   - Assegura chamada correta ao método da service com parâmetros esperados.
-- `deveRetornarRetrospectoZeradoQuandoNaoHaPartidas`
+- `deveRetornarRetrospectoZerado_quandoNaoHaPartidas`
   - Simula situação em que o clube existe, mas não possui partidas.
   - Valida que todos os contadores do retrospecto vêm zerados e o status da resposta é 200 OK.
-- `deveRetornarNotFoundQuandoClubeNaoExisteAoBuscarRetrospecto`
+- `deveRetornarNotFound_quandoClubeNaoExiste_aoBuscarRetrospecto`
   - Simula lançamento de exceção de clube não encontrado no service.
   - Garante retorno HTTP 404, mensagem e código de erro apropriados no JSON, além da chamada singleton ao método da service.
 
@@ -877,3 +877,32 @@ Implementação dos testes automatizados de controller para o endpoint de retros
 - [x] Mock e verificar chamada correta ao service para todos os parâmetros e exceções
 ---
 
+## 2. Retrospecto contra adversários (controller - sucesso, lista vazia e clube inexistente)
+
+#### **Descrição técnica**
+Implementação dos testes automatizados para o endpoint de retrospecto de clube contra seus adversários. Cobre cenários principais: busca com adversários presentes, resposta vazia quando não há partidas registradas, e erro de clube não encontrado. O teste verifica a construção do DTO de resposta, a integração correta da controller com a service e a resposta HTTP esperada para cada situação.
+
+#### **Métodos/Funções principais**
+- `deveBuscarRetrospectoContraAdversario_comSucesso`
+  - Teste parametrizado que cobre retornos de adversários, validando todos os campos de retrospecto, incluindo vitórias, empates, derrotas, gols e dados do adversário.
+  - Garante que filtros opcionais (mandante, visitante) são respeitados e verificados na chamada do serviço.
+- `deveRetornarListaVaziaDeRetrospectoContraAdversario_quandoNaoTemPartidas`
+  - Simula cenário onde o clube não possui partidas contra adversários, validando resposta 200 OK e array vazio de retrospectos.
+- `deveRetornarNotFound_quandoClubeNaoExiste_aoBuscarRetrospectoContraAdversario`
+  - Simula cenário de clube inexistente, garantindo retorno HTTP 404, mensagem e código de erro adequados.
+
+#### **Principais argumentos, entradas e dependências**
+- Endpoint GET `/api/clube/{id}/retrospectos-adversarios` com filtros opcionais via query (mandante, visitante)
+- Service mockada: `BuscarRetrospectoService`
+- Utilização do DTO `RetrospectoAdversariosResponseDTO` no response
+- Assert de jsonPath sobre todos os atributos relevantes de output, incluindo arrays de adversários e campos individuais
+- Handler global integrado para mapeamento de exceções
+
+#### **Checklist de implementação**
+- [x] Cobertura para cenário feliz com adversários no DTO de resposta
+- [x] Lista de adversários vazia e status 200 quando clube não possui confrontos
+- [x] Retorno de 404 e corpo adequado para clube inexistente
+- [x] Teste inclui asserts de campos do clube e adversários, garantindo contrato do JSON
+- [x] Verifica chamada correta ao método service correspondente em todos os casos
+
+---

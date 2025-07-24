@@ -65,7 +65,7 @@ public class BuscarRetrospectoApiControllerTest {
             ",true",
             "true,true"
     })
-    void deveBuscarRetrospectoComSucesso(Boolean mandante, Boolean visitante) throws Exception {
+    void deveBuscarRetrospecto_comSucesso(Boolean mandante, Boolean visitante) throws Exception {
         Long id = 1L;
         List<Partida> partidas = PartidaUtil.criarListPartidasComTesteUtils(2);
         Clube clube = partidas.getFirst().getClubeMandante();
@@ -102,7 +102,7 @@ public class BuscarRetrospectoApiControllerTest {
     }
 
     @Test
-    void deveRetornarRetrospectoZeradoQuandoNaoHaPartidas() throws Exception {
+    void deveRetornarRetrospectoZerado_quandoNaoHaPartidas() throws Exception {
         Long id = 10L;
         Clube clube = ClubeUtil.criarClube(id);
         Retrospecto retrospecto = new Retrospecto(clube, List.of());
@@ -132,7 +132,7 @@ public class BuscarRetrospectoApiControllerTest {
     }
 
     @Test
-    void deveRetornarNotFoundQuandoClubeNaoExisteAoBuscarRetrospecto() throws Exception {
+    void deveRetornarNotFound_quandoClubeNaoExiste_aoBuscarRetrospecto() throws Exception {
         Long id = 99L;
 
         Mockito.when(buscarRetrospectoService.buscarRetrospectoClube(
@@ -148,5 +148,97 @@ public class BuscarRetrospectoApiControllerTest {
 
         Mockito.verify(buscarRetrospectoService, Mockito.times(1))
                 .buscarRetrospectoClube(Mockito.eq(id), Mockito.any(), Mockito.any());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            ",",
+            "true,",
+            ",true",
+            "true,true"
+    })
+    void deveBuscarRetrospectoContraAdversario_comSucesso(Boolean mandante, Boolean visitante) throws Exception {
+        Long id = 1L;
+        List<Partida> partidas = PartidaUtil.criarListPartidasComTesteUtils(2);
+        Clube clube = partidas.getFirst().getClubeMandante();
+        Clube clubeAdversario = partidas.getFirst().getClubeVisitante();
+
+        RetrospectoAdversario retrospectoAdversario = new RetrospectoAdversario(id,clubeAdversario,partidas);
+        List<RetrospectoAdversario> retrospectosContraAdversario = new ArrayList<>();
+        retrospectosContraAdversario.add(retrospectoAdversario);
+
+        RetrospectoAdversariosResponseDTO resultado = RetrospectosAdversariosMapper.toDTO(clube.getNome(), clube.getSiglaEstado(), retrospectosContraAdversario);
+
+        Mockito.when(buscarRetrospectoService.buscarRetrospectoClubeContraAdversarios(
+                        Mockito.eq(id), Mockito.any(), Mockito.any()))
+                .thenReturn(resultado);
+
+        var requestBuilder = get(PATH_RETROSPECTO_CONTRA_ADVERSARIOS,id)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        if (mandante != null) requestBuilder = requestBuilder.param("mandante", mandante.toString());
+        if (visitante != null) requestBuilder = requestBuilder.param("visitante", visitante.toString());
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nomeClube").value("Clube Exemplo 1"))
+                .andExpect(jsonPath("$.estadoClube").value("AM"))
+                .andExpect(jsonPath("$.retrospectoContraAdversarios[0].nomeAdversario").value("Clube Exemplo 2"))
+                .andExpect(jsonPath("$.retrospectoContraAdversarios[0].estadoAdversario").value("AM"))
+                .andExpect(jsonPath("$.retrospectoContraAdversarios[0].jogos").value(2))
+                .andExpect(jsonPath("$.retrospectoContraAdversarios[0].vitorias").value(2))
+                .andExpect(jsonPath("$.retrospectoContraAdversarios[0].derrotas").value(0))
+                .andExpect(jsonPath("$.retrospectoContraAdversarios[0].empates").value(0))
+                .andExpect(jsonPath("$.retrospectoContraAdversarios[0].golsFeitos").value(7))
+                .andExpect(jsonPath("$.retrospectoContraAdversarios[0].golsSofridos").value(5))
+                .andDo(MockMvcResultHandlers.print());
+
+        Mockito.verify(buscarRetrospectoService, Mockito.times(1))
+                .buscarRetrospectoClubeContraAdversarios(Mockito.eq(id), Mockito.eq(mandante), Mockito.eq(visitante));
+    }
+
+    @Test
+    void deveRetornarListaVaziaDeRetrospectoContraAdversario_quandoNaoTemPartidas() throws Exception {
+        Long id = 14L;
+        Clube clube = ClubeUtil.criarClube(id);
+
+        RetrospectoAdversariosResponseDTO resultado = RetrospectosAdversariosMapper.toDTO(clube.getNome(), clube.getSiglaEstado(), List.of());
+
+        Mockito.when(buscarRetrospectoService.buscarRetrospectoClubeContraAdversarios(
+                        Mockito.eq(id), Mockito.any(), Mockito.any()))
+                .thenReturn(resultado);
+
+        var requestBuilder = get(PATH_RETROSPECTO_CONTRA_ADVERSARIOS,id)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nomeClube").value("Clube Exemplo 14"))
+                .andExpect(jsonPath("$.estadoClube").value("AM"))
+                .andExpect(jsonPath("$.retrospectoContraAdversarios").isEmpty())
+
+                .andDo(MockMvcResultHandlers.print());
+
+        Mockito.verify(buscarRetrospectoService, Mockito.times(1))
+                .buscarRetrospectoClubeContraAdversarios(Mockito.eq(id), Mockito.any(), Mockito.any());
+    }
+
+    @Test
+    void deveRetornarNotFound_quandoClubeNaoExiste_aoBuscarRetrospectoContraAdversario() throws Exception {
+        Long id = 99L;
+
+        Mockito.when(buscarRetrospectoService.buscarRetrospectoClubeContraAdversarios(
+                        Mockito.eq(id), Mockito.any(), Mockito.any()))
+                .thenThrow(new ClubeNaoEncontradoException(id));
+
+        mockMvc.perform(get(PATH_RETROSPECTO_CONTRA_ADVERSARIOS, id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.mensagem").value("Clube com id 99 não encontrado."))
+                .andExpect(jsonPath("$.codigoErro").value("CLUBE_NAO_ENCONTRADO"))
+                .andDo(MockMvcResultHandlers.print());
+
+        Mockito.verify(buscarRetrospectoService, Mockito.times(1))
+                .buscarRetrospectoClubeContraAdversarios(Mockito.eq(id), Mockito.any(), Mockito.any());
     }
 }
