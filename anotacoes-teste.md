@@ -904,5 +904,38 @@ Implementação dos testes automatizados para o endpoint de retrospecto de clube
 - [x] Retorno de 404 e corpo adequado para clube inexistente
 - [x] Teste inclui asserts de campos do clube e adversários, garantindo contrato do JSON
 - [x] Verifica chamada correta ao método service correspondente em todos os casos
+---
+
+## 3. Retrospecto confronto direto (controller - sucesso, dados zerados e clube inexistente)
+
+#### **Descrição técnica**
+Foram implementados testes automatizados para o endpoint de busca de retrospecto confronto direto entre dois clubes 
+na controller BuscarRetrospectoApiController. 
+Os testes contemplam: fluxo principal com validação detalhada de todas as informações retornadas das listas de retrospectos 
+e partidas; cenário sem partidas/confrontos (retornando arrays e campos zerados); 
+e tratamento de exceção de clube não encontrado com retorno 404. 
+A validação dos valores esperados é centralizada via métodos utilitários no RetrospectoUtil, 
+garantindo assertividade e legibilidade dos casos de teste.
+
+#### **Métodos/Funções principais**
+- `deveBuscarRetrospectoConfronto_comSucesso`  
+  Valida resposta completa com dois retrospectos e duas partidas, utilizando asserts grandes via RetrospectoUtil para garantir todos os campos retornados.
+- `deveRetornarRetrospectoConfronto_comRetrospectosZerados_eListaPartidasVazia`  
+  Testa situação em que não existem partidas entre os clubes, validando arrays vazios/dados zerados na resposta.
+- `deveRetornarNotFound_quandoClubeNaoExiste_aoBuscarRetrospectoConfronto`  
+  Cobre cenário de clube inexistente, forçando exceção e validando status 404 e corpo de erro.
+
+#### **Principais argumentos, entradas e dependências**
+- Endpoint GET `/api/clube/{idClube}/confronto/{idAdversario}`
+- Service mockada: BuscarRetrospectoService
+- Utilitários: RetrospectoUtil para assert de arrays nas respostas JSON
+- DTOs utilizados: Retrospecto, PartidaResponseDTO, RetrospectoConfronto
+- Validações amplas das listas e dos campos individuais de resposta
+
+#### **Checklist de implementação**
+- [x] Testes para fluxo principal de sucesso com arrays completos
+- [x] Testes para arrays e campos zerados em cenário sem partidas
+- [x] Validação do contrato de resposta para clube inexistente (404 e mensagem de erro)
+- [x] Criação e uso de utilitários para grandes asserts de arrays/listas em respostas
 
 ---

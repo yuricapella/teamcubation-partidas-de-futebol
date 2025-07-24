@@ -4,15 +4,17 @@ import br.com.meli.teamcubation_partidas_de_futebol.clube.exception.ClubeNaoEnco
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.util.ClubeUtil;
 import br.com.meli.teamcubation_partidas_de_futebol.global_exception.GlobalApiExceptionHandler;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.PartidaResponseDTO;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.dto.mapper.PartidaResponseMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.util.PartidaUtil;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.RetrospectoAdversariosResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.dto.mapper.RetrospectosAdversariosMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.Retrospecto;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.RetrospectoAdversario;
+import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.RetrospectoConfronto;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.service.BuscarRetrospectoService;
 import br.com.meli.teamcubation_partidas_de_futebol.util.PrintUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -26,12 +28,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.xml.transform.Result;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static br.com.meli.teamcubation_partidas_de_futebol.retrospecto.RetrospectoUtil.assertListaPartidas;
+import static br.com.meli.teamcubation_partidas_de_futebol.retrospecto.RetrospectoUtil.assertRetrospectoClube;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -240,5 +248,118 @@ public class BuscarRetrospectoApiControllerTest {
 
         Mockito.verify(buscarRetrospectoService, Mockito.times(1))
                 .buscarRetrospectoClubeContraAdversarios(Mockito.eq(id), Mockito.any(), Mockito.any());
+    }
+
+    @Test
+    void deveBuscarRetrospectoConfronto_comSucesso() throws Exception {
+        Long idClube = 1L;
+        Long idAdversario = 2L;
+        Clube clube = ClubeUtil.criarClube(idClube);
+        Clube clubeAdversario = ClubeUtil.criarClube(idAdversario);
+        List<Partida> partidas = PartidaUtil.criarListPartidasComTesteUtils(2);
+
+        Retrospecto retrospectoClube = new Retrospecto(clube,partidas);
+        Retrospecto retrospectoAdversario = new Retrospecto(clubeAdversario,partidas);
+
+        List<Retrospecto> retrospectos = List.of(retrospectoClube, retrospectoAdversario);
+        List<PartidaResponseDTO> partidasDTO = PartidaResponseMapper.toPartidaResponseDTO(partidas);
+
+        RetrospectoConfronto resultado = new RetrospectoConfronto(retrospectos,partidasDTO);
+
+        Mockito.when(buscarRetrospectoService.buscarRetrospectoConfronto(
+                idClube,idAdversario
+        )).thenReturn(resultado);
+
+        var requestBuilder = get(PATH_RETROSPECTO_CONFRONTO,idClube,idAdversario)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        var result = mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertRetrospectoClube(result, 0, "Clube Exemplo 1", "AM", 2025, 11, 3,
+                2, 2, 0, 0, 7, 5);
+
+        assertRetrospectoClube(result, 1, "Clube Exemplo 2", "AM", 2025, 11, 3,
+                2, 0, 2, 0, 5, 7);
+
+        assertListaPartidas(result, 0,
+                "Clube Exemplo 1", "AM", 2025, 11, 3,
+                "Clube Exemplo 2", "AM", 2025, 11, 3,
+                "Estadio Exemplo",
+                3, 2,
+                "10/07/2023 16:00:00",
+                "VITORIA_MANDANTE"
+        );
+
+        assertListaPartidas(result, 1,
+                "Clube Exemplo 1", "AM", 2025, 11, 3,
+                "Clube Exemplo 2", "AM", 2025, 11, 3,
+                "Estadio Exemplo",
+                4, 3,
+                "11/07/2023 16:00:00",
+                "VITORIA_MANDANTE"
+        );
+
+        Mockito.verify(buscarRetrospectoService, Mockito.times(1))
+                .buscarRetrospectoConfronto(idClube,idAdversario);
+    }
+
+    @Test
+    void deveRetornarRetrospectoConfronto_comRetrospectosZerados_eListaPartidasVazia() throws Exception {
+        Long idClube = 1L;
+        Long idAdversario = 4L;
+        Clube clube = ClubeUtil.criarClube(idClube);
+        Clube clubeAdversario = ClubeUtil.criarClube(idAdversario);
+        List<Partida> partidas = List.of();
+
+        Retrospecto retrospectoClube = new Retrospecto(clube,partidas);
+        Retrospecto retrospectoAdversario = new Retrospecto(clubeAdversario,partidas);
+
+        List<Retrospecto> retrospectos = List.of(retrospectoClube, retrospectoAdversario);
+        List<PartidaResponseDTO> partidasDTO = PartidaResponseMapper.toPartidaResponseDTO(partidas);
+
+        RetrospectoConfronto resultado = new RetrospectoConfronto(retrospectos,partidasDTO);
+
+        Mockito.when(buscarRetrospectoService.buscarRetrospectoConfronto(
+                idClube,idAdversario
+        )).thenReturn(resultado);
+
+        var requestBuilder = get(PATH_RETROSPECTO_CONFRONTO,idClube,idAdversario)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        var result = mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.partidas").isEmpty())
+                .andDo(MockMvcResultHandlers.print());
+
+        assertRetrospectoClube(result, 0, "Clube Exemplo 1", "AM", 2025, 11, 3,
+                0, 0, 0, 0, 0, 0);
+
+        assertRetrospectoClube(result, 1, "Clube Exemplo 4", "AM", 2025, 11, 3,
+                0, 0, 0, 0, 0, 0);
+
+        Mockito.verify(buscarRetrospectoService, Mockito.times(1))
+                .buscarRetrospectoConfronto(idClube,idAdversario);
+    }
+
+    @Test
+    void deveRetornarNotFound_quandoClubeNaoExiste_aoBuscarRetrospectoConfronto() throws Exception {
+        Long clubeid = 999L;
+        Long idAdversario = 4L;
+
+        Mockito.when(buscarRetrospectoService.buscarRetrospectoConfronto(
+                        clubeid,idAdversario))
+                .thenThrow(new ClubeNaoEncontradoException(clubeid));
+
+        mockMvc.perform(get(PATH_RETROSPECTO_CONFRONTO, clubeid, idAdversario)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.mensagem").value("Clube com id 999 não encontrado."))
+                .andExpect(jsonPath("$.codigoErro").value("CLUBE_NAO_ENCONTRADO"))
+                .andDo(MockMvcResultHandlers.print());
+
+        Mockito.verify(buscarRetrospectoService, Mockito.times(1))
+                .buscarRetrospectoConfronto(clubeid,idAdversario);
     }
 }
