@@ -937,5 +937,35 @@ garantindo assertividade e legibilidade dos casos de teste.
 - [x] Testes para arrays e campos zerados em cenário sem partidas
 - [x] Validação do contrato de resposta para clube inexistente (404 e mensagem de erro)
 - [x] Criação e uso de utilitários para grandes asserts de arrays/listas em respostas
+---
 
+# Ranking
+
+## 1. Ranking de clubes (controller - ranking multiparadigma e cenários de lista vazia)
+
+#### **Descrição técnica**
+Foram implementados testes parametrizados para a controller de ranking, validando o endpoint em todos os tipos de ranking (TOTAL_PONTOS, TOTAL_GOLS, TOTAL_VITORIAS, TOTAL_JOGOS). Os testes simulam todas as variações dos rankings através de mocks construídos pelo novo utilitário RankingUtil, garantindo a correta filtragem e ordenação dos resultados conforme a regra do domínio (exclusão de clubes com total zero). Um método auxiliar em RetrospectoUtil simplifica a geração dos objetos de entrada (retrospectos).
+
+#### **Métodos/Funções principais**
+- `deveBuscarRankingPorClub`
+  - Executa teste para cada tipo de ranking via @EnumSource
+  - Monta dinamicamente lista mockada e valores esperados com RankingUtil e valida posição, nome, estado e total dos clubes retornados
+  - Garante cobertura para filtragem de clubes zerados
+- `deveRetornarListaVazia_quandoNaoExistiremClubes`
+  - Testa cenário em que o ranking retorna lista vazia, validando array vazio e status 200 OK
+
+#### **Principais argumentos, entradas e dependências**
+- Endpoint GET `/api/clube/ranking` com parâmetro obrigatório `tipoRanking`
+- Camada de service mockada via RankingService e método de fábrica do utilitário
+- Listas de ranking compostas dinamicamente conforme enum TipoRanking
+- Novo método em RetrospectoUtil para fabricação de retrospectos nos testes de ranking
+- Assert dinâmico usando jsonPath para cada elemento retornado, considerando regras de exclusão de totais zero
+
+#### **Checklist de implementação**
+- [x] Testes genéricos para cada tipo de ranking coberto via EnumSource
+- [x] Mocks dinâmicos que descartam clubes sem pontuação/conformidade com regras
+- [x] Recebimento do parâmetro tipoRanking via query param
+- [x] Teste exclusivo para cobertura de retorno de lista vazia
+- [x] Assert de campos nome, estado e total dos clubes para cada cenário retornado
+- [x] Uso do novo método de criação de retrospecto em RetrospectoUtil
 ---

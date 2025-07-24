@@ -1,6 +1,12 @@
-package br.com.meli.teamcubation_partidas_de_futebol.retrospecto;
+package br.com.meli.teamcubation_partidas_de_futebol.retrospecto.util;
 
+import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
+import br.com.meli.teamcubation_partidas_de_futebol.partida.util.PartidaUtil;
+import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.Retrospecto;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -69,5 +75,11 @@ public class RetrospectoUtil {
                 .andExpect(jsonPath("$.partidas[" + index + "].golsVisitante").value(golsVisitante))
                 .andExpect(jsonPath("$.partidas[" + index + "].dataHora").value(dataHora))
                 .andExpect(jsonPath("$.partidas[" + index + "].resultado").value(resultado));
+    }
+
+    public static Retrospecto criaRetrospecto(Clube clube) {
+        List<Partida> partidas = PartidaUtil.criarListPartidasComTesteUtils(2);
+
+        return new Retrospecto(clube,partidas);
     }
 }

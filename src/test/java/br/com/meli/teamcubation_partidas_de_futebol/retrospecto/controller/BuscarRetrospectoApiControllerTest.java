@@ -28,18 +28,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.xml.transform.Result;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static br.com.meli.teamcubation_partidas_de_futebol.retrospecto.RetrospectoUtil.assertListaPartidas;
-import static br.com.meli.teamcubation_partidas_de_futebol.retrospecto.RetrospectoUtil.assertRetrospectoClube;
+import static br.com.meli.teamcubation_partidas_de_futebol.retrospecto.util.RetrospectoUtil.assertListaPartidas;
+import static br.com.meli.teamcubation_partidas_de_futebol.retrospecto.util.RetrospectoUtil.assertRetrospectoClube;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
