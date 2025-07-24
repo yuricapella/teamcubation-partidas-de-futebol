@@ -842,3 +842,38 @@ Fluxos cobertos validam ordem de chamadas, resposta do serviço de busca, propag
 - [x] Propagação e assert exato da exceção para partida não encontrada
 - [x] Logs de erro e rastreamento
 ---
+
+# Busca Avançada - Retrospectos
+
+## 1. Buscar retrospecto geral (controller - sucesso, sem partidas e clube inexistente)
+
+#### **Descrição técnica**
+Implementação dos testes automatizados de controller para o endpoint de retrospecto geral de clube. Foram validados todos os fluxos principais: busca de retrospecto com partidas, situação zerada (clube sem jogo) e exceção para clube ausente. O teste cobre diferentes filtros na requisição e garante o contrato do JSON de resposta e o mapeamento de erros conforme o handler.
+
+#### **Métodos/Funções principais**
+- `deveBuscarRetrospectoComSucesso`
+  - Teste parametrizado cobrindo fluxos de filtro mandante/visitante.
+  - Garante status 200 OK, valida os campos principais do retrospecto (jogos, vitórias, empates, derrotas, gols feitos e sofridos) e dados do clube.
+  - Assegura chamada correta ao método da service com parâmetros esperados.
+- `deveRetornarRetrospectoZeradoQuandoNaoHaPartidas`
+  - Simula situação em que o clube existe, mas não possui partidas.
+  - Valida que todos os contadores do retrospecto vêm zerados e o status da resposta é 200 OK.
+- `deveRetornarNotFoundQuandoClubeNaoExisteAoBuscarRetrospecto`
+  - Simula lançamento de exceção de clube não encontrado no service.
+  - Garante retorno HTTP 404, mensagem e código de erro apropriados no JSON, além da chamada singleton ao método da service.
+
+#### **Principais argumentos, entradas e dependências**
+- Endpoint GET `/api/clube/{id}/retrospecto` com parâmetros opcionais via query (mandante, visitante)
+- Service mockada: `BuscarRetrospectoService`
+- Utilização de mocks para o domínio (Clube, Partida, Retrospecto)
+- Corpo JSON esperado validado via asserts de jsonPath para todos os campos principais
+- Handlers globais para mapeamento correto dos erros
+
+#### **Checklist de implementação**
+- [x] Cobertura para cenário feliz com partidas
+- [x] Retorno zerado quando club não possui jogos
+- [x] Fluxo de erro quando clube não existe (404)
+- [x] Garante contrato do JSON de saída em todas as situações
+- [x] Mock e verificar chamada correta ao service para todos os parâmetros e exceções
+---
+
