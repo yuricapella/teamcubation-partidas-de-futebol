@@ -61,6 +61,14 @@ public class PartidaUtil {
         return new Partida(estadio, clubeMandante, clubeVisitante, 0, 0, dataHora);
     }
 
+    public static Partida criarPartidaComTesteUtilsInformandoIds(Long idClube, Long idAdversario) {
+        Clube clubeMandante = ClubeUtil.criarClube(idClube);
+        Clube clubeVisitante = ClubeUtil.criarClube(idAdversario);
+        Estadio estadio = EstadioUtil.criarEstadio(1L);
+        LocalDateTime dataHora = LocalDateTime.of(2023, 7, 10, 16, 0, 0);
+        return new Partida(estadio, clubeMandante, clubeVisitante, 0, 0, dataHora);
+    }
+
     public static Partida criarPartidaComTesteUtilsTrocandoVisitanteMandante() {
         Clube clubeMandante = ClubeUtil.criarClube(2L);
         Clube clubeVisitante = ClubeUtil.criarClube(1L);

@@ -955,13 +955,13 @@ Implementação de testes unitários para o serviço responsável pelo cálculo 
   - Compara todos os atributos do resultado e verifica ordem de interação dos mocks.
   - Imprime resumo do retrospecto para facilitar depuração.
 
-- **deveRetornarListaVazia_quandoClubeNaoTerPartidas**
+- **deveRetornarRetrospectoVazio_quandoClubeNaoTerPartidas**
   - Simula busca de clube existente sem partidas cadastradas.
   - Valida retorno de retrospecto zerado em todos os campos.
   - Garante que serviço trata ausência de partidas sem lançar exceção.
   - Imprime resumo do retrospecto vazio.
 
-- **deveRetornarClubeNaoEncontradoException_quandoClubeNaoExistir**
+- **deveLancarClubeNaoEncontradoException_quandoClubeNaoExistir_aoBuscarRetrospecto**
   - Cobre cenário de exceção (clube não encontrado).
   - Mocka serviço para lançamento de `ClubeNaoEncontradoException`.
   - Usa `assertThrows` para validar propagação da exceção e confere mensagem de erro.
@@ -987,6 +987,44 @@ Implementação de testes unitários para o serviço responsável pelo cálculo 
 - [x] Organização e padronização dos asserts para todos os campos relevantes no resultado
 ---
 
+## 2. Retrospecto de um clube contra seus adversários (service - testes unitários BuscarRetrospectoServiceTest)
+
+#### **Descrição técnica**
+Testes unitários validam a consulta do retrospecto do clube contra seus adversários, seguindo o requisito funcional da aplicação. Avalia diferentes combinações de filtros mandante/visitante, garante que o agrupamento por adversário, o cálculo de estatísticas e o tratamento de exceções estejam adequados de acordo com as regras do domínio. Utiliza mocks para dependências, métodos utilitários para montagem dos cenários e impressão dos resultados.
+
+#### **Métodos/Funções principais**
+- **deveBuscarRetrospectoContraAdversariosComSucesso**
+  - Cobre cenários de fluxo feliz, agrupando partidas por adversário após aplicação dos filtros de mandante e visitante.
+  - Mocka BuscarClubeService para retorno do clube e PartidaRepository para as listas simuladas de partidas.
+  - Utiliza método de filtragem do próprio service, garantindo aderência à regra de negócio.
+  - Monta resultado esperado via utilitários e valida todos os campos relevantes do DTO para cada adversário.
+  - Verifica ordem das interações dos mocks e imprime resumo do resultado com RetrospectoPrintUtil.
+
+- **deveRetornarRetrospectoContraAdversariosVazio_quandoClubeNaoTerPartidas**
+  - Simula cenário de clube existente sem partidas cadastradas.
+  - Garante que a resposta contenha apenas dados do clube e lista de adversários vazia.
+  - Assegura que não é lançada exceção e imprime o resumo do resultado vazio para depuração.
+
+- **deveLancarClubeNaoEncontradoException_quandoClubeNaoExistir_aoBuscarRetrospectoAdversario**
+  - Cobre cenário de clube inexistente, forçando BuscarClubeService a lançar ClubeNaoEncontradoException.
+  - Usa assertThrows para validar a propagação correta da exceção e compara mensagem de erro.
+  - Verifica que as dependências são chamadas apenas até o ponto de exceção e imprime mensagem para análise.
+
+#### **Principais argumentos, entradas e dependências**
+- Parâmetros: identificador do clube (Long), filtro Boolean mandante e visitante.
+- DTO principal: `RetrospectoAdversariosResponseDTO`, listando totais de jogos, vitórias, empates, derrotas, gols feitos e sofridos por adversário.
+- Utilização de PartidaUtil para preparar partidas simuladas nos filtros de teste.
+- Dependências mockadas: BuscarClubeService e PartidaRepository.
+- Impressão de informações resumidas pelo método printResumo de RetrospectoPrintUtil.
+- Verificação de ordem de chamadas dos mocks via InOrder.
+
+#### **Checklist de implementação**
+- [x] Cobertura completa dos cenários positivos para diferentes filtros
+- [x] Validação do retorno de lista vazia em ausência de partidas
+- [x] Propagação e validação de exceção para clube inexistente
+- [x] Uso de utilitários para montagem de partidas e impressão de saídas
+- [x] Assert detalhado nos campos do DTO e controle da ordem das dependências mockadas
+---
 
 ---
 
