@@ -2,6 +2,7 @@ package br.com.meli.teamcubation_partidas_de_futebol.ranking.util;
 
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.ranking.model.*;
+import br.com.meli.teamcubation_partidas_de_futebol.ranking.strategy.*;
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.Retrospecto;
 
 import java.util.List;
@@ -40,4 +41,13 @@ public class RankingUtil {
     }
 
     public record DadosRankingMock(List<? extends Ranking> lista, int totalClube1, int totalClube2) {}
+
+    public static CalculadoraRankingStrategy criarCalculadoraRanking(TipoRanking tipo) {
+        return switch (tipo) {
+            case TOTAL_PONTOS -> new RankingPontosStrategy();
+            case TOTAL_GOLS -> new RankingGolsStrategy();
+            case TOTAL_VITORIAS -> new RankingVitoriasStrategy();
+            case TOTAL_JOGOS -> new RankingJogosStrategy();
+        };
+    }
 }

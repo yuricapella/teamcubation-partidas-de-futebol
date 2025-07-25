@@ -843,7 +843,8 @@ Fluxos cobertos validam ordem de chamadas, resposta do serviço de busca, propag
 - [x] Logs de erro e rastreamento
 ---
 
-# Busca Avançada - Retrospectos
+# Busca Avançada (1 a 3) - Retrospectos
+## Controller
 
 ## 1. Buscar retrospecto geral (controller - sucesso, sem partidas e clube inexistente)
 
@@ -939,7 +940,8 @@ garantindo assertividade e legibilidade dos casos de teste.
 - [x] Criação e uso de utilitários para grandes asserts de arrays/listas em respostas
 ---
 
-# Ranking
+# Busca Avançada (4) - Ranking
+## Controller
 
 ## 1. Ranking de clubes (controller - ranking multiparadigma e cenários de lista vazia)
 
@@ -968,4 +970,46 @@ Foram implementados testes parametrizados para a controller de ranking, validand
 - [x] Teste exclusivo para cobertura de retorno de lista vazia
 - [x] Assert de campos nome, estado e total dos clubes para cada cenário retornado
 - [x] Uso do novo método de criação de retrospecto em RetrospectoUtil
+---
+
+## Service
+
+## 1. Ranking de clubes (service - cálculo ranking, regras de exclusão e exceção para tipo inválido)
+
+#### **Descrição técnica**
+Implementa uma bateria de testes unitários para a classe RankingService, 
+responsável por calcular rankings de clubes com base em diferentes critérios, 
+utilizando o padrão Strategy para cálculo dinâmico conforme o tipo solicitado. 
+Os testes validam todos os fluxos principais: cálculo bem-sucedido de todos os tipos de ranking, 
+resposta vazia quando não há clubes aptos, e lançamento de exceção para parâmetro de ranking inválido. 
+O utilitário RankingUtil abstrai a criação de estratégias para evitar duplicação e facilitar a manutenção da cobertura.
+
+#### **Métodos/Funções principais**
+- `deveBuscarRanking_comSucesso`
+  - Teste parametrizado cobrindo as estratégias TOTAL_PONTOS, TOTAL_GOLS, TOTAL_JOGOS e TOTAL_VITORIAS
+  - Cria clubes, retrospectos e partidas mockadas, monta strategies e valida tamanho, conteúdo, ordem, valores dos campos retornados, e regra de não inclusão de clubes zerados
+  - Confirma ordenação decrescente do campo total e verifica interações com repositórios mockados
+
+- `deveRetornarListaVazia_quandoNaoExistiremClubes`
+  - Testa resposta do service quando não há clubes cadastrados ou elegíveis, garantindo lista vazia e ordens de chamada nos repositórios
+
+- `deveLancarExcecao_quandoTipoRankingInvalido`
+  - Garante que a service lança ResponseStatusException com status 400 e mensagem adequada quando o tipo informado não corresponde a nenhuma strategy registrada
+  - Valida ausência de interações com repositórios no caso de inválido
+
+#### **Principais argumentos, entradas e dependências**
+- Service testada: `RankingService`
+- Dependências mockadas: `ClubeRepository` e `PartidaRepository`
+- Utilitário: `RankingUtil.criarCalculadoraRanking` para instanciar a strategy correspondente conforme o tipo de ranking
+- Regras de negócio validadas: apenas clubes com total > 0 aparecem nos rankings, resultados sempre ordenados por total decrescente
+- Exception handling validado para tipo de ranking inválido
+
+#### **Checklist de implementação**
+- [x] Testes para todos os tipos de ranking implementados via parametrização
+- [x] Cobertura de retorno de lista vazia para clubes/partidas ausentes
+- [x] Verificação da ordem e dos campos de cada item do ranking (nome, estado, total)
+- [x] Assert que clubes com total 0 não aparecem
+- [x] Verificação de exceção 400 customizada para tipos inválidos
+- [x] Uso de utilitários para abstração da criação das strategies e validações de chamadas nos repositórios mocked
+- [x] Garantia de alinhamento com todos os requisitos do domínio de ranking
 ---
