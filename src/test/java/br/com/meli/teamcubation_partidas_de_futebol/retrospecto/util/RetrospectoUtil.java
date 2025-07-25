@@ -79,7 +79,10 @@ public class RetrospectoUtil {
 
     public static Retrospecto criaRetrospecto(Clube clube) {
         List<Partida> partidas = PartidaUtil.criarListPartidasComTesteUtils(2);
+        return new Retrospecto(clube,partidas);
+    }
 
+    public static Retrospecto criaRetrospecto(Clube clube, List<Partida> partidas) {
         return new Retrospecto(clube,partidas);
     }
 }

@@ -70,7 +70,7 @@ public class BuscarRetrospectoService {
         return new RetrospectoConfronto(List.of(retrospectoClube, retrospectoAdversario), partidasDTO);
     }
 
-    private List<Partida> filtrarPartidasPorMandanteVisitante(List<Partida> partidas, Long id, Boolean mandante, Boolean visitante) {
+    List<Partida> filtrarPartidasPorMandanteVisitante(List<Partida> partidas, Long id, Boolean mandante, Boolean visitante) {
         return partidas.stream()
                 .filter(partida -> mandante == null || (partida.getClubeMandante().getId().equals(id) == mandante))
                 .filter(partida -> visitante == null || (partida.getClubeVisitante().getId().equals(id) == visitante))

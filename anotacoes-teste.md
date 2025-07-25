@@ -940,6 +940,56 @@ garantindo assertividade e legibilidade dos casos de teste.
 - [x] Criação e uso de utilitários para grandes asserts de arrays/listas em respostas
 ---
 
+## Service
+
+## 1. Retrospecto geral de clube (service - testes unitários BuscarRetrospectoServiceTest)
+
+#### **Descrição técnica**
+Implementação de testes unitários para o serviço responsável pelo cálculo do retrospecto geral de um clube, validando fluxos principais de consulta por filtros (mandante/visitante), retorno zerado em caso de ausência de partidas e resposta a club não encontrado. O teste foi desenvolvido na classe `BuscarRetrospectoServiceTest`, utilizando utilitários para criação de entidades e impressão de resultados, além de garantir a não duplicação de lógica de filtragem. As classes envolvidas são `BuscarRetrospectoService`, `BuscarClubeService`, `PartidaRepository`, `RetrospectoPrintUtil`, `PartidaUtil` e `RetrospectoUtil`.
+
+#### **Métodos/Funções principais**
+- **deveBuscarRetrospectoDeUmClubeComSucesso**
+  - Cobre o cenário de fluxo feliz, validando o cálculo do retrospecto com todos os filtros de mandante/visitante.
+  - Mocka dependências `buscarClubeService` e `partidaRepository`.
+  - Utiliza método de filtro do próprio service para garantir alinhamento com a produção.
+  - Compara todos os atributos do resultado e verifica ordem de interação dos mocks.
+  - Imprime resumo do retrospecto para facilitar depuração.
+
+- **deveRetornarListaVazia_quandoClubeNaoTerPartidas**
+  - Simula busca de clube existente sem partidas cadastradas.
+  - Valida retorno de retrospecto zerado em todos os campos.
+  - Garante que serviço trata ausência de partidas sem lançar exceção.
+  - Imprime resumo do retrospecto vazio.
+
+- **deveRetornarClubeNaoEncontradoException_quandoClubeNaoExistir**
+  - Cobre cenário de exceção (clube não encontrado).
+  - Mocka serviço para lançamento de `ClubeNaoEncontradoException`.
+  - Usa `assertThrows` para validar propagação da exceção e confere mensagem de erro.
+  - Garante ordem de chamadas e não interação adicional com os mocks.
+  - Imprime mensagem de erro para análise.
+
+#### **Principais argumentos, entradas e dependências**
+- Parâmetros de filtro (`Boolean mandante`, `Boolean visitante`) recebidos pela service.
+- Mocks de `BuscarClubeService` (busca de dados de clube) e `PartidaRepository` (consulta de partidas por mandante/visitante).
+- Utilização de utilitários:
+  - `PartidaUtil.criarPartidaComTesteUtilsTrocandoVisitanteMandante()` para simulação de cenários onde clube é visitante.
+  - `RetrospectoPrintUtil.printResumo()` para sumarizar informações no console durante os testes.
+- O método privado de filtro da service foi tornado default para reuso nos testes, evitando duplicação de lógica de filtragem.
+
+#### **Checklist de implementação**
+- [x] Cobertura completa de cenário feliz com múltiplas combinações de filtros (mandante, visitante)
+- [x] Cobertura de cenário com clube sem partidas (retorno zerado)
+- [x] Cobertura de cenário com clube inexistente (exceção)
+- [x] Criação de partida invertida para simular clube como visitante
+- [x] Utilitário para impressão do resultado dos testes e mensagens de erro
+- [x] Validação da ordem de chamadas às dependências com InOrder do Mockito
+- [x] Não duplicação de lógica de filtro no teste, utilizando método de filtro do service
+- [x] Organização e padronização dos asserts para todos os campos relevantes no resultado
+---
+
+
+---
+
 # Busca Avançada (4) - Ranking
 ## Controller
 
