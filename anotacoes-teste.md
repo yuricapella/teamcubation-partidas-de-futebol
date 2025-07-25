@@ -943,33 +943,38 @@ garantindo assertividade e legibilidade dos casos de teste.
 # Busca Avançada (4) - Ranking
 ## Controller
 
-## 1. Ranking de clubes (controller - ranking multiparadigma e cenários de lista vazia)
+## 1. Ranking de clubes (controller - ranking geral, lista vazia e exceção por tipo inválido)
 
 #### **Descrição técnica**
-Foram implementados testes parametrizados para a controller de ranking, validando o endpoint em todos os tipos de ranking (TOTAL_PONTOS, TOTAL_GOLS, TOTAL_VITORIAS, TOTAL_JOGOS). Os testes simulam todas as variações dos rankings através de mocks construídos pelo novo utilitário RankingUtil, garantindo a correta filtragem e ordenação dos resultados conforme a regra do domínio (exclusão de clubes com total zero). Um método auxiliar em RetrospectoUtil simplifica a geração dos objetos de entrada (retrospectos).
+Essa suíte de testes cobre o endpoint de ranking da RankingApiController, garantindo o comportamento esperado em todos os cenários definidos pelo domínio: busca de rankings reais (pontuação, gols, vitórias, jogos), tratamento correto quando não há clubes elegíveis, e resposta robusta para requisições com tipo de ranking inválido. Os testes utilizam Mockito para mockar a service e garantir respostas controladas, e MockMvc para validar a estrutura exata do JSON retornado e o status adequado de cada casos.
 
 #### **Métodos/Funções principais**
 - `deveBuscarRankingPorClub`
-  - Executa teste para cada tipo de ranking via @EnumSource
-  - Monta dinamicamente lista mockada e valores esperados com RankingUtil e valida posição, nome, estado e total dos clubes retornados
-  - Garante cobertura para filtragem de clubes zerados
+  - Teste parametrizado cobrindo todos os tipos possíveis de ranking.
+  - Realiza chamada GET no endpoint passando o parâmetro tipoRanking.
+  - Valida status 200, estrutura e valores de cada clube retornado (nome, estado, total), posição correta no array e respeito à regra dos clubes zerados (clubes com total 0 não aparecem).
 - `deveRetornarListaVazia_quandoNaoExistiremClubes`
-  - Testa cenário em que o ranking retorna lista vazia, validando array vazio e status 200 OK
+  - Teste parametrizado para quando o ranking não possui nenhum clube (resposta completamente vazia).
+  - Valida array vazio no corpo e status 200 OK.
+- `deveLancarExcecao_quandoTipoRankingInvalido`
+  - Simula cenário em que foi solicitado um tipo de ranking inexistente.
+  - Verifica se o controller responde 400 BAD REQUEST e retorna objeto JSON contendo mensagem clara de erro e o campo codigoErro.
+  - Confirma também que a service foi chamada apenas uma vez.
 
 #### **Principais argumentos, entradas e dependências**
-- Endpoint GET `/api/clube/ranking` com parâmetro obrigatório `tipoRanking`
-- Camada de service mockada via RankingService e método de fábrica do utilitário
-- Listas de ranking compostas dinamicamente conforme enum TipoRanking
-- Novo método em RetrospectoUtil para fabricação de retrospectos nos testes de ranking
-- Assert dinâmico usando jsonPath para cada elemento retornado, considerando regras de exclusão de totais zero
+- Endpoint testado: `GET /api/clube/ranking` com parâmetro obrigatório `tipoRanking` na query
+- Service mockada: `RankingService`
+- Utilização de DTOs de Ranking e auxílio de RankingUtil/RetrospectoUtil para gerar mocks conforme o tipo
+- Verificações de estrutura JSON, status HTTP e conteúdo dos arrays retornados para todas as variações de ranking
+- Checagem de exceção e mensagens de erro para cenários inválidos de chamada
 
 #### **Checklist de implementação**
-- [x] Testes genéricos para cada tipo de ranking coberto via EnumSource
-- [x] Mocks dinâmicos que descartam clubes sem pontuação/conformidade com regras
-- [x] Recebimento do parâmetro tipoRanking via query param
-- [x] Teste exclusivo para cobertura de retorno de lista vazia
-- [x] Assert de campos nome, estado e total dos clubes para cada cenário retornado
-- [x] Uso do novo método de criação de retrospecto em RetrospectoUtil
+- [x] Cobertura completa dos fluxos principais do endpoint de ranking
+- [x] Teste parametrizado para todos os tipos de ranking implementados
+- [x] Assert detalhado para campos de nome, estado, total, ausência de clubes zerados e posição
+- [x] Assert de array vazio no cenário sem clubes válidos
+- [x] Validação da exceção por tipo de ranking inválido, incluindo status e corpo JSON padronizado
+- [x] Uso consistente de mocks para isolamento dos testes de controller
 ---
 
 ## Service

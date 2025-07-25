@@ -11,6 +11,7 @@ import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.model.Retrospect
 import br.com.meli.teamcubation_partidas_de_futebol.retrospecto.util.RetrospectoUtil;
 import br.com.meli.teamcubation_partidas_de_futebol.util.PrintUtil;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,10 +21,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -104,6 +107,26 @@ public class RankingApiControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(0))
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void deveLancarExcecao_quandoTipoRankingInvalido() throws Exception {
+        String tipoInvalido = "TIPO_NAO_EXISTENTE";
+
+        Mockito.when(rankingService.calcularRanking(tipoInvalido))
+                .thenThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST, "tipoRanking inválido! Use valores: TOTAL_PONTOS, TOTAL_GOLS, TOTAL_VITORIAS, TOTAL_JOGOS."));
+
+        var requestBuilder = get(PATH)
+                .param("tipoRanking", tipoInvalido)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.mensagem").value("tipoRanking inválido! Use valores: TOTAL_PONTOS, TOTAL_GOLS, TOTAL_VITORIAS, TOTAL_JOGOS."))
+                .andExpect(jsonPath("$.codigoErro").value("400 BAD_REQUEST"))
+                .andDo(MockMvcResultHandlers.print());
+
+        Mockito.verify(rankingService, Mockito.times(1)).calcularRanking(tipoInvalido);
     }
 }
 
