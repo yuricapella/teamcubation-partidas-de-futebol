@@ -1,8 +1,7 @@
 package br.com.meli.teamcubation_partidas_de_futebol.estadio.controller;
 
+import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioEnderecoResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioResponseDTO;
-import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.mapper.EstadioResponseMapper;
-import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.service.BuscarEstadioService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,11 +19,9 @@ public class BuscarEstadioApiController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EstadioResponseDTO> buscar(@PathVariable Long id) {
-        Estadio estadioBuscado = buscarEstadioService.buscarEstadioPorId(id);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(EstadioResponseMapper.toEstadioResponseDTO(estadioBuscado));
+    public ResponseEntity<EstadioEnderecoResponseDTO> buscar(@PathVariable Long id) {
+        EstadioEnderecoResponseDTO estadioBuscado = buscarEstadioService.buscarEstadioComEnderecoPorId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(estadioBuscado);
     }
 
     @GetMapping

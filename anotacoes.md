@@ -242,14 +242,63 @@ Encarregado de realizar a integração com a API ViaCep para buscar e mapear inf
 - [x] Validar nome mínimo de 3 letras (400 BAD REQUEST)
 - [x] Validar nome único (409 CONFLICT)
 - [x] Validar se estádio existe (404 NOT FOUND)
-
 ---
 
-## 13. Buscar um estádio (GET)
+## 13. Estádio (GET por ID)
 
-- [x] Adicionar service para busca de estádio por id
-- [x] Adicionar método GET na controller para buscar estádio por id
-- [x] Validar se estádio existe (404 NOT FOUND)
+#### Requisito do projeto:
+- [x] Permitir buscar um estádio pelo seu ID
+- [x] Implementar método GET para consulta por ID
+- [x] Retornar status 200 OK no sucesso
+- [x] Retornar 404 NOT FOUND no caso de estádio não existente
+
+#### **Descrição técnica**
+Implementa a busca detalhada de estádio por ID, retornando um DTO com nome do estádio e os dados completos de endereço (cep, logradouro, bairro, localidade, uf, estado). O fluxo realiza a validação da existência do estádio, retorna 404 em caso de ausência e, em caso positivo, consulta a API ViaCep para enriquecer o DTO com o endereço obtido dinamicamente. Para estádios legados que não possuem cep cadastrado, o endpoint retorna todos os campos de endereço como string vazia, preservando o padrão de resposta.
+
+#### **Métodos/Funções principais**
+- **buscarEstadioComEnderecoPorId**
+  - Recebe ID
+  - Consulta o repositório pela entidade Estadio
+  - Lança exceção customizada retornando 404 NOT FOUND se não encontrar o estádio
+  - Se o estádio não possuir cep cadastrado, retorna DTO com campos de endereço vazios
+  - Se houver cep, consulta ViaCep e preenche DTO detalhado
+
+#### **Principais argumentos, entradas e dependências**
+- PathVariable: id (Long)
+- Dependências: BuscarEstadioService, EstadioRepository, EnderecoViaCepClient
+- DTO de resposta: EstadioEnderecoResponseDTO (nome, CepResponseDTO: cep, logradouro, bairro, localidade, uf, estado)
+- Exceção personalizada EstadioNaoEncontradoException para controle de status 404
+
+#### **Checklist de implementação**
+- [x] Consulta detalhada de estádio por ID com integração dinâmica ao ViaCep
+- [x] Resposta OK com DTO enriquecido apenas para estádios existentes
+- [x] Retorno com endereço vazio para estádios sem cep cadastrado
+- [x] Retorno de 404 NOT FOUND para id inexistente
+- [x] Isolamento da lógica de externalização de endereço na service
+- [x] Controller enxuta, apenas direcionando as respostas e exceções
+---
+
+## 13 - extra. EnderecoViaCepClient (centralização da montagem do DTO detalhado na busca por estádio)
+
+#### **Descrição técnica**
+A EnderecoViaCepClient passa a ser responsável não apenas por integrar com o ViaCep, mas por centralizar toda a montagem do DTO EstadioEnderecoResponseDTO a partir dos campos nome e cep, no fluxo de busca detalhada de estádio. Isso garante que a lógica de validação de cep nulo/vazio e a produção da resposta enriquecida ou de campos vazios fique isolada nesta service, simplificando a lógica das demais camadas e mantendo consistência na resposta detalhada.
+
+#### **Métodos/Funções principais**
+- **criarEstadioEndereco**
+  - Recebe nome e cep como parâmetros
+  - Se o cep for nulo ou vazio, monta e retorna EstadioEnderecoResponseDTO com todos os campos de endereço em branco
+  - Se o cep existe e é válido, consulta ViaCep, mapeia resposta em CepResponseDTO e monta o EstadioEnderecoResponseDTO enriquecido
+
+#### **Principais argumentos, entradas e dependências**
+- Parâmetros: nome (String), cep (String)
+- Objetos processados: EstadioEnderecoResponseDTO, CepResponseDTO
+- Nenhuma lógica de fallback ou tratamento posterior precisa ser implementada nas services ou controllers que utilizam EnderecoViaCepClient
+
+#### **Checklist de implementação**
+- [x] Centraliza montagem da resposta detalhada de estádio (EstadioEnderecoResponseDTO) na service EnderecoViaCepClient
+- [x] Simplifica a BuscarEstadioService, que apenas delega a produção do DTO ao client
+- [x] Garante tratamento uniforme de cep nulo/vazio e de integração com ViaCep
+---
 
 ---
 

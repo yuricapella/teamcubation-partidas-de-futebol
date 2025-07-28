@@ -1,5 +1,6 @@
 package br.com.meli.teamcubation_partidas_de_futebol.estadio.service;
 
+import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioEnderecoResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.mapper.EstadioResponseMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.exception.EstadioNaoEncontradoException;
@@ -13,10 +14,19 @@ import java.util.Optional;
 
 @Service
 public class BuscarEstadioService {
-    EstadioRepository estadioRepository;
+    private final EstadioRepository estadioRepository;
+    private final EnderecoViaCepClient enderecoViaCepClient;
 
-    public BuscarEstadioService(EstadioRepository estadioRepository) {
+    public BuscarEstadioService(EstadioRepository estadioRepository, EnderecoViaCepClient enderecoViaCepClient) {
         this.estadioRepository = estadioRepository;
+        this.enderecoViaCepClient = enderecoViaCepClient;
+    }
+
+    public EstadioEnderecoResponseDTO buscarEstadioComEnderecoPorId(Long id) {
+        Optional<Estadio> estadioOptional = estadioRepository.findById(id);
+        estadioOptional.orElseThrow(() -> new EstadioNaoEncontradoException(id));
+        Estadio estadio = estadioOptional.get();
+        return enderecoViaCepClient.criarEstadioEndereco(estadio.getNome(), estadio.getCep());
     }
 
     public Estadio buscarEstadioPorId(Long id) {
