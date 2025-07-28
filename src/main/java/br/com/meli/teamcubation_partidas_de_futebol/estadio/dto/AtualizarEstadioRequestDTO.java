@@ -15,8 +15,9 @@ public class AtualizarEstadioRequestDTO {
     public AtualizarEstadioRequestDTO() {
     }
 
-    public AtualizarEstadioRequestDTO(String nome) {
+    public AtualizarEstadioRequestDTO(String nome, String cep) {
         this.nome = nome;
+        this.cep = cep;
     }
 
     public String getNome() {
