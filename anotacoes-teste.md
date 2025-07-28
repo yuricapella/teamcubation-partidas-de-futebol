@@ -1026,6 +1026,54 @@ Testes unitários validam a consulta do retrospecto do clube contra seus advers�
 - [x] Assert detalhado nos campos do DTO e controle da ordem das dependências mockadas
 ---
 
+## 3. Confronto direto entre clubes (service - sucesso, confrontos ausentes e clube inexistente)
+
+#### **Descrição técnica**
+Implementação de testes unitários para o serviço responsável por consultar 
+o retrospecto de confronto direto entre dois clubes, 
+retornando dados estatísticos (vitórias, empates, derrotas, gols feitos e sofridos) 
+para ambos os lados e a lista de partidas desse confronto. 
+Os testes seguem rigorosamente o requisito funcional, verificando cenários de sucesso, 
+ausência de confrontos (campos zerados/lista vazia) e clubes inexistentes (exceção lançada). 
+O teste utiliza utilitários de montagem e mapeamento de dados, além de mocks para dependências externas, 
+e realiza asserções detalhadas em todos os campos relevantes dos DTOs.
+
+#### **Métodos/Funções principais**
+- **deveBuscarRetrospectoConfrontoComSucesso**
+  - Cobre o fluxo feliz, simulando clubes existentes e partidas entre eles.
+  - Mocka BuscarClubeService para ambos os clubes e PartidaRepository para as partidas do confronto.
+  - Utiliza mapeamento para DTOs de resposta e compara todos os campos relevantes dos retrospectos e das partidas.
+  - Realiza asserts campo a campo para garantir total aderência ao contrato de resposta.
+  - Verifica o sequenciamento das interações com os mocks.
+
+- **deveRetornarRetrospectoZeradoEListaPartidaVazia_quandoNaoHouverConfrontoEntreOsTimes**
+  - Garante que o retorno contenha retrospecto zerado para ambos os clubes e uma lista de partidas vazia quando não houver confronto registrado.
+  - Assegura que todos os campos estatísticos são assertivamente validados como zero.
+  - Confirma a resposta correta da chamada mockada sem exceção.
+
+- **deveRetornarClubeNaoEncontrado_quandoClubeNaoExistir_aoBuscarRetrospectoConfronto**
+  - Simula ausência de um dos clubes ao forçar a service a lançar ClubeNaoEncontradoException.
+  - Usa assertThrows para validar o lançamento e a mensagem da exceção, confirmando contrato de erro.
+  - Checa que as interações com mocks acontecem apenas até o ponto de falha.
+
+- **deveRetornarClubeNaoEncontrado_quandoAdversarioNaoExistir_aoBuscarRetrospectoConfronto**
+  - Testa o cenário onde o adversário não existe, mockando BuscaClubeService para lançar exceção.
+  - Assegura propagação e mensagem correta da exceção e valida ausência de efeitos colaterais nas chamadas subsequentes.
+
+#### **Principais argumentos, entradas e dependências**
+- Parâmetros de entrada: identificador dos clubes (Long), enviados para a consulta na service.
+- DTO e objeto validados: RetrospectoConfronto contendo lista de Retrospecto (um para cada clube) e lista de PartidaResponseDTOs.
+- Utilização dos utilitários ClubeUtil, PartidaUtil, RetrospectoUtil e mapeamento com PartidaResponseMapper para preparar os objetos e cenários.
+- Mocks: BuscarClubeService e PartidaRepository para isolar a lógica da camada de serviço.
+- Impressão de mensagens e resultados via PrintUtil para depuração visual durante a execução dos testes.
+
+#### **Checklist de implementação**
+- [x] Teste para cenário de sucesso com clubes existentes e partidas registradas
+- [x] Teste para cenário de partidas ausentes entre os clubes, validando resposta zerada e lista vazia
+- [x] Teste para ausência de clube principal existente, validando exceção e mensagem
+- [x] Teste para ausência de clube adversário existente, validando exceção e mensagem
+- [x] Mock e isola comportamentos externos das dependências
+- [x] Assert detalhado nos campos de retrospecto e partidas retornadas, validando ordem dos mocks
 ---
 
 # Busca Avançada (4) - Ranking
