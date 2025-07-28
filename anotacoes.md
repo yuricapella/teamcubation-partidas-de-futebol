@@ -234,14 +234,49 @@ Encarregado de realizar a integração com a API ViaCep para buscar e mapear inf
 - [x] Isolamento da lógica de integração externa fora da controller/service principal
 ---
 
-## 12. Editar um estádio (PUT)
+## 12. Estádio (PUT - atualização com CEP e resposta de endereço detalhado)
 
-- [x] Adicionar service para atualização de estádio
-- [x] Adicionar DTO e mapper para atualização
-- [x] Adicionar método PUT na controller para editar estádio
-- [x] Validar nome mínimo de 3 letras (400 BAD REQUEST)
-- [x] Validar nome único (409 CONFLICT)
-- [x] Validar se estádio existe (404 NOT FOUND)
+#### Requisito do projeto:
+- [x] Permitir editar os dados de um estádio, agora também aceitando atualização do campo cep
+- [x] Implementar método PUT para atualização dos dados do estádio
+- [x] Validar que o nome do estádio deve ter pelo menos 3 letras
+- [x] Validar que o cep deve possuir exatamente 8 dígitos numéricos
+- [x] Retornar status 200 OK e DTO de resposta com endereço detalhado ao atualizar
+- [x] Retornar status 400 BAD REQUEST para nome inválido ou cep inválido
+- [x] Retornar status 409 CONFLICT ao tentar atualizar para nome de estádio já cadastrado
+- [x] Retornar status 404 NOT FOUND ao tentar atualizar estádio inexistente
+
+#### **Descrição técnica**
+Permite a atualização dos dados de um estádio existente, incluindo agora o campo `cep`, que passa a ser obrigatório e validado como 8 dígitos numéricos. O método recebe um DTO contendo nome e cep, aplica as validações funcionais definidas (nome mínimo 3 letras e cep válido), verifica possíveis conflitos de nome já existente e a existência do estádio informada pelo id. Ao persistir os dados, o serviço faz uma chamada à API ViaCep por meio do client dedicado para buscar o endereço detalhado referente ao novo cep, retornando um DTO de resposta enriquecido com todas as informações do estádio e do endereço obtido. Todos os cenários de exceção requisitados são tratados com os status HTTP adequados via controle de exceções.
+
+#### **Métodos/Funções principais**
+- **AtualizarEstadioApiController.atualizar**
+  - Recebe id como path e DTO contendo nome e cep no corpo da requisição
+  - Aciona a service de atualização, recebendo DTO de resposta já enriquecido via integração ViaCep
+  - Retorna status 200 OK junto com os dados detalhados de estádio e endereço na resposta
+
+- **AtualizarEstadioService.atualizarEstadio**
+  - Busca estádio pelo id informado e lança exceção 404 caso não exista
+  - Valida o nome do estádio (mínimo 3 letras, formato) e verifica se não existe outro estádio com esse nome, lançando exceção 400 ou 409 conforme o caso
+  - Atualiza os dados do estádio com nome e cep novos
+  - Integra com a API ViaCep para buscar e anexar o endereço detalhado do novo cep
+  - Retorna um DTO completo contendo nome, cep e os dados detalhados do endereço
+
+#### **Principais argumentos, entradas e dependências**
+- PathVariable: id (Long) — identificador do estádio a ser atualizado
+- RequestBody: DTO contendo nome (string, obrigatório, mínimo 3 letras) e cep (string, obrigatório, 8 dígitos)
+- Service: AtualizarEstadioService — coordena todas as validações, consulta e atualização de dados, integração ViaCep e montagem do DTO de resposta
+- Controller: AtualizarEstadioApiController — expõe e orquestra o endpoint RESTful para atualização
+- Dependência externa: EnderecoViaCepClient — responsável por obter e enriquecer a resposta com o endereço via integração
+
+#### **Checklist de implementação**
+- [x] Permite atualização do cep de estádios (antes inexistente) como campo obrigatório e validado
+- [x] Integra ViaCep para enriquecer a resposta do update com dados de endereço (cep, bairro, localidade, logradouro, uf e estado)
+- [x] Responde 200 OK e DTO enriquecido na atualização bem-sucedida
+- [x] Retorna 400 em caso de nome ou cep inválidos
+- [x] Retorna 409 ao tentar duplicar nome já existente
+- [x] Retorna 404 para estádio não cadastrado
+- [x] Controller expõe endpoint limpo, service centraliza regras, exceção e integração externa
 ---
 
 ## 13. Estádio (GET por ID)
@@ -298,8 +333,6 @@ A EnderecoViaCepClient passa a ser responsável não apenas por integrar com o V
 - [x] Centraliza montagem da resposta detalhada de estádio (EstadioEnderecoResponseDTO) na service EnderecoViaCepClient
 - [x] Simplifica a BuscarEstadioService, que apenas delega a produção do DTO ao client
 - [x] Garante tratamento uniforme de cep nulo/vazio e de integração com ViaCep
----
-
 ---
 
 ## 14. Listar estádios (GET)

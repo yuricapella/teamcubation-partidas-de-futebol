@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class AtualizarEstadioRequestMapper {
     public static Estadio updateEntity(AtualizarEstadioRequestDTO dadosParaAtualizar, Estadio dadosAntigos) {
         dadosAntigos.setNome(dadosParaAtualizar.getNome());
+        dadosAntigos.setCep(dadosParaAtualizar.getCep());
         dadosAntigos.setDataAtualizacao(LocalDateTime.now());
         return dadosAntigos;
     }

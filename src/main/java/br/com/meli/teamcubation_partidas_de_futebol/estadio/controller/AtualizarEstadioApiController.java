@@ -1,9 +1,7 @@
 package br.com.meli.teamcubation_partidas_de_futebol.estadio.controller;
 
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.AtualizarEstadioRequestDTO;
-import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioResponseDTO;
-import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.mapper.EstadioResponseMapper;
-import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;
+import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioEnderecoResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.service.AtualizarEstadioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -20,12 +18,10 @@ public class AtualizarEstadioApiController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EstadioResponseDTO> atualizar
+    public ResponseEntity<EstadioEnderecoResponseDTO> atualizar
             (@RequestBody @Valid AtualizarEstadioRequestDTO atualizarEstadioRequestDTO, @PathVariable Long id) {
-        Estadio estadioAtualizado = atualizarEstadioService.atualizarEstadio(atualizarEstadioRequestDTO, id);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(EstadioResponseMapper.toEstadioResponseDTO(estadioAtualizado));
+        EstadioEnderecoResponseDTO estadioAtualizado = atualizarEstadioService.atualizarEstadio(atualizarEstadioRequestDTO, id);
+        return ResponseEntity.status(HttpStatus.OK).body(estadioAtualizado);
     }
 
 }

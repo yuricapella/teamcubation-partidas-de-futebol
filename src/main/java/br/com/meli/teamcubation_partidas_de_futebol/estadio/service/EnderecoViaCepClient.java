@@ -16,7 +16,7 @@ public class EnderecoViaCepClient {
         return restTemplate.getForObject(String.format(urlViaCep, cep), CepResponseDTO.class);
     }
 
-    public EstadioEnderecoResponseDTO criarEstadioEndereco(String nome, String cep) {
+    public EstadioEnderecoResponseDTO criarEstadioEnderecoResponseDTO(String nome, String cep) {
         if (cep == null || cep.isBlank()) {
             return new EstadioEnderecoResponseDTO(nome, new CepResponseDTO());
         }

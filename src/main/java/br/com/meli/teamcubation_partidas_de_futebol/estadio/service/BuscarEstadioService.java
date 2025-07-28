@@ -26,7 +26,7 @@ public class BuscarEstadioService {
         Optional<Estadio> estadioOptional = estadioRepository.findById(id);
         estadioOptional.orElseThrow(() -> new EstadioNaoEncontradoException(id));
         Estadio estadio = estadioOptional.get();
-        return enderecoViaCepClient.criarEstadioEndereco(estadio.getNome(), estadio.getCep());
+        return enderecoViaCepClient.criarEstadioEnderecoResponseDTO(estadio.getNome(), estadio.getCep());
     }
 
     public Estadio buscarEstadioPorId(Long id) {

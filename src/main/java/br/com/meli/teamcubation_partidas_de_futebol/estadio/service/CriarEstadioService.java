@@ -1,10 +1,8 @@
 package br.com.meli.teamcubation_partidas_de_futebol.estadio.service;
 
-import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.CepResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.CriarEstadioRequestDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioEnderecoResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.mapper.CriarEstadioRequestMapper;
-import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.mapper.EstadioEnderecoResponseMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.repository.EstadioRepository;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.util.EstadioValidator;
@@ -23,10 +21,9 @@ public class CriarEstadioService {
     }
 
     public EstadioEnderecoResponseDTO criarEstadio(CriarEstadioRequestDTO estadioACriar) {
-        CepResponseDTO enderecoViaCep = enderecoViaCepClient.buscarEndereco(estadioACriar.getCep());
         Estadio estadioCriado = CriarEstadioRequestMapper.toEntity(estadioACriar);
         estadioValidator.validarDadosDoEstadioAoCriar(estadioCriado.getNome());
         estadioRepository.save(estadioCriado);
-        return EstadioEnderecoResponseMapper.toEstadioEnderecoResponseDTO(estadioCriado, enderecoViaCep);
+        return enderecoViaCepClient.criarEstadioEnderecoResponseDTO(estadioCriado.getNome(), estadioCriado.getCep());
     }
 }
