@@ -171,19 +171,67 @@ verificação de dados que não foram atualizados e lançar exceção desnecess�
 - [x] Permitir filtrar por clube e estádio via parâmetros opcionais
 - [x] Parâmetros de paginação/ordenação (`page`, `size`, `sort`) tratados automaticamente pelo Spring Data
 - [x] Sem resultado: deve retornar lista vazia com status 200 OK (não é exceção, padrão de API REST)
+---
+
+## 11. Estádio (POST)
+
+#### Requisito do projeto:
+- [x] Permitir o cadastro de um estádio, exigindo obrigatoriamente o nome e o cep do estádio
+- [x] Implementar método POST para cadastrar o estádio
+- [x] Retornar status 201 CREATED no sucesso
+- [x] Impedir cadastro e retornar 400 BAD REQUEST se o nome não for informado, tiver menos de 3 letras ou o cep estiver ausente ou em formato inválido
+- [x] Impedir cadastro e retornar 409 CONFLICT se já existir um estádio cadastrado com o mesmo nome
+
+#### **Descrição técnica**
+Implementa o fluxo de cadastro de estádio, recebendo nome e cep obrigatórios via DTO, validando o nome (mínimo de 3 letras, obrigatório e único) e o formato do cep (apenas 8 dígitos numéricos). Realiza mapeamento do DTO para a entidade Estadio, persiste o estádio e, ao final, retorna um DTO de resposta contendo o nome do estádio e o endereço completo obtido dinamicamente a partir do cep, integrando-se à API ViaCep. Toda a lógica de validação e orquestração é centralizada nas camadas de service e mapper, e a controller permanece responsável apenas pelo recebimento da requisição e devolução da resposta.
+
+#### **Métodos/Funções principais**
+- **criarEstadio**
+  - Recebe DTO com nome e cep
+  - Valida nome obrigatório, mínimo de 3 letras e unicidade
+  - Valida formato do cep (apenas 8 dígitos numéricos)
+  - Mapeia DTO para entidade Estadio
+  - Persiste Estadio no repositório
+  - Consulta endereço via cep usando integração dedicada, enriquecendo o DTO de resposta com logradouro, bairro, localidade, uf e estado
+  - Retorna DTO contendo nome do estádio e informações completas de endereço
+
+#### **Principais argumentos, entradas e dependências**
+- DTO de entrada: nome (String), cep (String)
+- Dependências da service: repositório do estádio, validador de regras de negócio, mapper para conversão de entidade para DTO, integração para consulta ao ViaCep
+- DTO de resposta: nome (String), cep, logradouro, bairro, localidade, uf, estado
+
+#### **Checklist de implementação**
+- [x] Validações de nome obrigatório, mínimo de 3 letras e unicidade
+- [x] Validação de cep obrigatório e formato numérico de 8 dígitos
+- [x] Mapeamento correto do DTO de input para entidade e desta para DTO de saída
+- [x] Consulta do endereço via cep após persistência do estádio
+- [x] Retorno estruturado de DTO com nome e endereço completo após criação
+- [x] Centralização de lógica de negócio e integração externa em service
+- [x] Controller responsável apenas por orquestrar entrada e saída
 
 ---
 
-# Estadio
+## 11 - extra. EnderecoViaCepClient (integração externa)
 
-## 11. Cadastrar um estádio (POST)
+#### **Descrição técnica**
+Encarregado de realizar a integração com a API ViaCep para buscar e mapear informações de endereço a partir do cep informado na criação do estádio. Sua função é retornar um DTO de endereço preenchido para utilização no fluxo de resposta da criação do estádio.
 
-- [x] Adicionar service para cadastro de estádio
-- [x] Adicionar DTO e mapper para cadastro
-- [x] Adicionar método POST na controller para criar estádio
-- [x] Validar nome obrigatório e mínimo de 3 letras (400 BAD REQUEST)
-- [x] Validar nome único (409 CONFLICT)
+#### **Métodos/Funções principais**
+- **buscarEndereco**
+  - Recebe cep (String)
+  - Executa chamada HTTP para a API ViaCep usando o valor informado
+  - Mapeia resposta para CepResponseDTO com campos cep, logradouro, bairro, localidade, uf e estado
 
+#### **Principais argumentos, entradas e dependências**
+- Parâmetro: cep (String)
+- Uso de RestTemplate para requisição REST
+- Variável de ambiente/property para configurar URL da API ViaCep
+- Retorno: CepResponseDTO com dados completos de endereço
+
+#### **Checklist de implementação**
+- [x] Consulta dinâmica ao ViaCep
+- [x] Mapeamento seguro da resposta para DTO interno
+- [x] Isolamento da lógica de integração externa fora da controller/service principal
 ---
 
 ## 12. Editar um estádio (PUT)
@@ -615,6 +663,9 @@ listar as datas conflituosas dos clubes e calcular qual o tempo correto para mos
 - Agora utiliza     @GetMapping("/{idClube}/confronto/{idAdversario}")
 
 - [] colocar um filtro de % % nos repository por nome por exemplo, para poder filtrar todos clubes/estadios com nomes parecidos.
+
+- [] adicionar validação na service de estadio que valida se o cep realmente existe, camada dto será apenas para validar estrutura do cep.
+- 
 
 ## Estrutura
 A estrutura do projeto acabou ficando no modelo chamado Domain Package Structure (DPS), 

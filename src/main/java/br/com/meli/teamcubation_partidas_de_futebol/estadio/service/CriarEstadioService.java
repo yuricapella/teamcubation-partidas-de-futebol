@@ -1,7 +1,10 @@
 package br.com.meli.teamcubation_partidas_de_futebol.estadio.service;
 
+import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.CepResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.CriarEstadioRequestDTO;
+import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioEnderecoResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.mapper.CriarEstadioRequestMapper;
+import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.mapper.EstadioEnderecoResponseMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.repository.EstadioRepository;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.util.EstadioValidator;
@@ -11,15 +14,19 @@ import org.springframework.stereotype.Service;
 public class CriarEstadioService {
     private final EstadioRepository estadioRepository;
     private final EstadioValidator estadioValidator;
+    private final EnderecoViaCepClient enderecoViaCepClient;
 
-    public CriarEstadioService(EstadioRepository estadioRepository, EstadioValidator estadioValidator) {
+    public CriarEstadioService(EstadioRepository estadioRepository, EstadioValidator estadioValidator, EnderecoViaCepClient enderecoViaCepClient) {
         this.estadioRepository = estadioRepository;
         this.estadioValidator = estadioValidator;
+        this.enderecoViaCepClient = enderecoViaCepClient;
     }
 
-    public Estadio criarEstadio(CriarEstadioRequestDTO estadioACriar) {
+    public EstadioEnderecoResponseDTO criarEstadio(CriarEstadioRequestDTO estadioACriar) {
+        CepResponseDTO enderecoViaCep = enderecoViaCepClient.buscarEndereco(estadioACriar.getCep());
         Estadio estadioCriado = CriarEstadioRequestMapper.toEntity(estadioACriar);
         estadioValidator.validarDadosDoEstadioAoCriar(estadioCriado.getNome());
-        return estadioRepository.save(estadioCriado);
+        estadioRepository.save(estadioCriado);
+        return EstadioEnderecoResponseMapper.toEstadioEnderecoResponseDTO(estadioCriado, enderecoViaCep);
     }
 }

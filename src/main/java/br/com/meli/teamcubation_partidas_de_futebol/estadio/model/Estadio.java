@@ -11,14 +11,16 @@ public class Estadio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    private String cep;
 
     private LocalDateTime dataAtualizacao;
 
     public Estadio() {
     }
 
-    public Estadio(String nome) {
+    public Estadio(String nome, String cep) {
         this.nome = nome;
+        this.cep = cep;
     }
 
     public String getNome() {
@@ -43,5 +45,13 @@ public class Estadio {
 
     public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
         this.dataAtualizacao = dataAtualizacao;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 }
