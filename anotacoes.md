@@ -1,13 +1,6 @@
 # Anotações & Ideias Futuras
 
-## Clube
-
-### Pendências:
-
-- [x] Possibilidade de criar um arquivo utilitário com todos os estados brasileiros e validar a existência antes de criar um clube.
-  (Enum EstadosUF)
-
----
+# Clube
 
 ## 1. **Cadastrar clube (POST, CriarClubeRequestDTO)**
 
@@ -90,7 +83,7 @@
 
 
 ---
-## Partida
+# Partida
 
 ## 6. **Cadastrar partida (POST, CriarPartidaRequestDTO)**
 
@@ -181,6 +174,8 @@ verificação de dados que não foram atualizados e lançar exceção desnecess�
 
 ---
 
+# Estadio
+
 ## 11. Cadastrar um estádio (POST)
 
 - [x] Adicionar service para cadastro de estádio
@@ -219,7 +214,7 @@ verificação de dados que não foram atualizados e lançar exceção desnecess�
 
 ---
 
-## Busca Avançada 1: Retrospecto Geral de um Clube (GET)
+# Busca Avançada 1: Retrospecto Geral de um Clube (GET)
 
 ### **Descrição técnica**
 Implementado endpoint para retornar o retrospecto geral de um clube, somando **todas as partidas** 
@@ -265,7 +260,7 @@ A resposta apresenta:
 
 ---
 
-## Busca Avançada 2: Retrospecto contra adversários (GET)
+# Busca Avançada 2: Retrospecto contra adversários (GET)
 
 ### **Descrição técnica**
 Implementado endpoint para retornar o retrospecto de um clube contra **cada um** de seus adversários já enfrentados.  
@@ -320,7 +315,7 @@ O resultado entregue é um objeto JSON com o nome do clube central, o estado e u
 
 ---
 
-## 3. Busca Avançada 3: Confrontos Diretos (GET)
+# 3. Busca Avançada 3: Confrontos Diretos (GET)
 
 ### **Descrição técnica**
 Implementado endpoint para retornar todas as partidas entre dois clubes específicos (confronto direto).  
@@ -405,7 +400,7 @@ O resultado entregue é um objeto JSON contendo uma lista de retrospectos (um pa
 
 ---
 
-## Busca Avançada 4: Ranking - Total de Pontos (GET)
+# Busca Avançada 4: Ranking - Total de Pontos (GET)
 
 ### **Descrição técnica**
 Implementado endpoint para retornar o **ranking dos clubes** com base no total de pontos (vitória = 3, empate = 1).  
@@ -477,7 +472,7 @@ O ranking mostra:
 
 ---
 
-## Busca Avançada 4: Ranking - Total de Gols (GET)
+# Busca Avançada 4: Ranking - Total de Gols (GET)
 
 ### **Descrição técnica**
 Implementado endpoint para retornar o **ranking dos clubes** com base no **total de gols marcados**.
@@ -497,7 +492,7 @@ Implementado endpoint para retornar o **ranking dos clubes** com base no **total
 
 ---
 
-## Busca Avançada 4: Ranking - Total de Vitórias (GET)
+# Busca Avançada 4: Ranking - Total de Vitórias (GET)
 
 ### **Descrição técnica**
 Implementado endpoint para retornar o **ranking dos clubes** baseado no **total de vitórias**.
@@ -516,7 +511,7 @@ Implementado endpoint para retornar o **ranking dos clubes** baseado no **total 
 
 ---
 
-## Busca Avançada 4: Ranking - Total de Jogos (GET)
+# Busca Avançada 4: Ranking - Total de Jogos (GET)
 
 ### **Descrição técnica**
 Implementado endpoint para retornar o **ranking dos clubes** por **total de jogos disputados**.
@@ -535,7 +530,7 @@ Implementado endpoint para retornar o **ranking dos clubes** por **total de jogo
 
 ---
 
-## Filtro Avançado (extra): Goleadas (GET)
+# Filtro Avançado (extra): Goleadas (GET)
 
 ### **Descrição técnica**
 Implementado filtro opcional para goleadas nos endpoints de listagem de partidas.  
@@ -582,7 +577,7 @@ Quando o parâmetro `goleada` é especificado na requisição, a API retorna ape
 
 ---
 
-## Filtro Avançado 2: Mandantes e Visitantes (GET)
+# Filtro Avançado 2: Mandantes e Visitantes (GET)
 
 ### **Descrição técnica**
 Implementado filtro opcional para partidas em que o clube jogou como mandante ou visitante nos endpoints que retornam listas de partidas ou retrospectos. O usuário pode aplicar o filtro adicionando os parâmetros `mandante` e/ou `visitante` à requisição.
@@ -607,7 +602,10 @@ Implementado filtro opcional para partidas em que o clube jogou como mandante ou
 ---
 
 
-## Melhorias futuras:
+## Pendencias e Melhorias futuras:
+- [x] Possibilidade de criar um arquivo utilitário com todos os estados brasileiros e validar a existência antes de criar um clube.
+  (Enum EstadosUF)
+
 - [] Ao retornar a exceção ClubesComPartidasEmHorarioMenorQue48HorasException, 
 listar as datas conflituosas dos clubes e calcular qual o tempo correto para mostrar ao usuario e facilitar o cadastro.
 
