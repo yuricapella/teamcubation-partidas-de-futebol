@@ -12,7 +12,7 @@ import java.util.List;
 public class ClubeUtil {
 
     public static Clube criarClube(Long id) {
-        Clube clube = new Clube("Clube Exemplo", "AM", true, LocalDate.of(2025, 11, 3));
+        Clube clube = new Clube("Clube Exemplo "+ id, "AM", true, LocalDate.of(2025, 11, 3));
         clube.setId(id);
         clube.setDataAtualizacao(null);
         return clube;

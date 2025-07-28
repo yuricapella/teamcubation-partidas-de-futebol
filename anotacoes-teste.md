@@ -842,3 +842,315 @@ Fluxos cobertos validam ordem de chamadas, resposta do serviço de busca, propag
 - [x] Propagação e assert exato da exceção para partida não encontrada
 - [x] Logs de erro e rastreamento
 ---
+
+# Busca Avançada (1 a 3) - Retrospectos
+## Controller
+
+## 1. Buscar retrospecto geral (controller - sucesso, sem partidas e clube inexistente)
+
+#### **Descrição técnica**
+Implementação dos testes automatizados de controller para o endpoint de retrospecto geral de clube. Foram validados todos os fluxos principais: busca de retrospecto com partidas, situação zerada (clube sem jogo) e exceção para clube ausente. O teste cobre diferentes filtros na requisição e garante o contrato do JSON de resposta e o mapeamento de erros conforme o handler.
+
+#### **Métodos/Funções principais**
+- `deveBuscarRetrospecto_comSucesso`
+  - Teste parametrizado cobrindo fluxos de filtro mandante/visitante.
+  - Garante status 200 OK, valida os campos principais do retrospecto (jogos, vitórias, empates, derrotas, gols feitos e sofridos) e dados do clube.
+  - Assegura chamada correta ao método da service com parâmetros esperados.
+- `deveRetornarRetrospectoZerado_quandoNaoHaPartidas`
+  - Simula situação em que o clube existe, mas não possui partidas.
+  - Valida que todos os contadores do retrospecto vêm zerados e o status da resposta é 200 OK.
+- `deveRetornarNotFound_quandoClubeNaoExiste_aoBuscarRetrospecto`
+  - Simula lançamento de exceção de clube não encontrado no service.
+  - Garante retorno HTTP 404, mensagem e código de erro apropriados no JSON, além da chamada singleton ao método da service.
+
+#### **Principais argumentos, entradas e dependências**
+- Endpoint GET `/api/clube/{id}/retrospecto` com parâmetros opcionais via query (mandante, visitante)
+- Service mockada: `BuscarRetrospectoService`
+- Utilização de mocks para o domínio (Clube, Partida, Retrospecto)
+- Corpo JSON esperado validado via asserts de jsonPath para todos os campos principais
+- Handlers globais para mapeamento correto dos erros
+
+#### **Checklist de implementação**
+- [x] Cobertura para cenário feliz com partidas
+- [x] Retorno zerado quando club não possui jogos
+- [x] Fluxo de erro quando clube não existe (404)
+- [x] Garante contrato do JSON de saída em todas as situações
+- [x] Mock e verificar chamada correta ao service para todos os parâmetros e exceções
+---
+
+## 2. Retrospecto contra adversários (controller - sucesso, lista vazia e clube inexistente)
+
+#### **Descrição técnica**
+Implementação dos testes automatizados para o endpoint de retrospecto de clube contra seus adversários. Cobre cenários principais: busca com adversários presentes, resposta vazia quando não há partidas registradas, e erro de clube não encontrado. O teste verifica a construção do DTO de resposta, a integração correta da controller com a service e a resposta HTTP esperada para cada situação.
+
+#### **Métodos/Funções principais**
+- `deveBuscarRetrospectoContraAdversario_comSucesso`
+  - Teste parametrizado que cobre retornos de adversários, validando todos os campos de retrospecto, incluindo vitórias, empates, derrotas, gols e dados do adversário.
+  - Garante que filtros opcionais (mandante, visitante) são respeitados e verificados na chamada do serviço.
+- `deveRetornarListaVaziaDeRetrospectoContraAdversario_quandoNaoTemPartidas`
+  - Simula cenário onde o clube não possui partidas contra adversários, validando resposta 200 OK e array vazio de retrospectos.
+- `deveRetornarNotFound_quandoClubeNaoExiste_aoBuscarRetrospectoContraAdversario`
+  - Simula cenário de clube inexistente, garantindo retorno HTTP 404, mensagem e código de erro adequados.
+
+#### **Principais argumentos, entradas e dependências**
+- Endpoint GET `/api/clube/{id}/retrospectos-adversarios` com filtros opcionais via query (mandante, visitante)
+- Service mockada: `BuscarRetrospectoService`
+- Utilização do DTO `RetrospectoAdversariosResponseDTO` no response
+- Assert de jsonPath sobre todos os atributos relevantes de output, incluindo arrays de adversários e campos individuais
+- Handler global integrado para mapeamento de exceções
+
+#### **Checklist de implementação**
+- [x] Cobertura para cenário feliz com adversários no DTO de resposta
+- [x] Lista de adversários vazia e status 200 quando clube não possui confrontos
+- [x] Retorno de 404 e corpo adequado para clube inexistente
+- [x] Teste inclui asserts de campos do clube e adversários, garantindo contrato do JSON
+- [x] Verifica chamada correta ao método service correspondente em todos os casos
+---
+
+## 3. Retrospecto confronto direto (controller - sucesso, dados zerados e clube inexistente)
+
+#### **Descrição técnica**
+Foram implementados testes automatizados para o endpoint de busca de retrospecto confronto direto entre dois clubes 
+na controller BuscarRetrospectoApiController. 
+Os testes contemplam: fluxo principal com validação detalhada de todas as informações retornadas das listas de retrospectos 
+e partidas; cenário sem partidas/confrontos (retornando arrays e campos zerados); 
+e tratamento de exceção de clube não encontrado com retorno 404. 
+A validação dos valores esperados é centralizada via métodos utilitários no RetrospectoUtil, 
+garantindo assertividade e legibilidade dos casos de teste.
+
+#### **Métodos/Funções principais**
+- `deveBuscarRetrospectoConfronto_comSucesso`  
+  Valida resposta completa com dois retrospectos e duas partidas, utilizando asserts grandes via RetrospectoUtil para garantir todos os campos retornados.
+- `deveRetornarRetrospectoConfronto_comRetrospectosZerados_eListaPartidasVazia`  
+  Testa situação em que não existem partidas entre os clubes, validando arrays vazios/dados zerados na resposta.
+- `deveRetornarNotFound_quandoClubeNaoExiste_aoBuscarRetrospectoConfronto`  
+  Cobre cenário de clube inexistente, forçando exceção e validando status 404 e corpo de erro.
+
+#### **Principais argumentos, entradas e dependências**
+- Endpoint GET `/api/clube/{idClube}/confronto/{idAdversario}`
+- Service mockada: BuscarRetrospectoService
+- Utilitários: RetrospectoUtil para assert de arrays nas respostas JSON
+- DTOs utilizados: Retrospecto, PartidaResponseDTO, RetrospectoConfronto
+- Validações amplas das listas e dos campos individuais de resposta
+
+#### **Checklist de implementação**
+- [x] Testes para fluxo principal de sucesso com arrays completos
+- [x] Testes para arrays e campos zerados em cenário sem partidas
+- [x] Validação do contrato de resposta para clube inexistente (404 e mensagem de erro)
+- [x] Criação e uso de utilitários para grandes asserts de arrays/listas em respostas
+---
+
+## Service
+
+## 1. Retrospecto geral de clube (service - testes unitários BuscarRetrospectoServiceTest)
+
+#### **Descrição técnica**
+Implementação de testes unitários para o serviço responsável pelo cálculo do retrospecto geral de um clube, validando fluxos principais de consulta por filtros (mandante/visitante), retorno zerado em caso de ausência de partidas e resposta a club não encontrado. O teste foi desenvolvido na classe `BuscarRetrospectoServiceTest`, utilizando utilitários para criação de entidades e impressão de resultados, além de garantir a não duplicação de lógica de filtragem. As classes envolvidas são `BuscarRetrospectoService`, `BuscarClubeService`, `PartidaRepository`, `RetrospectoPrintUtil`, `PartidaUtil` e `RetrospectoUtil`.
+
+#### **Métodos/Funções principais**
+- **deveBuscarRetrospectoDeUmClubeComSucesso**
+  - Cobre o cenário de fluxo feliz, validando o cálculo do retrospecto com todos os filtros de mandante/visitante.
+  - Mocka dependências `buscarClubeService` e `partidaRepository`.
+  - Utiliza método de filtro do próprio service para garantir alinhamento com a produção.
+  - Compara todos os atributos do resultado e verifica ordem de interação dos mocks.
+  - Imprime resumo do retrospecto para facilitar depuração.
+
+- **deveRetornarRetrospectoVazio_quandoClubeNaoTerPartidas**
+  - Simula busca de clube existente sem partidas cadastradas.
+  - Valida retorno de retrospecto zerado em todos os campos.
+  - Garante que serviço trata ausência de partidas sem lançar exceção.
+  - Imprime resumo do retrospecto vazio.
+
+- **deveLancarClubeNaoEncontradoException_quandoClubeNaoExistir_aoBuscarRetrospecto**
+  - Cobre cenário de exceção (clube não encontrado).
+  - Mocka serviço para lançamento de `ClubeNaoEncontradoException`.
+  - Usa `assertThrows` para validar propagação da exceção e confere mensagem de erro.
+  - Garante ordem de chamadas e não interação adicional com os mocks.
+  - Imprime mensagem de erro para análise.
+
+#### **Principais argumentos, entradas e dependências**
+- Parâmetros de filtro (`Boolean mandante`, `Boolean visitante`) recebidos pela service.
+- Mocks de `BuscarClubeService` (busca de dados de clube) e `PartidaRepository` (consulta de partidas por mandante/visitante).
+- Utilização de utilitários:
+  - `PartidaUtil.criarPartidaComTesteUtilsTrocandoVisitanteMandante()` para simulação de cenários onde clube é visitante.
+  - `RetrospectoPrintUtil.printResumo()` para sumarizar informações no console durante os testes.
+- O método privado de filtro da service foi tornado default para reuso nos testes, evitando duplicação de lógica de filtragem.
+
+#### **Checklist de implementação**
+- [x] Cobertura completa de cenário feliz com múltiplas combinações de filtros (mandante, visitante)
+- [x] Cobertura de cenário com clube sem partidas (retorno zerado)
+- [x] Cobertura de cenário com clube inexistente (exceção)
+- [x] Criação de partida invertida para simular clube como visitante
+- [x] Utilitário para impressão do resultado dos testes e mensagens de erro
+- [x] Validação da ordem de chamadas às dependências com InOrder do Mockito
+- [x] Não duplicação de lógica de filtro no teste, utilizando método de filtro do service
+- [x] Organização e padronização dos asserts para todos os campos relevantes no resultado
+---
+
+## 2. Retrospecto de um clube contra seus adversários (service - testes unitários BuscarRetrospectoServiceTest)
+
+#### **Descrição técnica**
+Testes unitários validam a consulta do retrospecto do clube contra seus adversários, seguindo o requisito funcional da aplicação. Avalia diferentes combinações de filtros mandante/visitante, garante que o agrupamento por adversário, o cálculo de estatísticas e o tratamento de exceções estejam adequados de acordo com as regras do domínio. Utiliza mocks para dependências, métodos utilitários para montagem dos cenários e impressão dos resultados.
+
+#### **Métodos/Funções principais**
+- **deveBuscarRetrospectoContraAdversariosComSucesso**
+  - Cobre cenários de fluxo feliz, agrupando partidas por adversário após aplicação dos filtros de mandante e visitante.
+  - Mocka BuscarClubeService para retorno do clube e PartidaRepository para as listas simuladas de partidas.
+  - Utiliza método de filtragem do próprio service, garantindo aderência à regra de negócio.
+  - Monta resultado esperado via utilitários e valida todos os campos relevantes do DTO para cada adversário.
+  - Verifica ordem das interações dos mocks e imprime resumo do resultado com RetrospectoPrintUtil.
+
+- **deveRetornarRetrospectoContraAdversariosVazio_quandoClubeNaoTerPartidas**
+  - Simula cenário de clube existente sem partidas cadastradas.
+  - Garante que a resposta contenha apenas dados do clube e lista de adversários vazia.
+  - Assegura que não é lançada exceção e imprime o resumo do resultado vazio para depuração.
+
+- **deveLancarClubeNaoEncontradoException_quandoClubeNaoExistir_aoBuscarRetrospectoAdversario**
+  - Cobre cenário de clube inexistente, forçando BuscarClubeService a lançar ClubeNaoEncontradoException.
+  - Usa assertThrows para validar a propagação correta da exceção e compara mensagem de erro.
+  - Verifica que as dependências são chamadas apenas até o ponto de exceção e imprime mensagem para análise.
+
+#### **Principais argumentos, entradas e dependências**
+- Parâmetros: identificador do clube (Long), filtro Boolean mandante e visitante.
+- DTO principal: `RetrospectoAdversariosResponseDTO`, listando totais de jogos, vitórias, empates, derrotas, gols feitos e sofridos por adversário.
+- Utilização de PartidaUtil para preparar partidas simuladas nos filtros de teste.
+- Dependências mockadas: BuscarClubeService e PartidaRepository.
+- Impressão de informações resumidas pelo método printResumo de RetrospectoPrintUtil.
+- Verificação de ordem de chamadas dos mocks via InOrder.
+
+#### **Checklist de implementação**
+- [x] Cobertura completa dos cenários positivos para diferentes filtros
+- [x] Validação do retorno de lista vazia em ausência de partidas
+- [x] Propagação e validação de exceção para clube inexistente
+- [x] Uso de utilitários para montagem de partidas e impressão de saídas
+- [x] Assert detalhado nos campos do DTO e controle da ordem das dependências mockadas
+---
+
+## 3. Confronto direto entre clubes (service - sucesso, confrontos ausentes e clube inexistente)
+
+#### **Descrição técnica**
+Implementação de testes unitários para o serviço responsável por consultar 
+o retrospecto de confronto direto entre dois clubes, 
+retornando dados estatísticos (vitórias, empates, derrotas, gols feitos e sofridos) 
+para ambos os lados e a lista de partidas desse confronto. 
+Os testes seguem rigorosamente o requisito funcional, verificando cenários de sucesso, 
+ausência de confrontos (campos zerados/lista vazia) e clubes inexistentes (exceção lançada). 
+O teste utiliza utilitários de montagem e mapeamento de dados, além de mocks para dependências externas, 
+e realiza asserções detalhadas em todos os campos relevantes dos DTOs.
+
+#### **Métodos/Funções principais**
+- **deveBuscarRetrospectoConfrontoComSucesso**
+  - Cobre o fluxo feliz, simulando clubes existentes e partidas entre eles.
+  - Mocka BuscarClubeService para ambos os clubes e PartidaRepository para as partidas do confronto.
+  - Utiliza mapeamento para DTOs de resposta e compara todos os campos relevantes dos retrospectos e das partidas.
+  - Realiza asserts campo a campo para garantir total aderência ao contrato de resposta.
+  - Verifica o sequenciamento das interações com os mocks.
+
+- **deveRetornarRetrospectoZeradoEListaPartidaVazia_quandoNaoHouverConfrontoEntreOsTimes**
+  - Garante que o retorno contenha retrospecto zerado para ambos os clubes e uma lista de partidas vazia quando não houver confronto registrado.
+  - Assegura que todos os campos estatísticos são assertivamente validados como zero.
+  - Confirma a resposta correta da chamada mockada sem exceção.
+
+- **deveRetornarClubeNaoEncontrado_quandoClubeNaoExistir_aoBuscarRetrospectoConfronto**
+  - Simula ausência de um dos clubes ao forçar a service a lançar ClubeNaoEncontradoException.
+  - Usa assertThrows para validar o lançamento e a mensagem da exceção, confirmando contrato de erro.
+  - Checa que as interações com mocks acontecem apenas até o ponto de falha.
+
+- **deveRetornarClubeNaoEncontrado_quandoAdversarioNaoExistir_aoBuscarRetrospectoConfronto**
+  - Testa o cenário onde o adversário não existe, mockando BuscaClubeService para lançar exceção.
+  - Assegura propagação e mensagem correta da exceção e valida ausência de efeitos colaterais nas chamadas subsequentes.
+
+#### **Principais argumentos, entradas e dependências**
+- Parâmetros de entrada: identificador dos clubes (Long), enviados para a consulta na service.
+- DTO e objeto validados: RetrospectoConfronto contendo lista de Retrospecto (um para cada clube) e lista de PartidaResponseDTOs.
+- Utilização dos utilitários ClubeUtil, PartidaUtil, RetrospectoUtil e mapeamento com PartidaResponseMapper para preparar os objetos e cenários.
+- Mocks: BuscarClubeService e PartidaRepository para isolar a lógica da camada de serviço.
+- Impressão de mensagens e resultados via PrintUtil para depuração visual durante a execução dos testes.
+
+#### **Checklist de implementação**
+- [x] Teste para cenário de sucesso com clubes existentes e partidas registradas
+- [x] Teste para cenário de partidas ausentes entre os clubes, validando resposta zerada e lista vazia
+- [x] Teste para ausência de clube principal existente, validando exceção e mensagem
+- [x] Teste para ausência de clube adversário existente, validando exceção e mensagem
+- [x] Mock e isola comportamentos externos das dependências
+- [x] Assert detalhado nos campos de retrospecto e partidas retornadas, validando ordem dos mocks
+---
+
+# Busca Avançada (4) - Ranking
+## Controller
+
+## 1. Ranking de clubes (controller - ranking geral, lista vazia e exceção por tipo inválido)
+
+#### **Descrição técnica**
+Essa suíte de testes cobre o endpoint de ranking da RankingApiController, garantindo o comportamento esperado em todos os cenários definidos pelo domínio: busca de rankings reais (pontuação, gols, vitórias, jogos), tratamento correto quando não há clubes elegíveis, e resposta robusta para requisições com tipo de ranking inválido. Os testes utilizam Mockito para mockar a service e garantir respostas controladas, e MockMvc para validar a estrutura exata do JSON retornado e o status adequado de cada casos.
+
+#### **Métodos/Funções principais**
+- `deveBuscarRankingPorClub`
+  - Teste parametrizado cobrindo todos os tipos possíveis de ranking.
+  - Realiza chamada GET no endpoint passando o parâmetro tipoRanking.
+  - Valida status 200, estrutura e valores de cada clube retornado (nome, estado, total), posição correta no array e respeito à regra dos clubes zerados (clubes com total 0 não aparecem).
+- `deveRetornarListaVazia_quandoNaoExistiremClubes`
+  - Teste parametrizado para quando o ranking não possui nenhum clube (resposta completamente vazia).
+  - Valida array vazio no corpo e status 200 OK.
+- `deveLancarExcecao_quandoTipoRankingInvalido`
+  - Simula cenário em que foi solicitado um tipo de ranking inexistente.
+  - Verifica se o controller responde 400 BAD REQUEST e retorna objeto JSON contendo mensagem clara de erro e o campo codigoErro.
+  - Confirma também que a service foi chamada apenas uma vez.
+
+#### **Principais argumentos, entradas e dependências**
+- Endpoint testado: `GET /api/clube/ranking` com parâmetro obrigatório `tipoRanking` na query
+- Service mockada: `RankingService`
+- Utilização de DTOs de Ranking e auxílio de RankingUtil/RetrospectoUtil para gerar mocks conforme o tipo
+- Verificações de estrutura JSON, status HTTP e conteúdo dos arrays retornados para todas as variações de ranking
+- Checagem de exceção e mensagens de erro para cenários inválidos de chamada
+
+#### **Checklist de implementação**
+- [x] Cobertura completa dos fluxos principais do endpoint de ranking
+- [x] Teste parametrizado para todos os tipos de ranking implementados
+- [x] Assert detalhado para campos de nome, estado, total, ausência de clubes zerados e posição
+- [x] Assert de array vazio no cenário sem clubes válidos
+- [x] Validação da exceção por tipo de ranking inválido, incluindo status e corpo JSON padronizado
+- [x] Uso consistente de mocks para isolamento dos testes de controller
+---
+
+## Service
+
+## 1. Ranking de clubes (service - cálculo ranking, regras de exclusão e exceção para tipo inválido)
+
+#### **Descrição técnica**
+Implementa uma bateria de testes unitários para a classe RankingService, 
+responsável por calcular rankings de clubes com base em diferentes critérios, 
+utilizando o padrão Strategy para cálculo dinâmico conforme o tipo solicitado. 
+Os testes validam todos os fluxos principais: cálculo bem-sucedido de todos os tipos de ranking, 
+resposta vazia quando não há clubes aptos, e lançamento de exceção para parâmetro de ranking inválido. 
+O utilitário RankingUtil abstrai a criação de estratégias para evitar duplicação e facilitar a manutenção da cobertura.
+
+#### **Métodos/Funções principais**
+- `deveBuscarRanking_comSucesso`
+  - Teste parametrizado cobrindo as estratégias TOTAL_PONTOS, TOTAL_GOLS, TOTAL_JOGOS e TOTAL_VITORIAS
+  - Cria clubes, retrospectos e partidas mockadas, monta strategies e valida tamanho, conteúdo, ordem, valores dos campos retornados, e regra de não inclusão de clubes zerados
+  - Confirma ordenação decrescente do campo total e verifica interações com repositórios mockados
+
+- `deveRetornarListaVazia_quandoNaoExistiremClubes`
+  - Testa resposta do service quando não há clubes cadastrados ou elegíveis, garantindo lista vazia e ordens de chamada nos repositórios
+
+- `deveLancarExcecao_quandoTipoRankingInvalido`
+  - Garante que a service lança ResponseStatusException com status 400 e mensagem adequada quando o tipo informado não corresponde a nenhuma strategy registrada
+  - Valida ausência de interações com repositórios no caso de inválido
+
+#### **Principais argumentos, entradas e dependências**
+- Service testada: `RankingService`
+- Dependências mockadas: `ClubeRepository` e `PartidaRepository`
+- Utilitário: `RankingUtil.criarCalculadoraRanking` para instanciar a strategy correspondente conforme o tipo de ranking
+- Regras de negócio validadas: apenas clubes com total > 0 aparecem nos rankings, resultados sempre ordenados por total decrescente
+- Exception handling validado para tipo de ranking inválido
+
+#### **Checklist de implementação**
+- [x] Testes para todos os tipos de ranking implementados via parametrização
+- [x] Cobertura de retorno de lista vazia para clubes/partidas ausentes
+- [x] Verificação da ordem e dos campos de cada item do ranking (nome, estado, total)
+- [x] Assert que clubes com total 0 não aparecem
+- [x] Verificação de exceção 400 customizada para tipos inválidos
+- [x] Uso de utilitários para abstração da criação das strategies e validações de chamadas nos repositórios mocked
+- [x] Garantia de alinhamento com todos os requisitos do domínio de ranking
+---

@@ -1,7 +1,9 @@
 package br.com.meli.teamcubation_partidas_de_futebol.partida.util;
 
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
+import br.com.meli.teamcubation_partidas_de_futebol.clube.util.ClubeUtil;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;
+import br.com.meli.teamcubation_partidas_de_futebol.estadio.util.EstadioUtil;
 import br.com.meli.teamcubation_partidas_de_futebol.partida.model.Partida;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -49,5 +51,44 @@ public class PartidaUtil {
         }
 
         return new PageImpl<>(partidas, org.springframework.data.domain.PageRequest.of(0, 10), quantidade);
+    }
+
+    public static Partida criarPartidaComTesteUtils() {
+        Clube clubeMandante = ClubeUtil.criarClube(1L);
+        Clube clubeVisitante = ClubeUtil.criarClube(2L);
+        Estadio estadio = EstadioUtil.criarEstadio(1L);
+        LocalDateTime dataHora = LocalDateTime.of(2023, 7, 10, 16, 0, 0);
+        return new Partida(estadio, clubeMandante, clubeVisitante, 0, 0, dataHora);
+    }
+
+    public static Partida criarPartidaComTesteUtilsInformandoIds(Long idClube, Long idAdversario) {
+        Clube clubeMandante = ClubeUtil.criarClube(idClube);
+        Clube clubeVisitante = ClubeUtil.criarClube(idAdversario);
+        Estadio estadio = EstadioUtil.criarEstadio(1L);
+        LocalDateTime dataHora = LocalDateTime.of(2023, 7, 10, 16, 0, 0);
+        return new Partida(estadio, clubeMandante, clubeVisitante, 0, 0, dataHora);
+    }
+
+    public static Partida criarPartidaComTesteUtilsTrocandoVisitanteMandante() {
+        Clube clubeMandante = ClubeUtil.criarClube(2L);
+        Clube clubeVisitante = ClubeUtil.criarClube(1L);
+        Estadio estadio = EstadioUtil.criarEstadio(1L);
+        LocalDateTime dataHora = LocalDateTime.of(2023, 7, 10, 16, 0, 0);
+        return new Partida(estadio, clubeMandante, clubeVisitante, 0, 0, dataHora);
+    }
+
+    public static List<Partida> criarListPartidasComTesteUtils(int quantidade) {
+        List<Partida> partidas = new ArrayList<>();
+        for (int i = 1; i <= quantidade; i++) {
+            Partida partida = criarPartidaComTesteUtils();
+            partida.setId((long) i);
+
+            partida.setGolsMandante(2 + i);
+            partida.setGolsVisitante(1 + (i % 3));
+            partida.setDataHora(partida.getDataHora().plusDays(i - 1));
+
+            partidas.add(partida);
+        }
+        return partidas;
     }
 }
