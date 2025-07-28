@@ -1,11 +1,12 @@
 package br.com.meli.teamcubation_partidas_de_futebol.estadio.controller;
 
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.AtualizarEstadioRequestDTO;
+import br.com.meli.teamcubation_partidas_de_futebol.estadio.dto.EstadioEnderecoResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.exception.EstadioApiExceptionHandler;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.exception.EstadioJaExisteException;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.exception.EstadioNaoEncontradoException;
-import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.service.AtualizarEstadioService;
+import br.com.meli.teamcubation_partidas_de_futebol.estadio.util.EstadioUtil;
 import br.com.meli.teamcubation_partidas_de_futebol.global_exception.GlobalApiExceptionHandler;
 import br.com.meli.teamcubation_partidas_de_futebol.util.JsonUtil;
 import br.com.meli.teamcubation_partidas_de_futebol.util.PrintUtil;
@@ -39,7 +40,6 @@ public class AtualizarEstadioApiControllerTest {
     MockMvc mockMvc;
 
     final String PATH_COM_ID = "/api/estadio/atualizar/{id}";
-    AtualizarEstadioRequestDTO atualizarDTO = new AtualizarEstadioRequestDTO("Estadio de time atualizado");
 
     @BeforeEach
     public void setUp(TestInfo testeInfo) {
@@ -50,57 +50,69 @@ public class AtualizarEstadioApiControllerTest {
     }
 
     @Test
-    void deveAtualizarEstadioComSucessoERetornar200OK() throws Exception {
+    void deveAtualizarEstadioComSucessoERetornar200Ok() throws Exception {
         Long id = 1L;
-        Estadio estadioAtualizado = new Estadio();
-        estadioAtualizado.setId(id);
-        estadioAtualizado.setNome(atualizarDTO.getNome());
+        AtualizarEstadioRequestDTO atualizarDTO = new AtualizarEstadioRequestDTO("Estadio Atualizado", "88032005");
+        EstadioEnderecoResponseDTO estadioEsperado = EstadioUtil.criaEstadioEnderecoResponseDTO();
 
-        Mockito.when(atualizarEstadioService.atualizarEstadio(Mockito.any(AtualizarEstadioRequestDTO.class),
-                        Mockito.eq(id))).thenReturn(estadioAtualizado);
+        Mockito.when(atualizarEstadioService.atualizarEstadio(
+                        Mockito.any(AtualizarEstadioRequestDTO.class),
+                        Mockito.eq(id)))
+                .thenReturn(estadioEsperado);
 
-        mockMvc.perform(put(PATH_COM_ID,id)
+        mockMvc.perform(put(PATH_COM_ID, id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.asJsonString(atualizarDTO)))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome").value(estadioEsperado.nome()))
+                .andExpect(jsonPath("$.endereco.cep").value(estadioEsperado.endereco().getCep()))
+                .andExpect(jsonPath("$.endereco.logradouro").value(estadioEsperado.endereco().getLogradouro()))
+                .andExpect(jsonPath("$.endereco.bairro").value(estadioEsperado.endereco().getBairro()))
+                .andExpect(jsonPath("$.endereco.localidade").value(estadioEsperado.endereco().getLocalidade()))
+                .andExpect(jsonPath("$.endereco.uf").value(estadioEsperado.endereco().getUf()))
+                .andExpect(jsonPath("$.endereco.estado").value(estadioEsperado.endereco().getEstado()))
                 .andDo(MockMvcResultHandlers.print());
 
         Mockito.verify(atualizarEstadioService, Mockito.times(1))
                 .atualizarEstadio(Mockito.argThat(dto ->
-                        dto.getNome().equals("Estadio de time atualizado")), Mockito.eq(id));
+                        dto.getNome().equals(atualizarDTO.getNome()) &&
+                                dto.getCep().equals(atualizarDTO.getCep())), Mockito.eq(id));
     }
 
     @ParameterizedTest
     @CsvSource({
-            "A,nome,O nome tem que ter no minimo três letras;",
-            "12345!,nome,O nome deve conter apenas letras sem acento e espaços"
+            "A,88032005,nome,O nome tem que ter no minimo três letras",
+            "12345!,88032005,nome,O nome deve conter apenas letras sem acento e espaços",
+            "Estadio Exemplo,1234567a,cep,O cep deve conter exatamente 8 dígitos numéricos"
     })
     void deveRetornarBadRequestQuandoAtualizarEstadioComDtoInvalido(
-            String nome,
+            String nome, String cep,
             String campoErro, String mensagemEsperada
     ) throws Exception {
         Long id = 1L;
+        AtualizarEstadioRequestDTO dtoInvalido = new AtualizarEstadioRequestDTO(nome, cep);
 
-        AtualizarEstadioRequestDTO dtoInvalido = new AtualizarEstadioRequestDTO(nome);
-
-        mockMvc.perform(put(PATH_COM_ID,id)
+        mockMvc.perform(put(PATH_COM_ID, id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.asJsonString(dtoInvalido)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.codigoErro").value("CAMPO_INVALIDO"))
                 .andExpect(jsonPath("$.errors." + campoErro).value(mensagemEsperada))
                 .andDo(MockMvcResultHandlers.print());
-
     }
+
 
     @Test
     void deveRetornarConflictQuandoNomeJaCadastrado() throws Exception {
         Long id = 1L;
-        Mockito.when(atualizarEstadioService.atualizarEstadio
-                (Mockito.any(AtualizarEstadioRequestDTO.class),Mockito.eq(id)))
+        AtualizarEstadioRequestDTO atualizarDTO = new AtualizarEstadioRequestDTO("Estadio Atualizado", "88032005");
+
+        Mockito.when(atualizarEstadioService.atualizarEstadio(
+                        Mockito.any(AtualizarEstadioRequestDTO.class),
+                        Mockito.eq(id)))
                 .thenThrow(new EstadioJaExisteException());
 
-        mockMvc.perform(put(PATH_COM_ID,id)
+        mockMvc.perform(put(PATH_COM_ID, id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.asJsonString(atualizarDTO)))
                 .andExpect(status().isConflict())
@@ -109,15 +121,17 @@ public class AtualizarEstadioApiControllerTest {
                 .andDo(MockMvcResultHandlers.print());
 
         Mockito.verify(atualizarEstadioService, Mockito.times(1))
-                .atualizarEstadio(Mockito.any(AtualizarEstadioRequestDTO.class),Mockito.eq(id));
+                .atualizarEstadio(Mockito.any(AtualizarEstadioRequestDTO.class), Mockito.eq(id));
     }
 
     @Test
     void deveRetornarNotFoundQuandoAtualizarEstadioComIdInexistente() throws Exception {
         Long idInvalido = 999L;
+        AtualizarEstadioRequestDTO atualizarDTO = new AtualizarEstadioRequestDTO("Estadio Atualizado", "88032005");
 
-        Mockito.when(atualizarEstadioService.atualizarEstadio
-                (Mockito.any(AtualizarEstadioRequestDTO.class), Mockito.eq(idInvalido)))
+        Mockito.when(atualizarEstadioService.atualizarEstadio(
+                        Mockito.any(AtualizarEstadioRequestDTO.class),
+                        Mockito.eq(idInvalido)))
                 .thenThrow(new EstadioNaoEncontradoException(idInvalido));
 
         mockMvc.perform(put(PATH_COM_ID, idInvalido)
@@ -125,7 +139,7 @@ public class AtualizarEstadioApiControllerTest {
                         .content(JsonUtil.asJsonString(atualizarDTO)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.codigoErro").value("ESTADIO_NAO_ENCONTRADO"))
-                .andExpect(jsonPath("$.mensagem").value("Estadio com id 999 não encontrado."))
+                .andExpect(jsonPath("$.mensagem").value("Estadio com id " + idInvalido + " não encontrado."))
                 .andDo(MockMvcResultHandlers.print());
 
         Mockito.verify(atualizarEstadioService, Mockito.times(1))
