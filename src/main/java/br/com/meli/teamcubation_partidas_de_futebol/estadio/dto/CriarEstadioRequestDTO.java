@@ -13,8 +13,9 @@ public class CriarEstadioRequestDTO {
     public CriarEstadioRequestDTO() {
     }
 
-    public CriarEstadioRequestDTO(String nome) {
+    public CriarEstadioRequestDTO(String nome, String cep) {
         this.nome = nome;
+        this.cep = cep;
     }
 
     public String getNome() {

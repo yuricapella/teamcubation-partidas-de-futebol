@@ -374,79 +374,89 @@ A classe `BuscarEstadioApiControllerTest` cobre cenários principais de busca pa
 - [x] Uso do PrintUtil para logar início dos testes.
 ---
 
-## 2. Criar estádio controller (POST - sucesso, validação, conflito de nome)
+## 2. Criar estádio controller (POST - sucesso, validação, conflito de nome, validação e resposta com cep e endereço completo)
 
 #### **Descrição técnica**
-Foram implementados testes unitários para o controller responsável pelo cadastro de estádios de futebol.
-A classe `CriarEstadioApiControllerTest` cobre os principais cenários de criação, incluindo fluxo de cadastro bem-sucedido, erros de validação do DTO e conflito de nome já existente.
+Foram implementados testes unitários para o controller responsável pelo cadastro de estádios de futebol, já incluindo o novo campo obrigatório `cep` e a resposta com DTO enriquecido pelo endereço completo via integração com ViaCep.  
+A classe `CriarEstadioApiControllerTest` cobre cenários de criação bem-sucedida, erros de validação tanto do nome quanto do cep, e detecção de conflito quando o nome já está cadastrado. Todos os fluxos utilizam o novo DTO de resposta com endereço detalhado.
 
 #### **Métodos de teste**
-- `deveCriarEstadioComSucessoERetornar201Created()`
-  - Testa o endpoint de criação (`/api/estadio/criar`) com dados válidos.
-  - Mocka o service para retornar o estádio criado.
-  - Verifica status 201 (Created) e garante via Mockito.verify que o service foi chamado com o nome correto.
-- `deveRetornarBadRequestQuandoCriarEstadioComDtoInvalido(String nome, String campoErro, String mensagemEsperada)`
-  - Teste parametrizado via @CsvSource para cenários de erro do DTO (`@Size`, `@Pattern`), validando status 400, campo de erro e mensagem específica.
-- `deveRetornarConflictQuandoNomeJaCadastrado()`
-  - Testa o cenário de nome duplicado, simulando EstadioJaExisteException.
-  - Verifica status 409, código e mensagem customizada no JSON de erro.
+- **`deveCriarEstadioComSucessoERetornar201Created()`**
+  - Testa o endpoint de criação (`/api/estadio/criar`) com dados válidos de nome e cep.
+  - Mocka o service para retornar um `EstadioEnderecoResponseDTO` com nome e todos os campos de endereço.
+  - Verifica status 201 (Created) e valida todos os campos do JSON de resposta (nome, cep, logradouro, bairro, localidade, uf, estado).
+  - Garante via Mockito.verify que o service foi chamado com os argumentos de nome e cep corretos.
+
+- **`deveRetornarBadRequestQuandoCriarEstadioComDtoInvalido(String nome, String cep, String campoErro, String mensagemEsperada)`**
+  - Teste parametrizado cobrindo cenários de erro do DTO: nome curto, nome com caracteres inválidos e cep fora do padrão (não-numérico ou tamanho incorreto).
+  - Valida status 400, código de erro e mensagem específica no campo correspondente do erro.
+
+- **`deveRetornarConflictQuandoNomeJaCadastrado()`**
+  - Testa o cenário de nome duplicado, simulando lançamento de `EstadioJaExisteException` pelo service.
+  - Valida status 409, código de erro customizado e mensagem informativa no JSON de erro.
 
 #### **Principais argumentos e dependências**
 - **Controller/Endpoint testado:**
   - `/api/estadio/criar` [POST]
-- **DTO de request:** `CriarEstadioRequestDTO` (validações de tamanho e formato no campo `nome`)
-- **Mocks do service:** Uso de Mockito para simular retorno do estádio criado e lançamento de exceção de nome duplicado
-- **Configuração do MockMvc:** Inclui ControllerAdvices para tratamento global e de exceção de estádio
-- **Verificação dos argumentos com Mockito.verify** e validadores específicos no DTO
-- **Impressão do início dos testes** via PrintUtil
+- **DTO de request:** `CriarEstadioRequestDTO` (validação obrigatória de nome e **cep** — mínimo 3 letras, letras e espaços, cep com exatamente 8 dígitos numéricos)
+- **Mocks do service:** Uso de Mockito para simular criação bem-sucedida (`EstadioEnderecoResponseDTO`) e exceção para nome duplicado.
+- **Configuração do MockMvc:** Inclui ControllerAdvices para tratamento global e de exceção de estádio.
+- **Verificação dos argumentos:** Com Mockito.verify, conferindo nome e cep enviados.
+- **Validação do DTO de resposta:** Todos os campos de endereço validados via jsonPath no retorno do endpoint (nome, cep, logradouro, bairro, localidade, uf, estado).
+- **Impressão dos testes:** Via PrintUtil.
 
 #### **Checklist de implementação**
-- [x] Teste para POST de sucesso com status 201 Created.
-- [x] Teste parametrizado cobrindo validação de campo do DTO e retorno 400.
+- [x] Teste para POST de sucesso com status 201 Created e resposta detalhada incluindo todos os campos de endereço.
+- [x] Teste parametrizado cobrindo validação dos campos nome e cep do DTO e retorno 400.
 - [x] Teste para exceção de nome de estádio duplicado com retorno 409 Conflict.
 - [x] Setup do MockMvc com ControllerAdvices.
-- [x] Verificação rigorosa da chamada ao service e mensagens de erro em JSON.
+- [x] Verificação precisa dos argumentos enviados para o service.
+- [x] Cobertura completa da resposta de erro em formato JSON.
 - [x] Utilização de PrintUtil para rastreabilidade nos testes.
+- [x] Implementa método de EstadioUtil para criação de mocks.
 ---
 
-## 3. AtualizarEstadioApiControllerTest (testes - atualização, validação, conflitos e inexistência de estádio)
+## 3. AtualizarEstadioApiControllerTest (testes - atualização, validação de nome e cep, conflitos e inexistência de estádio)
 
 #### **Descrição técnica**
-A classe `AtualizarEstadioApiControllerTest` valida, de forma isolada, os principais fluxos do endpoint de atualização de estádios (`AtualizarEstadioApiController`). Os testes cobrem cenários de sucesso, validações de entrada (nome inválido), conflitos (nome já existente) e não encontrados (ID inexistente). São utilizados Mockito para mockar dependências e MockMvc configurado com handlers globais e específicos.
+A classe `AtualizarEstadioApiControllerTest` valida os principais fluxos do endpoint de atualização de estádios na controller, considerando agora o campo `cep` como obrigatório e validando tanto nome quanto cep no DTO de atualização. Os testes cobrem os cenários de atualização bem-sucedida com endereço detalhado, erros de validação em ambos os campos, conflito de nome já cadastrado e inexistência de id. Todos os retornos, asserts e respostas seguem o modelo enriquecido e as regras definidas pelo novo contrato.
 
 #### **Métodos/Funções principais**
 - **setUp**
-  - Inicializa MockMvc para testar a controller isoladamente, aplicando o `GlobalApiExceptionHandler` e `EstadioApiExceptionHandler` para tratamento de erros.
-- **deveAtualizarEstadioComSucessoERetornar200OK**
-  - Testa fluxo principal de sucesso para atualização de estádio. Simula retorno correto da service e valida interação e resposta 200.
+  - Inicializa o MockMvc para testes isolados da controller, aplicando GlobalApiExceptionHandler e EstadioApiExceptionHandler para tratamento consistente dos erros.
+- **deveAtualizarEstadioComSucessoERetornar200Ok**
+  - Testa o fluxo feliz de atualização, simulando retorno do DTO enriquecido da service, validando status 200 e todos os campos da resposta JSON (nome e todos de endereço).
+  - Confere que o service é chamado corretamente com nome e cep recebidos.
 - **deveRetornarBadRequestQuandoAtualizarEstadioComDtoInvalido**
-  - Utiliza dados parametrizados para testar diferentes erros de validação do DTO (`nome` muito curto ou com caracteres inválidos). Espera erro 400 e presença do campo de erro e mensagem específica.
+  - Utiliza teste parametrizado para simular diferentes falhas de validação em nome e em cep.
+  - Espera status 400, presença do código de erro e mensagem específica no campo correspondente para cada cenário.
 - **deveRetornarConflictQuandoNomeJaCadastrado**
-  - Simula tentativa de atualização com nome já existente, força exceção customizada (`EstadioJaExisteException`) e valida retorno 409 com mensagem apropriada.
+  - Simula conflito de nome já existente usando exception customizada, validando status 409, código e mensagem de erro apropriados.
 - **deveRetornarNotFoundQuandoAtualizarEstadioComIdInexistente**
-  - Simula cenário em que o ID não existe, disparando `EstadioNaoEncontradoException` e garantindo status 404 Not Found, código e mensagem específicos.
+  - Simula tentativa de atualizar estádio com id não cadastrado, dispara exception customizada e valida status 404, código e mensagem personalizados da resposta JSON.
 
 #### **Principais argumentos, entradas e dependências**
 - **Endpoint testado:** `PUT /api/estadio/atualizar/{id}`
-- **DTO:** `AtualizarEstadioRequestDTO` — recebe campo `nome`, validado com regras mínimas de tamanho e padrão de caracteres
+- **DTO:** `AtualizarEstadioRequestDTO` — recebe campos `nome` e `cep`, ambos obrigatórios e validados quanto a tamanho e padrão de caracteres/dígitos
 - **Dependências Mockadas:**
-  - `AtualizarEstadioService` para orquestração dos fluxos de atualização
-  - Exceções customizadas: `EstadioJaExisteException`, `EstadioNaoEncontradoException`
-  - Utilização de `JsonUtil` para serialização dos objetos
-  - Handlers globais/local para tratamento e mapeamento de erros na resposta
+  - AtualizarEstadioService para orquestração dos fluxos de atualização
+  - Exceções customizadas: EstadioJaExisteException, EstadioNaoEncontradoException
+  - JsonUtil para serialização dos objetos enviados/recebidos
+  - Handlers globais e locais para tratamento e mapeamento de erros no MockMvc
 - **Validações:**
-  - Tamanho e padrão do nome
+  - Regras de negócio e tamanho de nome
+  - Formato e obrigatoriedade do cep (8 dígitos)
   - Conflito de nomes já cadastrados
-  - Existência do estádio pelo ID informado
+  - Existência do estádio pelo id informado
 
 #### **Checklist de implementação**
-- [x] Fluxo principal de atualização de estádio funcionando e validado (status 200 OK)
-- [x] Validação de entradas obrigatórias e regras de negócio (nome)
-- [x] Testes para tratamento de conflito (nome duplicado) com status 409
-- [x] Testes para ID inexistente retornando status 404 e mensagens customizadas
-- [x] Configuração dos handlers de exceção específicos e globais na MockMvc
-- [x] Uso de mocks para isolar camada de controller dos serviços reais
-- [x] Cobertura para mensagens, códigos de erro e estrutura da resposta JSON
+- [x] Fluxo principal de atualização de estádio com nome e cep obrigatórios, validando status 200 e resposta detalhada
+- [x] Testes de borda e parametrizados para validação dos campos nome e cep (retornando status 400 e mensagens customizadas)
+- [x] Testes para conflito de nome duplicado (status 409 e mensagem apropriada)
+- [x] Teste para id inexistente, status 404 e mensagem específica
+- [x] Handlers e configuração de MockMvc cobrindo todos os fluxos de erro
+- [x] Uso de mocks para isolar controller dos serviços reais
+- [x] Cobertura para estrutura da resposta JSON e campos enriquecidos
 ---
 
 ## Service
