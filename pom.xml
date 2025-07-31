@@ -9,6 +9,7 @@
     <modules>
 
         <module>partidas-de-futebol-api</module>
+        <module>partidas-de-futebol-mensageria</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
