@@ -6,6 +6,7 @@ import br.com.meli.teamcubation_partidas_de_futebol.estadio.exception.EstadioApi
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.exception.EstadioNaoEncontradoException;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.model.Estadio;
 import br.com.meli.teamcubation_partidas_de_futebol.estadio.service.BuscarEstadioService;
+import br.com.meli.teamcubation_partidas_de_futebol.estadio.util.EstadioUtil;
 import br.com.meli.teamcubation_partidas_de_futebol.global_exception.GlobalApiExceptionHandler;
 import br.com.meli.teamcubation_partidas_de_futebol.util.PrintUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -98,8 +99,7 @@ public class BuscarEstadioApiControllerTest {
     @Test
     void deveBuscarEstadioPorIdComSucesso() throws Exception {
         Long id = 1L;
-        Estadio estadio = new Estadio("estadio de time");
-        estadio.setId(id);
+        Estadio estadio = EstadioUtil.criarEstadio(id);
         EstadioResponseDTO estadioDTO = EstadioResponseMapper.toEstadioResponseDTO(estadio);
 
         Mockito.when(buscarEstadioService.buscarEstadioPorId(id)).thenReturn(estadio);

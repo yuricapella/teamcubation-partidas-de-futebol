@@ -22,12 +22,13 @@ import java.util.Optional;
 public class BuscarEstadioServiceTest {
     BuscarEstadioService buscarEstadioService;
     EstadioRepository estadioRepository;
+    EnderecoViaCepClient enderecoViaCepClient;
 
     @BeforeEach
     void setUp(TestInfo testInfo) {
         PrintUtil.printInicioDoTeste(testInfo.getDisplayName());
         estadioRepository = Mockito.mock(EstadioRepository.class);
-        buscarEstadioService = new BuscarEstadioService(estadioRepository);
+        buscarEstadioService = new BuscarEstadioService(estadioRepository,enderecoViaCepClient);
     }
 
     @ParameterizedTest
