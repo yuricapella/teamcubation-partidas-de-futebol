@@ -1,4 +1,4 @@
-package br.com.meli.teamcubation_partidas_de_futebol.global_rabbitmq;
+package br.com.meli.teamcubation_partidas_de_futebol.config;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;

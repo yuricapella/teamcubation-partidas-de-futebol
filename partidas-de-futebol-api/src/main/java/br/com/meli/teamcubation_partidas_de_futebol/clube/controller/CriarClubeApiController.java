@@ -2,8 +2,6 @@ package br.com.meli.teamcubation_partidas_de_futebol.clube.controller;
 
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.ClubeResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.CriarClubeRequestDTO;
-import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.mapper.ClubeResponseMapper;
-import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.service.CriarClubeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,8 +22,7 @@ public class CriarClubeApiController {
 
     @PostMapping
     public ResponseEntity<ClubeResponseDTO> criar(@RequestBody @Valid CriarClubeRequestDTO clubeDTO) {
-        Clube clubeCriado = criarClubeService.criarClube(clubeDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ClubeResponseMapper.toClubeResponseDTO(clubeCriado));
+                .body(criarClubeService.criarClube(clubeDTO));
     }
 }

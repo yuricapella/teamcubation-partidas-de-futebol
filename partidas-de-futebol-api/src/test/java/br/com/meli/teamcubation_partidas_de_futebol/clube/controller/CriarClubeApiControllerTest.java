@@ -1,10 +1,10 @@
 package br.com.meli.teamcubation_partidas_de_futebol.clube.controller;
 
+import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.ClubeResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.CriarClubeRequestDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.exception.ClubeApiExceptionHandler;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.exception.ClubeComNomeJaCadastradoNoEstadoException;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.exception.EstadoInexistenteException;
-import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.service.CriarClubeService;
 import br.com.meli.teamcubation_partidas_de_futebol.global_exception.GlobalApiExceptionHandler;
 import br.com.meli.teamcubation_partidas_de_futebol.util.JsonUtil;
@@ -52,12 +52,10 @@ public class CriarClubeApiControllerTest {
 
     @Test
     void deveCriarClubeComSucessoERetornar201Created() throws Exception {
-        Long id = 1L;
         CriarClubeRequestDTO criarDTO = new CriarClubeRequestDTO(
                 "Clube de time criado", "AM", LocalDate.of(2020, 3, 11)
         );
-        Clube clubeCriado = new Clube();
-        clubeCriado.setId(id);
+        ClubeResponseDTO clubeCriado = new ClubeResponseDTO();
         clubeCriado.setNome(criarDTO.getNome());
         clubeCriado.setSiglaEstado(criarDTO.getSiglaEstado());
         clubeCriado.setDataCriacao(criarDTO.getDataCriacao());

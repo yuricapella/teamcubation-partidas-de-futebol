@@ -1,6 +1,8 @@
 package br.com.meli.teamcubation_partidas_de_futebol.clube.service;
 
+import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.ClubeResponseDTO;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.CriarClubeRequestDTO;
+import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.mapper.CriarClubeRequestMapper;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.exception.ClubeComNomeJaCadastradoNoEstadoException;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.exception.EstadoInexistenteException;
 import br.com.meli.teamcubation_partidas_de_futebol.clube.model.Clube;
@@ -11,47 +13,62 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 
+@ExtendWith(MockitoExtension.class)
 public class CriarClubeServiceTest {
+    @InjectMocks
     CriarClubeService criarClubeService;
+    @Mock
     ClubeRepository clubeRepository;
+    @Mock
     ClubeValidator clubeValidator;
+    @Mock
+    ModelMapper modelMapper;
 
     @BeforeEach
     void setUp(TestInfo testInfo) {
         PrintUtil.printInicioDoTeste(testInfo.getDisplayName());
-        clubeRepository = Mockito.mock(ClubeRepository.class);
-        clubeValidator = Mockito.mock(ClubeValidator.class);
-        criarClubeService = new CriarClubeService(clubeRepository,clubeValidator);
     }
 
     @Test
     void deveCriarUmClubeComSucesso(){
         Long id = 1L;
         CriarClubeRequestDTO criarDTO = new CriarClubeRequestDTO("clube de time","AM",LocalDate.of(2025,11,3));
-        Clube clube = new Clube("clube de time","AM",true, LocalDate.of(2025,11,3));
+        Clube clube = CriarClubeRequestMapper.toEntity(criarDTO);
         clube.setId(id);
+
+        ClubeResponseDTO dtoEsperado = new ClubeResponseDTO();
+        dtoEsperado.setNome(clube.getNome());
+        dtoEsperado.setSiglaEstado(clube.getSiglaEstado());
+        dtoEsperado.setDataCriacao(clube.getDataCriacao());
 
         Mockito.doNothing().when(clubeValidator).validarClubeNaCriacao(Mockito.any(Clube.class));
         Mockito.when(clubeRepository.save(Mockito.any(Clube.class))).thenReturn(clube);
+        Mockito.when(modelMapper.map(Mockito.any(Clube.class), Mockito.eq(ClubeResponseDTO.class))).thenReturn(dtoEsperado);
 
-        Clube clubeCriado = criarClubeService.criarClube(criarDTO);
+        ClubeResponseDTO resultado = criarClubeService.criarClube(criarDTO);
 
-        Assertions.assertNotNull(clubeCriado);
-        Assertions.assertEquals(criarDTO.getNome(), clubeCriado.getNome());
-        Assertions.assertEquals(criarDTO.getSiglaEstado(), clubeCriado.getSiglaEstado());
-        Assertions.assertEquals(criarDTO.getDataCriacao(), clubeCriado.getDataCriacao());
-        Assertions.assertNotNull(clubeCriado.getId());
-        Assertions.assertTrue(clubeCriado.getAtivo());
-        Assertions.assertNull(clubeCriado.getDataAtualizacao());
+        Assertions.assertNotNull(resultado);
+        Assertions.assertEquals(dtoEsperado.getNome(), resultado.getNome());
+        Assertions.assertEquals(dtoEsperado.getSiglaEstado(), resultado.getSiglaEstado());
+        Assertions.assertEquals(dtoEsperado.getDataCriacao(), resultado.getDataCriacao());
+        Assertions.assertNotNull(clube.getId());
+        Assertions.assertTrue(clube.getAtivo());
+        Assertions.assertNull(clube.getDataAtualizacao());
 
-        InOrder inOrder = Mockito.inOrder(clubeValidator, clubeRepository);
+        InOrder inOrder = Mockito.inOrder(clubeValidator, clubeRepository, modelMapper);
         inOrder.verify(clubeValidator, Mockito.times(1)).validarClubeNaCriacao(Mockito.any(Clube.class));
         inOrder.verify(clubeRepository, Mockito.times(1)).save(Mockito.any(Clube.class));
+        inOrder.verify(modelMapper, Mockito.times(1)).map(Mockito.any(Clube.class), Mockito.eq(ClubeResponseDTO.class));
     }
 
     @Test
