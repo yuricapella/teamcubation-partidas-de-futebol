@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQExchangeClubeConfig {
     @Value("${rabbitmq.exchange.clube}")
-    private String exchangeClube;
+    private String clubeExchange;
 
     @Bean
     public TopicExchange clubeExchange() {
-        return new TopicExchange(exchangeClube);
+        return new TopicExchange(clubeExchange);
     }
 }

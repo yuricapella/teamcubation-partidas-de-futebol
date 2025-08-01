@@ -6,6 +6,8 @@ import br.com.meli.partidas_de_futebol_mensageria.clube.producer.CriarClubeProdu
 import br.com.meli.partidas_de_futebol_mensageria.clube.util.ClubeEventStatus;
 import br.com.meli.partidas_de_futebol_mensageria.clube.util.ClubeEventType;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +26,7 @@ public class CriarClubeController {
     }
 
     @PostMapping("/criar")
-    public String criarClube(@RequestBody @Valid CriarClubeRequestDTO criarClubeRequestDTO) {
+    public ResponseEntity<String> criarClube(@RequestBody @Valid CriarClubeRequestDTO criarClubeRequestDTO) {
         ClubeEvent event = new ClubeEvent();
         event.setStatus(ClubeEventStatus.CREATED);
         event.setTipoEvento(ClubeEventType.CRIACAO_CLUBE);
@@ -33,7 +35,9 @@ public class CriarClubeController {
         event.setClube(criarClubeRequestDTO);
 
         producer.sendCriarClube(event);
-        return "Clube enviado para o RabbitMQ";
+        return ResponseEntity
+                .status(HttpStatus.ACCEPTED)
+                .body("Clube enviado para o RabbitMQ");
     }
 
 }

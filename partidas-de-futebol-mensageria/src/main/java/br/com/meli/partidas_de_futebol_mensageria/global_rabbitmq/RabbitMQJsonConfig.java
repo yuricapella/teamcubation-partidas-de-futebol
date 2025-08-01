@@ -1,4 +1,4 @@
-package br.com.meli.partidas_de_futebol_mensageria.config_global;
+package br.com.meli.partidas_de_futebol_mensageria.global_rabbitmq;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
