@@ -20,7 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Clubes", description = "Endpoints para consulta e busca de clubes")
+@Tag(name = "Clubes", description = "Endpoints para busca, criação, atualização e inativação de clubes")
 @RestController
 @RequestMapping("/api/clube/buscar")
 public class BuscarClubeApiController {
