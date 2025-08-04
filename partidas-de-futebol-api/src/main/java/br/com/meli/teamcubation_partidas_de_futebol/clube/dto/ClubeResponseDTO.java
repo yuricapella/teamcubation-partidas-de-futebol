@@ -1,10 +1,17 @@
 package br.com.meli.teamcubation_partidas_de_futebol.clube.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDate;
 
 public class ClubeResponseDTO {
+    @Schema(description = "Nome oficial do clube", example = "Flamengo")
     private String nome;
+
+    @Schema(description = "Sigla do estado do clube", example = "RJ")
     private String siglaEstado;
+
+    @Schema(description = "Data de criação do clube", example = "2025-05-13", type = "string", format = "date")
     private LocalDate dataCriacao;
 
     public ClubeResponseDTO() {
