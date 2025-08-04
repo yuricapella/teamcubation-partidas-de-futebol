@@ -109,7 +109,10 @@ public class BuscarClubeApiController {
     )
     @GetMapping
     public Page<ClubeResponseDTO> listarClubes
-            (@RequestParam(required = false) String nome,
+
+            (
+            @Parameter(description = "Nome (opcional) para filtro", example = "testando")
+            @RequestParam(required = false) String nome,
              @RequestParam(required = false) String estado,
              @RequestParam(required = false) Boolean ativo,
              @Parameter(
