@@ -161,7 +161,7 @@ public class BuscarRetrospectoApiControllerTest {
             ",true",
             "true,true"
     })
-    void deveBuscarRetrospectoContraAdversario_comSucesso(Boolean mandante, Boolean visitante) throws Exception {
+    void deveBuscarRetrospectoTotalDeUmClubeConfronto_comSucesso(Boolean mandante, Boolean visitante) throws Exception {
         Long id = 1L;
         List<Partida> partidas = PartidaUtil.criarListPartidasComTesteUtils(2);
         Clube clube = partidas.getFirst().getClubeMandante();
@@ -228,7 +228,7 @@ public class BuscarRetrospectoApiControllerTest {
     }
 
     @Test
-    void deveRetornarNotFound_quandoClubeNaoExiste_aoBuscarRetrospectoContraAdversario() throws Exception {
+    void deveRetornarNotFound_quandoClubeNaoExiste_aoBuscarConfronto() throws Exception {
         Long id = 99L;
 
         Mockito.when(buscarRetrospectoService.buscarRetrospectoClubeContraAdversarios(
@@ -247,7 +247,7 @@ public class BuscarRetrospectoApiControllerTest {
     }
 
     @Test
-    void deveBuscarRetrospectoConfronto_comSucesso() throws Exception {
+    void deveBuscarRetrospectoTotalDeUmClubeRetrospectoConfronto_comSucesso() throws Exception {
         Long idClube = 1L;
         Long idAdversario = 2L;
         Clube clube = ClubeUtil.criarClube(idClube);
