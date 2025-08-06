@@ -10,7 +10,7 @@
 
 - **Consumer:** `partidas-de-futebol-api`
     - Consome fila principal e DLQ via @RabbitListener.
-    - Procesa evento acionando service; falhas vão para DLQ.
+    - Processa evento acionando service; falhas vão para DLQ.
     - Contrato de DTO/evento padronizado com o producer.
     - Configuração (filas, exchanges, binding, DLQ) totalmente externa.
     - Logging detalhado de consumo e erro
