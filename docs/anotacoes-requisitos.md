@@ -5,15 +5,12 @@
 ## 1. **Cadastrar clube (POST, CriarClubeRequestDTO)**
 
 ### Bean Validation a implementar (automático):
-
+- [x] `@NotNull(message = "O nome não pode ser nulo")` para nome
 - [x] `@Size(min = 2, message = "O nome tem que ter no minimo duas letras;")` para nome  
-  _Arquivo: CriarClubeRequestDTO_
-- [x] `@Pattern(regexp = "^[A-Za-zÀ-ÿ ]+$", message = "O nome deve conter apenas letras e espaços")` para nome  
-  _Arquivo: CriarClubeRequestDTO_
+- [x] `@Pattern(regexp = "^[A-Za-zÀ-ÿ ]+$", message = "O nome deve conter apenas letras e espaços")` para nome
+- [x] `@NotNull(message = "O estado não pode ser nulo")` para siglaEstado
 - [x] `@Size(min = 2, max = 2, message = "A sigla do estado só pode ter 2 letras.")` para siglaEstado  
-  _Arquivo: CriarClubeRequestDTO_
 - [x] `@NotNull(message = "Data de criação obrigatória")` para dataCriacao  
-  _Arquivo: CriarClubeRequestDTO_
 - [x] `@PastOrPresent(message = "A data de criação não pode ser futura")` para dataCriacao  
   _Arquivo: CriarClubeRequestDTO_
 
@@ -21,7 +18,6 @@
 ### Regras a validar manualmente (service/validator):
 
 - [x] Sigla de estado brasileiro deve ser válida (`EstadoInexistenteException`)  
-  _Método: criar; Arquivo: CriarClubeService, ClubeValidator_
 - [x] Nome duplicado para o mesmo estado (`ClubeComNomeJaCadastradoNoEstadoException`)  
   _Método: criar; Arquivo: CriarClubeService, ClubeValidator_
 - [x] (Demais campos já são cobertos pelo Bean Validation)
@@ -32,9 +28,10 @@
 ## 2. Editar clube (PUT, AtualizarClubeRequestDTO)
 
 ### Bean Validation a implementar (automático):
-
+- [x] `@NotNull(message = "O nome não pode ser nulo")` para nome
 - [x] `@Size(min = 2, message = "O nome tem que ter no minimo duas letras;")` para nome
 - [x] `@Pattern(regexp = "^[A-Za-zÀ-ÿ ]+$", message = "O nome deve conter apenas letras e espaços")` para nome
+- [x] `@NotNull(message = "O estado não pode ser nulo")` para siglaEstado
 - [x] `@Size(min = 2, max = 2, message = "A sigla do estado só pode ter 2 letras.")` para siglaEstado
 - [x] `@NotNull(message = "Data de criação obrigatória")` para dataCriacao
 - [x] `@PastOrPresent(message = "A data de criação não pode ser futura")` para dataCriacao
@@ -42,10 +39,8 @@
 ### Regras a validar manualmente (service/validator):
 
 - [x] Nome duplicado para o mesmo estado (`ClubeComNomeJaCadastradoNoEstadoException`)  
-  _Método: atualizar; Arquivo: AtualizarClubeService, ClubeValidator_
 - [x] Estado válido (`EstadoInexistenteException`)  
-  _Método: atualizar; Arquivo: AtualizarClubeService, ClubeValidator_
-- [x] Data inválida: data criação não pode ser posterior a alguma partida já registrada (`DataCriacaoPosteriorDataPartidaException`)  
+- [x] Data inválida: data criação não pode ser posterior a alguma partida já registrada(`DataCriacaoPosteriorDataPartidaException`)  
   _Método: atualizar; Arquivo: AtualizarClubeService, ClubeValidator_
 - [x] Clube não existe: _já tratado por buscarClubeService, retorna 404_
 - [x] Dados mínimos: Bean Validation cobre
