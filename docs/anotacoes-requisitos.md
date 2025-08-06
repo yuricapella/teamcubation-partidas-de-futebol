@@ -1,4 +1,4 @@
-# Checklist dos requisitos do projeto
+# Checklist dos requisitos do projeto & anotações
 
 # Clube
 
