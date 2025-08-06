@@ -14,6 +14,7 @@ public class CriarClubeRequestDTO {
             description = "Nome do clube. Mínimo 2 letras, apenas letras e espaços.",
             example = "Clube de Exemplo dezoito"
     )
+    @NotNull(message = "O nome não pode ser nulo")
     @Size(min = 2, message = "O nome tem que ter no minimo duas letras;")
     @Pattern(regexp = "^[A-Za-zÀ-ÿ ]+$", message = "O nome deve conter apenas letras e espaços")
     private String nome;
@@ -24,6 +25,7 @@ public class CriarClubeRequestDTO {
             minLength = 2,
             maxLength = 2
     )
+    @NotNull(message = "O estado não pode ser nulo")
     @Size(min = 2, max = 2, message = "A sigla do estado só pode ter 2 letras.")
     private String siglaEstado;
 
