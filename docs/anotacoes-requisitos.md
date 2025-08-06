@@ -1,4 +1,4 @@
-# Anotações & Ideias Futuras
+# Checklist dos requisitos do projeto
 
 # Clube
 
