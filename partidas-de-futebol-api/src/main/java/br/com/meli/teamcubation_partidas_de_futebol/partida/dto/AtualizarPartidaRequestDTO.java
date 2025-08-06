@@ -1,30 +1,38 @@
 package br.com.meli.teamcubation_partidas_de_futebol.partida.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDateTime;
 
+@Schema(description = "Dados para atualizar uma partida já cadastrada")
 public class AtualizarPartidaRequestDTO {
+    @Schema(description = "ID do clube mandante", example = "1")
     @NotNull(message = "O clube mandante é obrigatório")
     private Long clubeMandanteId;
 
+    @Schema(description = "ID do clube visitante", example = "2")
     @NotNull(message = "O clube visitante é obrigatório")
     private Long clubeVisitanteId;
 
+    @Schema(description = "ID do estádio", example = "10")
     @NotNull(message = "O estádio é obrigatório")
     private Long estadioId;
 
+    @Schema(description = "Gols do mandante (não pode ser negativo)", example = "2")
     @PositiveOrZero(message = "O número de gols do mandante não pode ser negativo")
     private int golsMandante;
 
+    @Schema(description = "Gols do visitante (não pode ser negativo)", example = "1")
     @PositiveOrZero(message = "O número de gols do visitante não pode ser negativo")
     private int golsVisitante;
 
+    @Schema(description = "Data e hora da partida", example = "2025-06-10T21:00:00", type = "string", format = "date-time")
     @NotNull(message = "A data e hora da partida são obrigatórias")
     @PastOrPresent(message = "A data da partida não pode ser futura")
-    LocalDateTime dataHora;
+    private LocalDateTime dataHora;
 
     public AtualizarPartidaRequestDTO(Long clubeMandanteId, Long clubeVisitanteId, Long estadioId, int golsMandante, int golsVisitante, LocalDateTime dataHora) {
         this.clubeMandanteId = clubeMandanteId;

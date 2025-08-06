@@ -1,11 +1,20 @@
 package br.com.meli.teamcubation_partidas_de_futebol.estadio.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "DTO com informações detalhadas do endereço provenientes do CEP.")
 public class CepResponseDTO {
+    @Schema(description = "CEP consultado", example = "88032005")
     private String cep;
+    @Schema(description = "Logradouro do endereço", example = "Rodovia José Carlos Daux")
     private String logradouro;
+    @Schema(description = "Bairro do endereço", example = "Saco Grande")
     private String bairro;
+    @Schema(description = "Cidade (localidade)", example = "Florianópolis")
     private String localidade;
+    @Schema(description = "UF do endereço", example = "SC")
     private String uf;
+    @Schema(description = "Nome do estado", example = "Santa Catarina")
     private String estado;
 
     public CepResponseDTO() {
