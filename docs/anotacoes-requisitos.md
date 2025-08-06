@@ -6,13 +6,9 @@
 
 ### Bean Validation a implementar (automático):
 
-- [x] `@NotBlank(message = "O nome não pode estar vazio.")` para nome  
-  _Arquivo: CriarClubeRequestDTO_
 - [x] `@Size(min = 2, message = "O nome tem que ter no minimo duas letras;")` para nome  
   _Arquivo: CriarClubeRequestDTO_
 - [x] `@Pattern(regexp = "^[A-Za-zÀ-ÿ ]+$", message = "O nome deve conter apenas letras e espaços")` para nome  
-  _Arquivo: CriarClubeRequestDTO_
-- [x] `@NotBlank(message = "A sigla do estado não pode estar vazia.")` para siglaEstado  
   _Arquivo: CriarClubeRequestDTO_
 - [x] `@Size(min = 2, max = 2, message = "A sigla do estado só pode ter 2 letras.")` para siglaEstado  
   _Arquivo: CriarClubeRequestDTO_
@@ -37,10 +33,8 @@
 
 ### Bean Validation a implementar (automático):
 
-- [x] `@NotBlank(message = "O nome não pode estar vazio.")` para nome
 - [x] `@Size(min = 2, message = "O nome tem que ter no minimo duas letras;")` para nome
 - [x] `@Pattern(regexp = "^[A-Za-zÀ-ÿ ]+$", message = "O nome deve conter apenas letras e espaços")` para nome
-- [x] `@NotBlank(message = "A sigla do estado não pode estar vazia.")` para siglaEstado
 - [x] `@Size(min = 2, max = 2, message = "A sigla do estado só pode ter 2 letras.")` para siglaEstado
 - [x] `@NotNull(message = "Data de criação obrigatória")` para dataCriacao
 - [x] `@PastOrPresent(message = "A data de criação não pode ser futura")` para dataCriacao
