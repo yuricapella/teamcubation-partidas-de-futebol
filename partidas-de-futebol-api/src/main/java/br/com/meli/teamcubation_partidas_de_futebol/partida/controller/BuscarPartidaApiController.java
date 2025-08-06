@@ -17,12 +17,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Partidas")
 @RestController
-@RequestMapping("/api/partida/buscar")
+@RequestMapping(value = "/api/partida/buscar", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BuscarPartidaApiController {
     private final BuscarPartidaService buscarPartidaService;
 
@@ -38,7 +39,6 @@ public class BuscarPartidaApiController {
             responseCode = "200",
             description = "Partida encontrada com sucesso",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = PartidaResponseDTO.class),
                     examples = @ExampleObject(
                             value = """
@@ -69,7 +69,6 @@ public class BuscarPartidaApiController {
             responseCode = "404",
             description = "Partida não encontrada",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             value = """
@@ -83,7 +82,7 @@ public class BuscarPartidaApiController {
                     )
             )
     )
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<PartidaResponseDTO> buscarPartidaPorId(@PathVariable Long id) {
         Partida partidaRetornada = buscarPartidaService.buscarPartidaPorId(id);
         return ResponseEntity
@@ -99,7 +98,6 @@ public class BuscarPartidaApiController {
             responseCode = "200",
             description = "Lista paginada de partidas",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = PartidaResponseDTO.class),
                     examples = {
                             @ExampleObject(

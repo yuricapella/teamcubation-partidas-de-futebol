@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Clubes")
 @RestController
-@RequestMapping("/api/clube/criar")
+@RequestMapping(value = "/api/clube/criar",
+        consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CriarClubeApiController {
     private final CriarClubeService criarClubeService;
 
@@ -37,7 +39,6 @@ public class CriarClubeApiController {
             responseCode = "201",
             description = "Clube criado com sucesso",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ClubeResponseDTO.class),
                     examples = @ExampleObject(
                             value = """
@@ -54,7 +55,6 @@ public class CriarClubeApiController {
             responseCode = "400",
             description = "Campos inválidos ou estado inexistente",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = {
                             @ExampleObject(
@@ -92,7 +92,6 @@ public class CriarClubeApiController {
             responseCode = "409",
             description = "Já existe clube com esse nome no estado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             value = """

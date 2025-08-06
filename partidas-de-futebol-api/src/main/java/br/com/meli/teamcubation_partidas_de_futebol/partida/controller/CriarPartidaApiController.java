@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Partidas")
 @RestController
-@RequestMapping("/api/partida/criar")
+@RequestMapping(value = "/api/partida/criar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class CriarPartidaApiController {
     private final CriarPartidaService criarPartidaService;
 
@@ -38,7 +39,6 @@ public class CriarPartidaApiController {
             responseCode = "201",
             description = "Partida criada com sucesso",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = PartidaResponseDTO.class),
                     examples = @ExampleObject(
                             value = """
@@ -69,7 +69,6 @@ public class CriarPartidaApiController {
             responseCode = "400",
             description = "Dados inválidos (campos obrigatórios, gols negativos, data futura, clubes iguais)",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = {
                             @ExampleObject(
@@ -107,7 +106,6 @@ public class CriarPartidaApiController {
             responseCode = "409",
             description = "Conflitos de negócio: data anterior à criação de clube, clube inativo, partidas próximas, estádio já ocupado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = {
                             @ExampleObject(
@@ -165,7 +163,6 @@ public class CriarPartidaApiController {
             responseCode = "404",
             description = "Clube ou estádio não encontrado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = {
                             @ExampleObject(

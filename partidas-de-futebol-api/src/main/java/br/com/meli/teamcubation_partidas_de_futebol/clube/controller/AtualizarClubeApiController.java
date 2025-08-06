@@ -15,12 +15,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Clubes")
 @RestController
-@RequestMapping("/api/clube/atualizar")
+@RequestMapping(value = "/api/clube/atualizar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class AtualizarClubeApiController {
     private final AtualizarClubeService atualizarClubeService;
 
@@ -37,7 +38,6 @@ public class AtualizarClubeApiController {
             responseCode = "200",
             description = "Clube atualizado com sucesso",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ClubeResponseDTO.class),
                     examples = @ExampleObject(
                             value = """
@@ -54,7 +54,6 @@ public class AtualizarClubeApiController {
             responseCode = "400",
             description = "Campos inválidos ou estado inexistente",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = {
                             @ExampleObject(
@@ -92,7 +91,6 @@ public class AtualizarClubeApiController {
             responseCode = "409",
             description = "Conflito de dados (data inválida ou duplicidade de clube)",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = {
                             @ExampleObject(
@@ -126,7 +124,6 @@ public class AtualizarClubeApiController {
             responseCode = "404",
             description = "Clube não encontrado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             name = "clube-nao-encontrado",

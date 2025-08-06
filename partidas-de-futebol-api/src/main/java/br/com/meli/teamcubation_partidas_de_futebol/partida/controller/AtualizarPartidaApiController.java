@@ -15,12 +15,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Partidas")
 @RestController
-@RequestMapping("/api/partida/atualizar")
+@RequestMapping(value = "/api/partida/atualizar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class AtualizarPartidaApiController {
     private final AtualizarPartidaService atualizarPartidaService;
 
@@ -36,7 +37,6 @@ public class AtualizarPartidaApiController {
             responseCode = "200",
             description = "Partida atualizada com sucesso",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = PartidaResponseDTO.class),
                     examples = @ExampleObject(
                             value = """
@@ -67,7 +67,6 @@ public class AtualizarPartidaApiController {
             responseCode = "400",
             description = "Dados inválidos, clubes iguais, clubes/estádio inexistentes, gols negativos ou data futura",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = {
                             @ExampleObject(
@@ -105,7 +104,6 @@ public class AtualizarPartidaApiController {
             responseCode = "409",
             description = "Conflitos de regras de negócio: datas, clube inativo, partidas próximas, estádio já ocupado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = {
                             @ExampleObject(
@@ -163,7 +161,6 @@ public class AtualizarPartidaApiController {
             responseCode = "404",
             description = "Clube, estádio ou partida não encontrada",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = {
                             @ExampleObject(
@@ -205,7 +202,7 @@ public class AtualizarPartidaApiController {
                     }
             )
     )
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<PartidaResponseDTO> atualizarPartidaPorId(
             @RequestBody @Valid AtualizarPartidaRequestDTO atualizarPartidaRequestDTO,
             @Parameter(description = "ID da partida a ser atualizada", example = "1")

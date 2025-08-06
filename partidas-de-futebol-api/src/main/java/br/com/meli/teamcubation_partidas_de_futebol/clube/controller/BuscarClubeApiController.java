@@ -17,12 +17,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Clubes", description = "Endpoints para busca, criação, atualização e inativação de clubes")
 @RestController
-@RequestMapping("/api/clube/buscar")
+@RequestMapping(value = "/api/clube/buscar", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BuscarClubeApiController {
     private final BuscarClubeService buscarClubeService;
 
@@ -38,7 +39,6 @@ public class BuscarClubeApiController {
             responseCode = "200",
             description = "Lista paginada de clubes",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ClubeResponseDTO.class),
                     examples = {@ExampleObject(
                             name = "lista com resultados",
@@ -132,7 +132,6 @@ public class BuscarClubeApiController {
             responseCode = "200",
             description = "Clube encontrado com sucesso",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ClubeResponseDTO.class),
                     examples = @ExampleObject(
                             value = """
@@ -149,7 +148,6 @@ public class BuscarClubeApiController {
             responseCode = "404",
             description = "Clube não encontrado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             value = """
@@ -163,7 +161,7 @@ public class BuscarClubeApiController {
                     )
             )
     )
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<ClubeResponseDTO> buscarPorId(@PathVariable Long id) {
         Clube clubeRetornado = buscarClubeService.buscarClubePorId(id);
         return ResponseEntity.status(HttpStatus.OK)

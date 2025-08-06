@@ -13,12 +13,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Retrospecto")
 @RestController
-@RequestMapping("/api/clube")
+@RequestMapping(value = "/api/clube", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BuscarRetrospectoApiController {
     private final BuscarRetrospectoService buscarRetrospectoService;
 
@@ -34,7 +35,6 @@ public class BuscarRetrospectoApiController {
             responseCode = "200",
             description = "Retrospecto retornado com sucesso",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = Retrospecto.class),
                     examples = {
                             @ExampleObject(
@@ -82,7 +82,6 @@ public class BuscarRetrospectoApiController {
             responseCode = "404",
             description = "Clube não encontrado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             value = """
@@ -118,7 +117,6 @@ public class BuscarRetrospectoApiController {
             responseCode = "200",
             description = "Retrospecto contra adversários retornado com sucesso",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = RetrospectoAdversariosResponseDTO.class),
                     examples = {
                             @ExampleObject(
@@ -181,7 +179,6 @@ public class BuscarRetrospectoApiController {
             responseCode = "404",
             description = "Clube não encontrado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             value = """
@@ -220,7 +217,6 @@ public class BuscarRetrospectoApiController {
             responseCode = "200",
             description = "Confronto encontrado ou ambos clubes com retrospecto zerado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = RetrospectoConfronto.class),
                     examples = {
                             @ExampleObject(
@@ -343,7 +339,6 @@ public class BuscarRetrospectoApiController {
             responseCode = "404",
             description = "Um dos clubes não encontrado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             value = """

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Partidas")
 @RestController
-@RequestMapping("/api/partida/deletar")
+@RequestMapping(value = "/api/partida/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DeletarPartidaApiController {
     private final DeletarPartidaService deletarPartidaService;
 
@@ -38,7 +39,6 @@ public class DeletarPartidaApiController {
             responseCode = "404",
             description = "Partida não encontrada",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             name = "partida-nao-encontrada",
@@ -54,7 +54,7 @@ public class DeletarPartidaApiController {
                     )
             )
     )
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deletarPartidaPorId(
             @Parameter(description = "ID da partida a ser excluída", example = "1")
             @PathVariable Long id) {

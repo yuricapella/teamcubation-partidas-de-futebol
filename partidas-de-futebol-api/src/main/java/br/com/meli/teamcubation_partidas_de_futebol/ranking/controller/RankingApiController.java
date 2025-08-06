@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @Tag(name = "Ranking")
 @RestController
-@RequestMapping("/api/clube/ranking")
+@RequestMapping(value = "/api/clube/ranking", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RankingApiController {
     private final RankingService rankingService;
 
@@ -43,7 +44,6 @@ public class RankingApiController {
             responseCode = "200",
             description = "Ranking retornado com sucesso",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = Ranking.class),
                     examples = {
                             @ExampleObject(

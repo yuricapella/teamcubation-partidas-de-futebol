@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Estádios")
 @RestController
-@RequestMapping("/api/estadio/criar")
+@RequestMapping(value = "/api/estadio/criar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class CriarEstadioApiController {
     private final CriarEstadioService criarEstadioService;
 
@@ -36,7 +37,6 @@ public class CriarEstadioApiController {
             responseCode = "201",
             description = "Estádio criado com sucesso",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = EstadioEnderecoResponseDTO.class),
                     examples = @ExampleObject(
                             value = """
@@ -59,7 +59,6 @@ public class CriarEstadioApiController {
             responseCode = "400",
             description = "Campos inválidos",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = {
                             @ExampleObject(
@@ -114,7 +113,6 @@ public class CriarEstadioApiController {
             responseCode = "409",
             description = "Estádio com nome duplicado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             value = """

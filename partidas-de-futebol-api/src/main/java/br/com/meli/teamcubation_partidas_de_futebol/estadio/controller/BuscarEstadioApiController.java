@@ -16,12 +16,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Estádios")
 @RestController
-@RequestMapping("/api/estadio/buscar")
+@RequestMapping(value = "/api/estadio/buscar", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BuscarEstadioApiController {
     private final BuscarEstadioService buscarEstadioService;
 
@@ -37,7 +38,6 @@ public class BuscarEstadioApiController {
             responseCode = "200",
             description = "Estádio encontrado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = EstadioEnderecoResponseDTO.class),
                     examples = @ExampleObject(
                             value = """
@@ -60,7 +60,6 @@ public class BuscarEstadioApiController {
             responseCode = "404",
             description = "Estádio não encontrado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             value = """
@@ -74,7 +73,7 @@ public class BuscarEstadioApiController {
                     )
             )
     )
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<EstadioEnderecoResponseDTO> buscar(
             @Parameter(description = "ID do estádio a buscar", example = "1")
             @PathVariable Long id) {
@@ -90,7 +89,6 @@ public class BuscarEstadioApiController {
             responseCode = "200",
             description = "Lista paginada de estádios",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = EstadioResponseDTO.class),
                     examples = {
                             @ExampleObject(

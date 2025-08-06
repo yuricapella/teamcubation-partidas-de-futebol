@@ -13,13 +13,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 @Tag(name = "Estádios")
 @RestController
-@RequestMapping("/api/estadio/atualizar")
+@RequestMapping(value = "/api/estadio/atualizar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class AtualizarEstadioApiController {
     private final AtualizarEstadioService atualizarEstadioService;
 
@@ -35,7 +36,6 @@ public class AtualizarEstadioApiController {
             responseCode = "200",
             description = "Estádio atualizado com sucesso",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = EstadioEnderecoResponseDTO.class),
                     examples = @ExampleObject(
                             value = """
@@ -58,7 +58,6 @@ public class AtualizarEstadioApiController {
             responseCode = "400",
             description = "Campos inválidos",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = {
                             @ExampleObject(
@@ -113,7 +112,6 @@ public class AtualizarEstadioApiController {
             responseCode = "409",
             description = "Estádio com nome duplicado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             value = """
@@ -131,7 +129,6 @@ public class AtualizarEstadioApiController {
             responseCode = "404",
             description = "Estádio não encontrado",
             content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             value = """
@@ -145,7 +142,7 @@ public class AtualizarEstadioApiController {
                     )
             )
     )
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<EstadioEnderecoResponseDTO> atualizar
             (@RequestBody @Valid AtualizarEstadioRequestDTO atualizarEstadioRequestDTO,
              @Parameter(description = "ID do estádio a ser atualizado", example = "1")
