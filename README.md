@@ -56,8 +56,8 @@ Projeto individual Java 21 + Spring Boot 3.5.3 com arquitetura multi-módulo Mav
 - [Documentação Mensageria RabbitMQ](docs/rabbitmq.md)
 - [Documentação de Jobs / Agendamentos](docs/jobs.md)
 - [Documentação Swagger/OpenAPI e exemplos](docs/swagger.md)
-- [Anotações de regras e domínios](anotacoes.md)
-- [Anotações sobre testes](anotacoes-teste.md)
+- [Anotações de regras e domínios](docs/anotacoes-requisitos.md)
+- [Anotações sobre testes](docs/anotacoes-teste.md)
 - [Coleção Postman](postman/teamcubation-partidas-de-futebol.postman_collection.json)
 
 ---
@@ -92,7 +92,7 @@ MIT (Veja o arquivo LICENSE).
 
 ## Contato
 
-- [Yuri Capella] — [https://github.com/yuricapella]
+- [Yuri Capella] — [GITHUB](https://github.com/yuricapella)
 
 ---
 
