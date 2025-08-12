@@ -24,8 +24,8 @@ public class CriarClubeProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendCriarClube(ClubeEvent clubeEvent) {
-        LOGGER.info("Clube event enviado para o RabbitMQ: {}", clubeEvent.toString());
-        rabbitTemplate.convertAndSend(exchangeClube, criarClubeRoutingKey, clubeEvent);
+    public void sendCriarClube(ClubeEvent event) {
+        LOGGER.info("Clube event enviado para o RabbitMQ: {}", event);
+        rabbitTemplate.convertAndSend(exchangeClube, criarClubeRoutingKey, event);
     }
 }

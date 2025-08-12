@@ -37,22 +37,7 @@ public class CriarEstadioApiController {
             responseCode = "201",
             description = "Estádio criado com sucesso",
             content = @Content(
-                    schema = @Schema(implementation = EstadioEnderecoResponseDTO.class),
-                    examples = @ExampleObject(
-                            value = """
-                {
-                    "nome": "Arena Central",
-                    "endereco": {
-                        "cep": "88032-005",
-                        "logradouro": "Rodovia José Carlos Daux",
-                        "bairro": "Saco Grande",
-                        "localidade": "Florianópolis",
-                        "uf": "SC",
-                        "estado": "Santa Catarina"
-                    }
-                }
-                """
-                    )
+                    schema = @Schema(implementation = EstadioEnderecoResponseDTO.class)
             )
     )
     @ApiResponse(
@@ -60,70 +45,18 @@ public class CriarEstadioApiController {
             description = "Campos inválidos",
             content = @Content(
                     schema = @Schema(implementation = ErroPadrao.class),
-                    examples = {
+                    examples =
                             @ExampleObject(
-                                    name = "nomeInvalidoECepNulo",
-                                    summary = "Nome com menos de 3 letras, CEP nulo",
-                                    value = """
-                    {
-                        "codigoErro": "CAMPO_INVALIDO",
-                        "dataHora": "04/08/2025 16:17:13",
-                        "mensagem": "Invalid request content.",
-                        "errors": {
-                            "nome": "O nome tem que ter no minimo três letras",
-                            "cep": "não deve ser nulo"
-                        }
-                    }
-                    """
-                            ),
-                            @ExampleObject(
-                                    name = "nomeInvalidoECepInvalido",
-                                    summary = "Nome com menos de 3 letras, CEP formato inválido",
-                                    value = """
-                    {
-                        "codigoErro": "CAMPO_INVALIDO",
-                        "dataHora": "04/08/2025 16:18:31",
-                        "mensagem": "Invalid request content.",
-                        "errors": {
-                            "nome": "O nome tem que ter no minimo três letras",
-                            "cep": "O cep deve conter exatamente 8 dígitos numéricos"
-                        }
-                    }
-                    """
-                            ),
-                            @ExampleObject(
-                                    name = "nomeNuloECepInvalido",
-                                    summary = "Nome nulo, CEP formato inválido",
-                                    value = """
-                    {
-                        "codigoErro": "CAMPO_INVALIDO",
-                        "dataHora": "04/08/2025 16:18:54",
-                        "mensagem": "Invalid request content.",
-                        "errors": {
-                            "nome": "não deve ser nulo",
-                            "cep": "O cep deve conter exatamente 8 dígitos numéricos"
-                        }
-                    }
-                    """
+                                    name = "Nome e cep obrigatórios",
+                                    summary = "nome ou cep inválido/nulo"
+                                    )
                             )
-                    }
-            )
     )
     @ApiResponse(
             responseCode = "409",
             description = "Estádio com nome duplicado",
             content = @Content(
-                    schema = @Schema(implementation = ErroPadrao.class),
-                    examples = @ExampleObject(
-                            value = """
-                {
-                    "codigoErro": "ESTADIO_JA_EXISTE",
-                    "dataHora": "04/08/2025 16:15:10",
-                    "mensagem": "Já existe um estadio com este nome.",
-                    "errors": null
-                }
-                """
-                    )
+                    schema = @Schema(implementation = ErroPadrao.class)
             )
     )
     @PostMapping

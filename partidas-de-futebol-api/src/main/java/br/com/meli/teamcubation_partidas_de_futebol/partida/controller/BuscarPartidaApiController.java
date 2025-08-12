@@ -39,47 +39,14 @@ public class BuscarPartidaApiController {
             responseCode = "200",
             description = "Partida encontrada com sucesso",
             content = @Content(
-                    schema = @Schema(implementation = PartidaResponseDTO.class),
-                    examples = @ExampleObject(
-                            value = """
-                {
-                    "clubeMandante": {
-                        "nome": "Clube Mandante",
-                        "siglaEstado": "AM",
-                        "dataCriacao": "2025-05-13"
-                    },
-                    "clubeVisitante": {
-                        "nome": "Clube Visitante",
-                        "siglaEstado": "AP",
-                        "dataCriacao": "2025-05-13"
-                    },
-                    "estadio": {
-                        "nome": "Estadio Exemplo"
-                    },
-                    "golsMandante": 2,
-                    "golsVisitante": 1,
-                    "dataHora": "10/06/2025 21:00:00",
-                    "resultado": "VITORIA_MANDANTE"
-                }
-                """
-                    )
+                    schema = @Schema(implementation = PartidaResponseDTO.class)
             )
     )
     @ApiResponse(
             responseCode = "404",
             description = "Partida não encontrada",
             content = @Content(
-                    schema = @Schema(implementation = ErroPadrao.class),
-                    examples = @ExampleObject(
-                            value = """
-                {
-                    "codigoErro": "PARTIDA_NAO_ENCONTRADA",
-                    "dataHora": "04/08/2025 23:30:00",
-                    "mensagem": "Partida com id 999 não encontrada.",
-                    "errors": null
-                }
-                """
-                    )
+                    schema = @Schema(implementation = ErroPadrao.class)
             )
     )
     @GetMapping(value = "/{id}")
@@ -99,96 +66,11 @@ public class BuscarPartidaApiController {
             description = "Lista paginada de partidas",
             content = @Content(
                     schema = @Schema(implementation = PartidaResponseDTO.class),
-                    examples = {
+                    examples =
                             @ExampleObject(
-                                    name = "lista-com-resultados",
-                                    summary = "Partidas encontradas",
-                                    value = """
-                    {
-                        "content": [
-                            {
-                                "clubeMandante": {
-                                    "nome": "Clube Mandante",
-                                    "siglaEstado": "AM",
-                                    "dataCriacao": "2025-05-13"
-                                },
-                                "clubeVisitante": {
-                                    "nome": "Clube Visitante",
-                                    "siglaEstado": "AP",
-                                    "dataCriacao": "2025-05-13"
-                                },
-                                "estadio": {
-                                    "nome": "Estadio Exemplo"
-                                },
-                                "golsMandante": 2,
-                                "golsVisitante": 1,
-                                "dataHora": "10/06/2025 21:00:00",
-                                "resultado": "VITORIA_MANDANTE"
-                            }
-                        ],
-                        "pageable": {
-                            "pageNumber": 0,
-                            "pageSize": 20,
-                            "sort": {
-                                "empty": true,
-                                "sorted": false,
-                                "unsorted": true
-                            },
-                            "offset": 0,
-                            "paged": true,
-                            "unpaged": false
-                        },
-                        "last": true,
-                        "totalElements": 1,
-                        "totalPages": 1,
-                        "first": true,
-                        "size": 20,
-                        "number": 0,
-                        "sort": {
-                            "empty": true,
-                            "sorted": false,
-                            "unsorted": true
-                        },
-                        "numberOfElements": 1,
-                        "empty": false
-                    }
-                    """
-                            ),
-                            @ExampleObject(
-                                    name = "lista-vazia",
-                                    summary = "Nenhuma partida encontrada para os filtros",
-                                    value = """
-                    {
-                        "content": [],
-                        "pageable": {
-                            "pageNumber": 0,
-                            "pageSize": 20,
-                            "sort": {
-                                "empty": true,
-                                "sorted": false,
-                                "unsorted": true
-                            },
-                            "offset": 0,
-                            "paged": true,
-                            "unpaged": false
-                        },
-                        "last": true,
-                        "totalElements": 0,
-                        "totalPages": 0,
-                        "first": true,
-                        "size": 20,
-                        "number": 0,
-                        "sort": {
-                            "empty": true,
-                            "sorted": false,
-                            "unsorted": true
-                        },
-                        "numberOfElements": 0,
-                        "empty": true
-                    }
-                    """
-                            )
-                    }
+                                    name = "lista com resultados ou vazia",
+                                    summary = "Lista de partidas encontradas ou lista vazia se partidas não existirem"
+                    )
             )
     )
     @GetMapping

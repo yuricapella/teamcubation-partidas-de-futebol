@@ -37,87 +37,18 @@ public class AtualizarClubeApiController {
     @ApiResponse(
             responseCode = "200",
             description = "Clube atualizado com sucesso",
-            content = @Content(
-                    schema = @Schema(implementation = ClubeResponseDTO.class),
-                    examples = @ExampleObject(
-                            value = """
-                {
-                  "nome":"Clube Atualizado",
-                  "siglaEstado":"AM",
-                  "dataCriacao":"2025-05-13"
-                }
-                """
-                    )
-            )
+            content = @Content(schema = @Schema(implementation = ClubeResponseDTO.class))
     )
     @ApiResponse(
             responseCode = "400",
             description = "Campos inválidos ou estado inexistente",
             content = @Content(
                     schema = @Schema(implementation = ErroPadrao.class),
-                    examples = {
+                    examples =
                             @ExampleObject(
                                     name = "campos-invalidos",
-                                    summary = "Request com campos inválidos",
-                                    value = """
-                    {
-                        "codigoErro": "CAMPO_INVALIDO",
-                        "dataHora": "04/08/2025 11:02:56",
-                        "mensagem": "Invalid request content.",
-                        "errors": {
-                            "siglaEstado": "A sigla do estado só pode ter 2 letras.",
-                            "nome": "O nome tem que ter no minimo duas letras;",
-                            "dataCriacao": "A data de criação não pode ser futura"
-                        }
-                    }
-                    """
-                            ),
-                            @ExampleObject(
-                                    name = "estado-inexistente",
-                                    summary = "Tentativa de atualizar clube com estado que não existe",
-                                    value = """
-                    {
-                        "codigoErro": "ESTADO_INEXISTENTE",
-                        "dataHora": "04/08/2025 11:03:40",
-                        "mensagem": "Não é possivel criar o clube pois o estado AX não existe.",
-                        "errors": null
-                    }
-                    """
+                                    summary = "Request com campos inválidos"
                             )
-                    }
-            )
-    )
-    @ApiResponse(
-            responseCode = "409",
-            description = "Conflito de dados (data inválida ou duplicidade de clube)",
-            content = @Content(
-                    schema = @Schema(implementation = ErroPadrao.class),
-                    examples = {
-                            @ExampleObject(
-                                    name = "data-criacao-posterior",
-                                    summary = "Data de criação após uma partida cadastrada",
-                                    value = """
-                    {
-                        "codigoErro": "DATA_CRIACAO_POSTERIOR_A_DATA_PARTIDA",
-                        "dataHora": "04/08/2025 11:52:08",
-                        "mensagem": "A data de criação do clube com id 1 está posterior a data de uma partida cadastrada.",
-                        "errors": null
-                    }
-                    """
-                            ),
-                            @ExampleObject(
-                                    name = "clube-duplicado",
-                                    summary = "Nome duplicado para o mesmo estado",
-                                    value = """
-                    {
-                        "codigoErro": "CLUBE_DUPLICADO",
-                        "dataHora": "04/08/2025 11:04:33",
-                        "mensagem": "Já existe clube com este nome no mesmo estado.",
-                        "errors": null
-                    }
-                    """
-                            )
-                    }
             )
     )
     @ApiResponse(
@@ -127,16 +58,20 @@ public class AtualizarClubeApiController {
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             name = "clube-nao-encontrado",
-                            summary = "Clube não existe na base de dados",
-                            value = """
-                {
-                    "codigoErro": "CLUBE_NAO_ENCONTRADO",
-                    "dataHora": "04/08/2025 11:52:23",
-                    "mensagem": "Clube com id 999 não encontrado.",
-                    "errors": null
-                }
-                """
+                            summary = "Clube não existe na base de dados"
                     )
+            )
+    )
+    @ApiResponse(
+            responseCode = "409",
+            description = "Conflito de dados (data inválida ou duplicidade de clube)",
+            content = @Content(
+                    schema = @Schema(implementation = ErroPadrao.class),
+                    examples =
+                            @ExampleObject(
+                                    name = "data-criacao-posterior",
+                                    summary = "Data de criação após uma partida cadastrada"
+                            )
             )
     )
     @PutMapping("/{id}")

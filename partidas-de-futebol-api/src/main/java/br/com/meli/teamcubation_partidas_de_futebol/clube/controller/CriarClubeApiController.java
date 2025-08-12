@@ -30,7 +30,6 @@ public class CriarClubeApiController {
         this.criarClubeService = criarClubeService;
     }
 
-
     @Operation(
             summary = "Cria um novo clube",
             description = "Cadastra um novo clube. Retorna 201 ao sucesso."
@@ -39,16 +38,7 @@ public class CriarClubeApiController {
             responseCode = "201",
             description = "Clube criado com sucesso",
             content = @Content(
-                    schema = @Schema(implementation = ClubeResponseDTO.class),
-                    examples = @ExampleObject(
-                            value = """
-                {
-                  "nome":"Clube de Exemplo dezoito",
-                  "siglaEstado":"AM",
-                  "dataCriacao":"2025-05-13"
-                }
-                """
-                    )
+                    schema = @Schema(implementation = ClubeResponseDTO.class)
             )
     )
     @ApiResponse(
@@ -56,53 +46,18 @@ public class CriarClubeApiController {
             description = "Campos inválidos ou estado inexistente",
             content = @Content(
                     schema = @Schema(implementation = ErroPadrao.class),
-                    examples = {
-                            @ExampleObject(
-                                    name = "campos-invalidos",
-                                    summary = "Request com campos inválidos",
-                                    value = """
-                {
-                    "codigoErro": "CAMPO_INVALIDO",
-                    "dataHora": "04/08/2025 11:02:56",
-                    "mensagem": "Invalid request content.",
-                    "errors": {
-                        "siglaEstado": "A sigla do estado só pode ter 2 letras.",
-                        "nome": "O nome tem que ter no minimo duas letras;",
-                        "dataCriacao": "A data de criação não pode ser futura"
-                    }
-                }
-                """
-                            ),
+                    examples =
                             @ExampleObject(
                                     name = "estado-inexistente",
-                                    summary = "Tentativa de criar clube com estado inexistente",
-                                    value = """
-                {
-                    "codigoErro": "ESTADO_INEXISTENTE",
-                    "dataHora": "04/08/2025 11:03:40",
-                    "mensagem": "Não é possivel criar o clube pois o estado AX não existe.",
-                    "errors": null
-                }
-                """
+                                    summary = "Tentativa de criar clube com estado inexistente"
                             )
-                    }
             )
     )
     @ApiResponse(
             responseCode = "409",
             description = "Já existe clube com esse nome no estado",
             content = @Content(
-                    schema = @Schema(implementation = ErroPadrao.class),
-                    examples = @ExampleObject(
-                            value = """
-                {
-                    "codigoErro": "CLUBE_DUPLICADO",
-                    "dataHora": "04/08/2025 11:04:33",
-                    "mensagem": "Já existe clube com este nome no mesmo estado.",
-                    "errors": null
-                }
-                """
-                    )
+                    schema = @Schema(implementation = ErroPadrao.class)
             )
     )
     @PostMapping

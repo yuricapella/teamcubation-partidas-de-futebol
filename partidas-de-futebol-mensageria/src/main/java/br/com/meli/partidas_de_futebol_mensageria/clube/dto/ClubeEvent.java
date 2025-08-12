@@ -1,7 +1,7 @@
 package br.com.meli.partidas_de_futebol_mensageria.clube.dto;
 
-import br.com.meli.partidas_de_futebol_mensageria.clube.util.ClubeEventStatus;
-import br.com.meli.partidas_de_futebol_mensageria.clube.util.ClubeEventType;
+import br.com.meli.partidas_de_futebol_mensageria.clube.enums.ClubeEventStatus;
+import br.com.meli.partidas_de_futebol_mensageria.clube.enums.ClubeEventType;
 
 import java.time.LocalDateTime;
 

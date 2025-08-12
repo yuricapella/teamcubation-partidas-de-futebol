@@ -42,15 +42,7 @@ public class InativarClubeApiController {
                     schema = @Schema(implementation = ErroPadrao.class),
                     examples = @ExampleObject(
                             name = "clube-nao-encontrado",
-                            summary = "Tentativa de inativar clube inexistente",
-                            value = """
-                {
-                    "codigoErro": "CLUBE_NAO_ENCONTRADO",
-                    "dataHora": "04/08/2025 12:00:00",
-                    "mensagem": "Clube com id 999 não encontrado.",
-                    "errors": null
-                }
-                """
+                            summary = "Tentativa de inativar clube inexistente"
                     )
             )
     )

@@ -5,7 +5,6 @@ import br.com.meli.teamcubation_partidas_de_futebol.ranking.service.RankingServi
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,73 +36,14 @@ public class RankingApiController {
         - TOTAL_VITORIAS
         - TOTAL_GOLS
         - TOTAL_JOGOS
-        - Uma lista vazia é retornada caso não existam clubes para o ranking solicitado.
+        - Uma lista vazia é retornada caso não existam clubes e partidas para o ranking solicitado.
         """
     )
     @ApiResponse(
             responseCode = "200",
-            description = "Ranking retornado com sucesso",
+            description = "Lista de Ranking retornado, lista vazia se clubes estiverem com pontuação zerada ou não existirem partidas",
             content = @Content(
-                    schema = @Schema(implementation = Ranking.class),
-                    examples = {
-                            @ExampleObject(
-                                    name = "TOTAL_PONTOS",
-                                    summary = "Ranking por total de pontos",
-                                    value = """
-                    [
-                        {"nomeClube": "aclube de time", "estadoClube": "AP", "total": 6},
-                        {"nomeClube": "clube de time criado", "estadoClube": "SP", "total": 6},
-                        {"nomeClube": "Clube de Exemplo Um", "estadoClube": "AM", "total": 6},
-                        {"nomeClube": "time teste", "estadoClube": "SP", "total": 5},
-                        {"nomeClube": "clube de time atualizado", "estadoClube": "AM", "total": 4}
-                    ]
-                    """
-                            ),
-                            @ExampleObject(
-                                    name = "TOTAL_VITORIAS",
-                                    summary = "Ranking por total de vitórias",
-                                    value = """
-                    [
-                        {"nomeClube": "aclube de time", "estadoClube": "AP", "total": 2},
-                        {"nomeClube": "clube de time criado", "estadoClube": "SP", "total": 2},
-                        {"nomeClube": "Clube de Exemplo Um", "estadoClube": "AM", "total": 2},
-                        {"nomeClube": "clube de time atualizado", "estadoClube": "AM", "total": 1},
-                        {"nomeClube": "clube de time criado", "estadoClube": "SC", "total": 1}
-                    ]
-                    """
-                            ),
-                            @ExampleObject(
-                                    name = "TOTAL_GOLS",
-                                    summary = "Ranking por total de gols",
-                                    value = """
-                    [
-                        {"nomeClube": "aclube de time", "estadoClube": "AP", "total": 10},
-                        {"nomeClube": "time teste", "estadoClube": "SP", "total": 8},
-                        {"nomeClube": "clube de time criado", "estadoClube": "SP", "total": 7},
-                        {"nomeClube": "Clube de Exemplo Um", "estadoClube": "AM", "total": 7},
-                        {"nomeClube": "clube de time atualizado", "estadoClube": "AM", "total": 6}
-                    ]
-                    """
-                            ),
-                            @ExampleObject(
-                                    name = "TOTAL_JOGOS",
-                                    summary = "Ranking por total de jogos",
-                                    value = """
-                    [
-                        {"nomeClube": "clube de time atualizado", "estadoClube": "AM", "total": 4},
-                        {"nomeClube": "aclube de time", "estadoClube": "AP", "total": 4},
-                        {"nomeClube": "clube de time", "estadoClube": "AP", "total": 3},
-                        {"nomeClube": "time teste", "estadoClube": "SP", "total": 3},
-                        {"nomeClube": "clube de time criado", "estadoClube": "SP", "total": 2}
-                    ]
-                    """
-                            ),
-                            @ExampleObject(
-                                    name = "lista-vazia",
-                                    summary = "Nenhum clube atende ao critério",
-                                    value = "[]"
-                            )
-                    }
+                    schema = @Schema(implementation = Ranking.class)
             )
     )
     @GetMapping

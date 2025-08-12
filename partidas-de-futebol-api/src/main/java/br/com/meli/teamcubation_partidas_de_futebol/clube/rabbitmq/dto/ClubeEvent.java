@@ -1,8 +1,8 @@
 package br.com.meli.teamcubation_partidas_de_futebol.clube.rabbitmq.dto;
 
 import br.com.meli.teamcubation_partidas_de_futebol.clube.dto.CriarClubeRequestDTO;
-import br.com.meli.teamcubation_partidas_de_futebol.clube.rabbitmq.util.ClubeEventStatus;
-import br.com.meli.teamcubation_partidas_de_futebol.clube.rabbitmq.util.ClubeEventType;
+import br.com.meli.teamcubation_partidas_de_futebol.clube.rabbitmq.enums.ClubeEventStatus;
+import br.com.meli.teamcubation_partidas_de_futebol.clube.rabbitmq.enums.ClubeEventType;
 
 import java.time.LocalDateTime;
 
