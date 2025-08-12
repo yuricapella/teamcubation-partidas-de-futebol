@@ -38,39 +38,14 @@ public class BuscarEstadioApiController {
             responseCode = "200",
             description = "Estádio encontrado",
             content = @Content(
-                    schema = @Schema(implementation = EstadioEnderecoResponseDTO.class),
-                    examples = @ExampleObject(
-                            value = """
-                {
-                    "nome": "Estadio de time atualizado com cep meli",
-                    "endereco": {
-                        "cep": "88032-005",
-                        "logradouro": "Rodovia José Carlos Daux",
-                        "bairro": "Saco Grande",
-                        "localidade": "Florianópolis",
-                        "uf": "SC",
-                        "estado": "Santa Catarina"
-                    }
-                }
-                """
-                    )
+                    schema = @Schema(implementation = EstadioEnderecoResponseDTO.class)
             )
     )
     @ApiResponse(
             responseCode = "404",
             description = "Estádio não encontrado",
             content = @Content(
-                    schema = @Schema(implementation = ErroPadrao.class),
-                    examples = @ExampleObject(
-                            value = """
-                {
-                    "codigoErro": "ESTADIO_NAO_ENCONTRADO",
-                    "dataHora": "04/08/2025 16:32:26",
-                    "mensagem": "Estadio com id 999 não encontrado.",
-                    "errors": null
-                }
-                """
-                    )
+                    schema = @Schema(implementation = ErroPadrao.class)
             )
     )
     @GetMapping(value = "/{id}")
@@ -90,65 +65,12 @@ public class BuscarEstadioApiController {
             description = "Lista paginada de estádios",
             content = @Content(
                     schema = @Schema(implementation = EstadioResponseDTO.class),
-                    examples = {
+                    examples =
                             @ExampleObject(
-                                    name = "comResultados",
-                                    summary = "Exemplo de lista com estádios encontrados",
-                                    value = """
-                    {
-                        "content": [
-                            { "nome": "Estadio de time atualizado com cep meli" },
-                            { "nome": "Estadio de time atualizado dois" },
-                            { "nome": "Estadio de time tres" }
-                        ],
-                        "pageable": {
-                            "pageNumber": 0,
-                            "pageSize": 20,
-                            "sort": { "empty": true, "sorted": false, "unsorted": true },
-                            "offset": 0,
-                            "paged": true,
-                            "unpaged": false
-                        },
-                        "last": true,
-                        "totalPages": 1,
-                        "totalElements": 11,
-                        "first": true,
-                        "size": 20,
-                        "number": 0,
-                        "sort": { "empty": true, "sorted": false, "unsorted": true },
-                        "numberOfElements": 11,
-                        "empty": false
-                    }
-                    """
-                            ),
-                            @ExampleObject(
-                                    name = "vazio",
-                                    summary = "Exemplo de lista vazia (sem resultados para o filtro)",
-                                    value = """
-                    {
-                        "content": [],
-                        "pageable": {
-                            "pageNumber": 0,
-                            "pageSize": 20,
-                            "sort": { "empty": true, "sorted": false, "unsorted": true },
-                            "offset": 0,
-                            "paged": true,
-                            "unpaged": false
-                        },
-                        "last": true,
-                        "totalPages": 0,
-                        "totalElements": 0,
-                        "first": true,
-                        "size": 20,
-                        "number": 0,
-                        "sort": { "empty": true, "sorted": false, "unsorted": true },
-                        "numberOfElements": 0,
-                        "empty": true
-                    }
-                    """
+                                    name = "Com Resultados ou vazio",
+                                    summary = "Estádios encontrados ou lista vazia se não possuir estadios"
+                                    )
                             )
-                    }
-            )
     )
     @GetMapping
     public Page<EstadioResponseDTO> buscarTodosEstadiosFiltrados(

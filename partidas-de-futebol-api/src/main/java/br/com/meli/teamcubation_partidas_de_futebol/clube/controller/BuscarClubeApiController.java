@@ -40,71 +40,10 @@ public class BuscarClubeApiController {
             description = "Lista paginada de clubes",
             content = @Content(
                     schema = @Schema(implementation = ClubeResponseDTO.class),
-                    examples = {@ExampleObject(
-                            name = "lista com resultados",
-                            summary = "Retorno de clubes encontrados",
-                            value = """
-                            {
-                        "content": [
-                                 {
-                                     "nome": "clube de time atualizado",
-                                     "siglaEstado": "AM",
-                                     "dataCriacao": "2025-05-13"
-                                 },
-                                 {
-                                     "nome": "clube de time",
-                                     "siglaEstado": "AP",
-                                     "dataCriacao": "2025-05-13"
-                                 }
-                             ],
-                             "pageable": {
-                                 "pageNumber": 0,
-                                 "pageSize": 20,
-                                 "sort": {
-                                     "empty": true,
-                                     "sorted": false,
-                                     "unsorted": true
-                                 },
-                                 "offset": 0,
-                                 "paged": true,
-                                 "unpaged": false
-                             },
-                             "last": true,
-                             "totalElements": 2,
-                             "totalPages": 1,
-                             "first": true,
-                             "size": 20,
-                             "number": 0,
-                             "sort": {
-                                 "empty": true,
-                                 "sorted": false,
-                                 "unsorted": true
-                             },
-                             "numberOfElements": 2,
-                             "empty": false
-                         }
-                        """
-
-                    ),
-                    @ExampleObject(
-                            name = "casoSemResultados",
-                            summary = "Retorno quando não encontra clubes para o filtro ou se não há clubes cadastrados.",
-                            value = """
-                            {
-                              "content": [],
-                              "pageable": { "pageNumber": 0, "pageSize": 20, ... },
-                              "last": true,
-                              "totalElements": 0,
-                              "totalPages": 0,
-                              "first": true,
-                              "size": 20,
-                              "number": 0,
-                              "sort": { "empty": true, "sorted": false, "unsorted": true },
-                              "numberOfElements": 0,
-                              "empty": true
-                            }
-                            """
-                    )}
+                    examples = @ExampleObject(
+                            name = "lista com resultados ou vazia",
+                            summary = "Retorno com lista de clubes encontrados ou lista vazia se clubes não existirem"
+                    )
             )
     )
     @GetMapping
@@ -132,33 +71,14 @@ public class BuscarClubeApiController {
             responseCode = "200",
             description = "Clube encontrado com sucesso",
             content = @Content(
-                    schema = @Schema(implementation = ClubeResponseDTO.class),
-                    examples = @ExampleObject(
-                            value = """
-            {
-              "nome": "clube de time atualizado",
-              "siglaEstado": "AM",
-              "dataCriacao": "2025-05-13"
-            }
-            """
-                    )
+                    schema = @Schema(implementation = ClubeResponseDTO.class)
             )
     )
     @ApiResponse(
             responseCode = "404",
             description = "Clube não encontrado",
             content = @Content(
-                    schema = @Schema(implementation = ErroPadrao.class),
-                    examples = @ExampleObject(
-                            value = """
-            {
-              "codigoErro": "CLUBE_NAO_ENCONTRADO",
-              "dataHora": "04/08/2025 10:23:55",
-              "mensagem": "Clube com id 999 não encontrado.",
-              "errors": null
-            }
-            """
-                    )
+                    schema = @Schema(implementation = ErroPadrao.class)
             )
     )
     @GetMapping(value = "/{id}")
