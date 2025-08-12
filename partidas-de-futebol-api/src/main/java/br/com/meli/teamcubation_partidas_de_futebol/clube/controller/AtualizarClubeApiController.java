@@ -37,18 +37,7 @@ public class AtualizarClubeApiController {
     @ApiResponse(
             responseCode = "200",
             description = "Clube atualizado com sucesso",
-            content = @Content(
-                    schema = @Schema(implementation = ClubeResponseDTO.class),
-                    examples = @ExampleObject(
-                            value = """
-                {
-                  "nome":"Clube Atualizado",
-                  "siglaEstado":"AM",
-                  "dataCriacao":"2025-05-13"
-                }
-                """
-                    )
-            )
+            content = @Content(schema = @Schema(implementation = ClubeResponseDTO.class))
     )
     @ApiResponse(
             responseCode = "400",
@@ -88,6 +77,25 @@ public class AtualizarClubeApiController {
             )
     )
     @ApiResponse(
+            responseCode = "404",
+            description = "Clube não encontrado",
+            content = @Content(
+                    schema = @Schema(implementation = ErroPadrao.class),
+                    examples = @ExampleObject(
+                            name = "clube-nao-encontrado",
+                            summary = "Clube não existe na base de dados",
+                            value = """
+                {
+                    "codigoErro": "CLUBE_NAO_ENCONTRADO",
+                    "dataHora": "04/08/2025 11:52:23",
+                    "mensagem": "Clube com id 999 não encontrado.",
+                    "errors": null
+                }
+                """
+                    )
+            )
+    )
+    @ApiResponse(
             responseCode = "409",
             description = "Conflito de dados (data inválida ou duplicidade de clube)",
             content = @Content(
@@ -118,25 +126,6 @@ public class AtualizarClubeApiController {
                     """
                             )
                     }
-            )
-    )
-    @ApiResponse(
-            responseCode = "404",
-            description = "Clube não encontrado",
-            content = @Content(
-                    schema = @Schema(implementation = ErroPadrao.class),
-                    examples = @ExampleObject(
-                            name = "clube-nao-encontrado",
-                            summary = "Clube não existe na base de dados",
-                            value = """
-                {
-                    "codigoErro": "CLUBE_NAO_ENCONTRADO",
-                    "dataHora": "04/08/2025 11:52:23",
-                    "mensagem": "Clube com id 999 não encontrado.",
-                    "errors": null
-                }
-                """
-                    )
             )
     )
     @PutMapping("/{id}")
